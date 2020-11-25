@@ -5,7 +5,7 @@ from flask_cors import CORS
 import random
 import logging
 
-from models import setup_db, Question, Category
+from ..models import setup_db, Fighter, Division, Event
 
 QUESTIONS_PER_PAGE = 10
 
@@ -24,7 +24,7 @@ def create_app(test_config=None):
   app = Flask(__name__)
   setup_db(app)
 
-  
+
   
   #This sets up CORS to Allow '*' for origins. 
   CORS(app)
@@ -36,9 +36,9 @@ def create_app(test_config=None):
     return response
    
   #This endpoint handles GET requests for categories
-  @app.route('/categories')
+  """ @app.route('/categories')
   def get_categories():
-    categories = Category.query.order_by(Category.id).all()
+    #categories = Category.query.order_by(Category.id).all()
 
     # 404 if no categories found
     if (len(categories) == 0):
@@ -246,7 +246,7 @@ def create_app(test_config=None):
             "success": False,
             "error": 422,
             "message": "unprocessable"
-        }), 422
+        }), 422 """
 
     
   return app
