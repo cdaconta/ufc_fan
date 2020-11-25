@@ -1,4 +1,5 @@
-from myENV import *
+from .myENV import *
+import os
 from flask import Flask, render_template, request, Response, flash, redirect, url_for
 from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
@@ -12,6 +13,7 @@ database_name = "ufcfan"
 database_path = "postgres://{}/{}".format(f'{user}:{password}@localhost:5432', database_name)
 
 db = SQLAlchemy()
+migrate = Migrate()
 
 '''
 setup_db(app)
@@ -23,7 +25,8 @@ def setup_db(app, database_path=database_path):
     moment = Moment(app)
     db.app = app
     db.init_app(app)
-    db.create_all()
+    migrate.init_app(app, db)
+    
 
 # Creating the debatase for Actors
 class Fighter(db.Model):

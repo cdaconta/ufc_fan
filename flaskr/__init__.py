@@ -4,20 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import random
 import logging
+from .models import setup_db, Fighter, Division, Event
 
-from ..models import setup_db, Fighter, Division, Event
-
-QUESTIONS_PER_PAGE = 10
-
-#this function will paginate the result questions to 10 per page
-def paginate(request, query_result):
-  page = request.args.get('page', 1, type=int)
-  start = (page - 1) * QUESTIONS_PER_PAGE
-  end = start + QUESTIONS_PER_PAGE
-
-  questions = [item.format() for item in query_result]
-  results = questions[start:end]
-  return results
 
 def create_app(test_config=None):
   # create and configure the app
