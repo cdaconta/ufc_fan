@@ -1,9 +1,7 @@
 import os
-from flask import Flask, request, abort, jsonify
+from flask import Flask, render_template, request, Response, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-import random
-import logging
 from .models import setup_db, Fighter, Division, Event
 
 
