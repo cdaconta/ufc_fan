@@ -101,18 +101,8 @@ class Division(db.Model):
     __tablename__ = 'divisions'
 
     id = db.Column(db.Integer, primary_key=True)
-    men_flyweight = db.Column(db.Integer)
-    men_bantamweight = db.Column(db.Integer) 
-    men_featherweight = db.Column(db.Integer)
-    men_lightweight = db.Column(db.Integer)
-    men_welterweight = db.Column(db.Integer)
-    men_middleweight = db.Column(db.Integer)
-    men_lightheavyweight = db.Column(db.Integer)
-    men_heavyweight = db.Column(db.Integer)
-    women_strawweight = db.Column(db.Integer)
-    women_flyweight = db.Column(db.Integer)
-    women_bantamweight = db.Column(db.Integer)
-    women_featherweight = db.Column(db.Integer)
+    name = db.Column(db.String)
+    weight = db.Column(db.Integer)
     fighters = db.relationship('Fighter', backref='division', lazy='select', cascade='all, delete-orphan')
     events = db.relationship('Event', backref = 'division', lazy='select', cascade='all, delete-orphan')
     
