@@ -22,6 +22,11 @@ def create_app(test_config=None):
     return response
    
   #This endpoint handles GET requests for categories
+  @app.route('/')
+  def ufcfan():
+    return render_template('index.html')
+
+
   """ @app.route('/categories')
   def get_categories():
     #categories = Category.query.order_by(Category.id).all()
