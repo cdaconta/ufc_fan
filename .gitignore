@@ -5,3 +5,9 @@ flaskr/myENV.py
 __pycache__/
 *.py[cod]
 *$py.class
+
+.env
+.pyc
+*.iml
+.directory
+.idea
