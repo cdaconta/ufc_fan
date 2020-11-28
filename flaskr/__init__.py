@@ -24,7 +24,7 @@ def create_app(test_config=None):
   #This endpoint handles GET requests for categories
   @app.route('/')
   def ufcfan():
-    return render_template('index.html')
+    return render_template('division_fighters.html')
 
 
   """ @app.route('/categories')
