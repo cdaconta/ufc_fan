@@ -96,7 +96,7 @@ def create_app(test_config=None):
             'name': userinfo['name'],
             'picture': userinfo['picture']
         }
-        return redirect('/dashboard')
+        return redirect('/index')
 
 
   @app.route('/login')
@@ -111,10 +111,10 @@ def create_app(test_config=None):
         return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
 
-  @app.route('/dashboard')
+  @app.route('/index')
   @requires_auth
-  def dashboard():
-        return render_template('dashboard.html',
+  def landingPage():
+        return render_template('index.html',
                               userinfo=session[constants.PROFILE_KEY],
                               userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4))
 
