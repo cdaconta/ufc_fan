@@ -39,16 +39,6 @@ def create_app(test_config=None):
   app.secret_key = constants.SECRET_KEY
   app.debug = True
 
-   #----------------may------------------------------------------------- I
-  @app.before_request 
-  def load_logged_in_user(): 
-    user = session[constants.PROFILE_KEY]
-    print (f'This is user_id: {user}')
-    if user is None: 
-      g.user = None 
-      return redirect('/')
-    else: 
-      g.user = user['name']
   
   @app.after_request
   def after_request(response):
@@ -83,7 +73,7 @@ def create_app(test_config=None):
     @wraps(f)
     def decorated(*args, **kwargs):
         if constants.PROFILE_KEY not in session:
-            return redirect('/login')
+            return redirect('/')
         return f(*args, **kwargs)
 
     return decorated

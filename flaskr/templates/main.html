@@ -59,19 +59,9 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2" viewBox="0 0 24 24" focusable="false"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
         <strong>Album</strong>
       </a>
-      <ul>
-        {% if g.user %} 
-            <li>
-            <span>{{ g.user }}</span> 
-            <li>
-              <a href="/logout">Log Out</a> 
-            </li>
-            {% else %}  
-              <li>
-                <a href="/Login">Log In</a> 
-              </li>
-              {% endif %}
-      </ul>
+    
+      <a id="qsLogoutBtn" class="btn btn-primary btn-lg btn-logout btn-block" href="/logout">Logout</a> 
+              
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
