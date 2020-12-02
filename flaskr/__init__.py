@@ -115,9 +115,18 @@ def create_app(test_config=None):
   @app.route('/index')
   @requires_auth
   def landingPage():
-        return render_template('index.html',
+    #Here I get all the fighters
+    all_fighters = Fighter.query.all()
+
+    data = []
+
+    for item in all_fighters:
+      data.append(item.format())
+
+
+    return render_template('index.html',
                               userinfo=session[constants.PROFILE_KEY],
-                              userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4))
+                              userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data)
 
  
 
