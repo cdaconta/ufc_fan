@@ -1,10 +1,13 @@
 from flask import Flask, render_template, g, request, Response, flash, redirect, url_for, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
 from flask_cors import CORS
 #from . import models
 from .models import setup_db, Fighter, Division, Event
 from functools import wraps
 import json
+import babel
+import dateutil.parser
 from os import environ as env
 from werkzeug.exceptions import HTTPException
 
@@ -39,6 +42,19 @@ def create_app(test_config=None):
   app.secret_key = constants.SECRET_KEY
   app.debug = True
 
+  #----------------------------------------------------------------------------#
+  # Filters.
+  #----------------------------------------------------------------------------#
+  # use a string for the value arg when calling this function
+  def format_datetime(value, format='medium'):
+    date = dateutil.parser.parse(value)
+    if format == 'full':
+      format="EEEE MMMM, d, y 'at' h:mma"
+    elif format == 'medium':
+      format="EE MM, dd, y h:mma"
+    return babel.dates.format_datetime(date, format)
+
+  app.jinja_env.filters['datetime'] = format_datetime
   
   @app.after_request
   def after_request(response):
@@ -122,13 +138,26 @@ def create_app(test_config=None):
 
     for item in all_fighters:
       data.append(item.format())
-
+    
+    #event = Event.query.order_by(text("event_date desc")).limit(1)
+    event_info = []
+    #event_new = Event.query.all()
+    #event_data.append(event_new.format())
+    #for item in event_new:
+     # event_data.append(item.format())
+    
+    #print(event_data) """
+    event_data = Event.query.order_by(Event.event_date.desc())
+    #last_item = descending.first()
+    #print(f'This is event_data - {event_data[0]}')
+    for item in event_data:
+      event_info.append(item.format())
 
     return render_template('index.html',
                               userinfo=session[constants.PROFILE_KEY],
-                              userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data)
+                              userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data, events = event_info)
 
- 
+    
 
 
   

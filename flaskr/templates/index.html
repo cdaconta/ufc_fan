@@ -16,9 +16,15 @@
   
     <div class="album py-5 bg-light">
       <div class="container">
+{% for item in events %}
+<p> {{ item.event_name }} {{ item.event_date }}</p>
+{% endfor %}
+
         {% for fighter in fighters %}
-        <h3>{{ fighter.first_name}} {{ fighter.last_name }}</h3>
+        <p>{{ fighter.first_name}} {{ fighter.last_name }}</p>
         {% endfor %}
+       
+
         <div class="row">
           <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
