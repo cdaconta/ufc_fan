@@ -24,9 +24,14 @@
           <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
               <!--<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>-->
+              {% if fighters[0].sex.upper() == 'M' %}
               <img src="/static/img/male.png" class="img-fluid" alt="Responsive image">
-              <div class="card-body">
+              {% else %}
+              <img src="/static/img/female.png" class="img-fluid" alt="Responsive image">
+              {% endif %}
+              <div class="card-body">               
                 <p class="card-text">{{ fighters[0].first_name}} {{ fighters[0].last_name }}</p>
+                
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
@@ -56,7 +61,11 @@
           </div>
           <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
+              {% if fighters[0].sex.upper() == 'M' %}
               <img src="/static/img/male2.png" class="img-fluid" alt="Responsive image">
+              {% else %}
+              <img src="/static/img/female2.jpg" class="img-fluid" alt="Responsive image">
+              {% endif %}
               <div class="card-body">
                 <p class="card-text">{{ fighters[2].first_name}} {{ fighters[2].last_name }}</p>
                 <div class="d-flex justify-content-between align-items-center">
@@ -73,7 +82,11 @@
         <div class="d-flex justify-content-center">
           <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
+              {% if fighters[0].sex.upper() == 'M' %}
               <img src="/static/img/male2.png" class="img-fluid" alt="Responsive image">
+              {% else %}
+              <img src="/static/img/female2.jpg" class="img-fluid" alt="Responsive image">
+              {% endif %}
               <div class="card-body">
                 <p class="card-text">{{ fighters[3].first_name}} {{ fighters[3].last_name }}</p>
                 <div class="d-flex justify-content-between align-items-center">
@@ -88,7 +101,11 @@
           </div>
           <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
+              {% if fighters[0].sex.upper() == 'M' %}
               <img src="/static/img/male2.png" class="img-fluid" alt="Responsive image">
+              {% else %}
+              <img src="/static/img/female2.jpg" class="img-fluid" alt="Responsive image">
+              {% endif %}
               <div class="card-body">
                 <p class="card-text">{{ fighters[4].first_name}} {{ fighters[4].last_name }}</p>
                 <div class="d-flex justify-content-between align-items-center">
