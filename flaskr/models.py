@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
 
+
 user = os.environ.get('USER')
 password = os.environ.get('PASSWORD')
 
@@ -168,13 +169,14 @@ class Event(db.Model):
     fighter2 = db.relationship("Fighter", foreign_keys=[fighter_2]) """
     fighter_1_votes = db.Column(db.Integer, default = 0)
     fighter_2_votes = db.Column(db.Integer, default = 0)
+    fight_order = db.Column(db.Integer, default = 0)
 
     def __repr__(self):
         return f"<Event id='{self.id}' event_name='{self.event_name}' event_date='{self.event_date}' location='{self.location}'\
             division='{self.division}' fighter_1='{self.fighter_1}' fighter_2='{self.fighter_2}' fighter_1_votes='{self.fighter_1_votes}' \
-                fighter_2_votes='{self.fighter_2_votes}' >"
+                fighter_2_votes='{self.fighter_2_votes}' fight_order='{self.fight_order}' >"
 
-    def __init__(self, event_name, event_date, location, division, fighter_1, fighter_2, fighter_1_votes, fighter_2_votes) -> None:
+    def __init__(self, event_name, event_date, location, division, fighter_1, fighter_2, fighter_1_votes, fighter_2_votes, fight_order) -> None:
         self.event_name = event_name
         self.event_date = event_date
         self.location = location
@@ -183,6 +185,7 @@ class Event(db.Model):
         self.fighter_2 = fighter_2
         self.fighter_1_votes = fighter_1_votes
         self.fighter_2_votes = fighter_2_votes
+        self.fight_order = fight_order
 
     def insert(self):
         db.session.add(self)
@@ -204,4 +207,5 @@ class Event(db.Model):
             'fighter_2':self.fighter_2,
             'fighter_1_votes':self.fighter_1_votes,
             'fighter_2_votes':self.fighter_2_votes,
+            'fight_order':self.fight_order
         }

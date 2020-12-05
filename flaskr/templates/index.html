@@ -17,7 +17,7 @@
     <div class="album py-5 bg-light">
       <div class="container">
 {% for item in events %}
-<p> {{ item.event_name }} {{ item.event_date }}</p>
+<p> {{ item.event_name }} {{ item.event_date|datetime('full') }}</p>
 {% endfor %}
 
         {% for fighter in fighters %}

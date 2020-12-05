@@ -2,11 +2,11 @@ from flask import Flask, render_template, g, request, Response, flash, redirect,
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 from flask_cors import CORS
-#from . import models
 from .models import setup_db, Fighter, Division, Event
 from functools import wraps
 import json
 import babel
+from babel.dates import format_date, format_datetime, format_time
 import dateutil.parser
 from os import environ as env
 from werkzeug.exceptions import HTTPException
@@ -53,7 +53,7 @@ def create_app(test_config=None):
     elif format == 'medium':
       format="EE MM, dd, y h:mma"
     return babel.dates.format_datetime(date, format)
-
+  
   app.jinja_env.filters['datetime'] = format_datetime
   
   @app.after_request
@@ -151,7 +151,18 @@ def create_app(test_config=None):
     #last_item = descending.first()
     #print(f'This is event_data - {event_data[0]}')
     for item in event_data:
-      event_info.append(item.format())
+      event_info.append(
+        {
+            'event_name':item.event_name, 
+            'event_date':format_datetime(str(item.event_date)), 
+            'division':item.division,
+            'fighter_1':item.fighter_1,
+            'fighter_2':item.fighter_2,
+            'fighter_1_votes':item.fighter_1_votes,
+            'fighter_2_votes':item.fighter_2_votes,
+            'fight_order':item.fight_order
+        }
+      )
 
     return render_template('index.html',
                               userinfo=session[constants.PROFILE_KEY],
