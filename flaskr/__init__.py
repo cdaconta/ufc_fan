@@ -140,7 +140,7 @@ def create_app(test_config=None):
       data.append(item.format())
     
     event_info = []
-    event_data = Event.query.order_by(Event.event_date.desc())
+    event_data = Event.query.order_by(Event.event_date.desc()).limit(6)
     
     for item in event_data:
       event_info.append(
@@ -172,9 +172,9 @@ def create_app(test_config=None):
       data.append(item.format())
     
     event_info = []
-    #event_data = Event.query.filter(Event.division == division_id).order_by(Event.event_date.desc()).limit(1)
+    event_data = Event.query.filter(Event.division == division_id).order_by(Event.event_date.desc()).limit(6)
     #print(f'This is event_data - {event_data}')
-    event_data = Event.query.order_by(Event.event_date.desc())
+    #event_data = Event.query.order_by(Event.event_date.desc())
 
 
     for item in event_data:
