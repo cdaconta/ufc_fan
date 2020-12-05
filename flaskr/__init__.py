@@ -130,7 +130,7 @@ def create_app(test_config=None):
 
   @app.route('/index')
   @requires_auth
-  def landingPage():
+  def get_all_fighters():
     #Here I get all the fighters
     all_fighters = Fighter.query.all()
 
@@ -139,17 +139,9 @@ def create_app(test_config=None):
     for item in all_fighters:
       data.append(item.format())
     
-    #event = Event.query.order_by(text("event_date desc")).limit(1)
     event_info = []
-    #event_new = Event.query.all()
-    #event_data.append(event_new.format())
-    #for item in event_new:
-     # event_data.append(item.format())
-    
-    #print(event_data) """
     event_data = Event.query.order_by(Event.event_date.desc())
-    #last_item = descending.first()
-    #print(f'This is event_data - {event_data[0]}')
+    
     for item in event_data:
       event_info.append(
         {
@@ -168,6 +160,40 @@ def create_app(test_config=None):
                               userinfo=session[constants.PROFILE_KEY],
                               userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data, events = event_info)
 
+  @app.route('/division_fighters/<int:division_id>')
+  @requires_auth
+  def get_division_fighters(division_id):
+    #Here I get all the fighters - questions = Question.query.filter(Question.category==category_id).all()
+    division_fighters = Fighter.query.filter(Fighter.division == division_id).all()
+
+    data = []
+
+    for item in division_fighters:
+      data.append(item.format())
+    
+    event_info = []
+    #event_data = Event.query.filter(Event.division == division_id).order_by(Event.event_date.desc()).limit(1)
+    #print(f'This is event_data - {event_data}')
+    event_data = Event.query.order_by(Event.event_date.desc())
+
+
+    for item in event_data:
+      event_info.append(
+        {
+            'event_name':item.event_name, 
+            'event_date':format_datetime(str(item.event_date)), 
+            'division':item.division,
+            'fighter_1':item.fighter_1,
+            'fighter_2':item.fighter_2,
+            'fighter_1_votes':item.fighter_1_votes,
+            'fighter_2_votes':item.fighter_2_votes,
+            'fight_order':item.fight_order
+        }
+      )
+
+    return render_template('division_fighters.html',
+                              userinfo=session[constants.PROFILE_KEY],
+                              userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data, events = event_info)
     
 
 
