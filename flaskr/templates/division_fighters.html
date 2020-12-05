@@ -46,7 +46,11 @@
         <div class="d-flex justify-content-center">
           <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
+              {% if fighters[0].sex.upper() == 'M' %}
               <img src="/static/img/male2.png" class="img-fluid" alt="Responsive image">
+              {% else %}
+              <img src="/static/img/female2.jpg" class="img-fluid" alt="Responsive image">
+              {% endif %}
               <div class="card-body">
                 <p class="card-text">{{ fighters[1].first_name}} {{ fighters[1].last_name }}</p>
                 <div class="d-flex justify-content-between align-items-center">
@@ -120,7 +124,11 @@
           </div>
           <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
+              {% if fighters[0].sex.upper() == 'M' %}
               <img src="/static/img/male2.png" class="img-fluid" alt="Responsive image">
+              {% else %}
+              <img src="/static/img/female2.jpg" class="img-fluid" alt="Responsive image">
+              {% endif %}
               <div class="card-body">
                 <p class="card-text">{{ fighters[5].first_name}} {{ fighters[5].last_name }}</p>
                 <div class="d-flex justify-content-between align-items-center">
