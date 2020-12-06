@@ -236,7 +236,7 @@ def create_app(test_config=None):
       flash('An error occurred. Event ' + request.form['event_name'] + ' could not be listed.')
     finally:
       db.session.close()
-    return render_template('forms/new_event.html', userinfo=session[constants.PROFILE_KEY])
+    return render_template('index.html', userinfo=session[constants.PROFILE_KEY])
 
 
   
