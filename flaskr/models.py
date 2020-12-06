@@ -179,6 +179,8 @@ class Event(db.Model):
     fighter_2 = db.Column(db.Integer, db.ForeignKey('fighters.id'))
     fighter_1_votes = db.Column(db.Integer, default = 0)
     fighter_2_votes = db.Column(db.Integer, default = 0)
+    #fighter_1_odds = db.Column(db.Float, defualt = .00)
+     #fighter_2_odds = db.Column(db.Float, defualt = .00)
     fight_order = db.Column(db.Integer, default = 0)
 
     def __repr__(self):

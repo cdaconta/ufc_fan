@@ -16,7 +16,9 @@ from authlib.integrations.flask_client import OAuth
 from six.moves.urllib.parse import urlencode
 
 from . import constants
-from .forms import *
+#from .forms import EventForm #was *
+from .forms import EventForm
+
 
 
 ENV_FILE = find_dotenv()
@@ -195,13 +197,20 @@ def create_app(test_config=None):
     return render_template('division_fighters.html',
                               userinfo=session[constants.PROFILE_KEY],
                               userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data, events = event_info)
-    
-  @app.route('/event/create', methods=['GET','POST'])
+  
+  @app.route('/event/create', methods=['GET']) 
+  @requires_auth  
+  def create_event_form():
+    form = EventForm()
+    return render_template('forms/new_event.html', form=form, userinfo=session[constants.PROFILE_KEY])
+  
+  @app.route('/event/create', methods=['POST'])
   @requires_auth
-  def create_event_submission():
+  def create_event():
     try:
       # get form data and create 
       form = EventForm()
+      print(f'This is form: {form}')
       form_event = Event(
       event_name = form.event_name.data, 
       event_date = form.event_date.data,
@@ -218,11 +227,11 @@ def create_app(test_config=None):
       db.session.add(form_event)
       db.session.commit()
       # flash success 
-      #flash('Event ' + request.form['event_name'] + ' was successfully listed!')
+      flash('Event ' + request.form['event_name'] + ' was successfully listed!')
     except:
       db.session.rollback()
       #flash failure
-      #flash('An error occurred. Event ' + request.form['event_name'] + ' could not be listed.')
+      flash('An error occurred. Event ' + request.form['event_name'] + ' could not be listed.')
     finally:
       db.session.close()
     return render_template('forms/new_event.html', userinfo=session[constants.PROFILE_KEY])

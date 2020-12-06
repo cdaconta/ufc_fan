@@ -1,22 +1,25 @@
-{% extends 'main.html' %}
+{% extends 'form.html' %}
 {% block title %}New Event/Fighter{% endblock %}
 {% block content %}
   <div class="form-wrapper">
     <form method="post" class="form" >
       <h3 class="form-heading">List a new event/fighter</h3>
       <div class="form-group">
-          <label>Event Name, Date, and Location</label>
-          <div class="form-inline">
+          
+          
             <div class="form-group">
+              <label for="event_name">Event</label>
               {{ form.event_name(class_ = 'form-control', placeholder='UFC location', autofocus = true) }}
             </div>
             <div class="form-group">
+              <label for="event_date">Date</label>
               {{ form.event_date(class_ = 'form-control', placeholder='Format to use: YYYY-MM-DD HH:MM:SS', autofocus = true) }}
             </div>
             <div class="form-group">
+              <label for="location">Location</label>
               {{ form.location(class_ = 'form-control', placeholder='Somewhere', autofocus = true) }}
             </div>
-          </div>
+          
       </div>
       
       <div class="form-group">
