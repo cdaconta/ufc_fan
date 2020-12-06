@@ -179,16 +179,16 @@ class Event(db.Model):
     fighter_2 = db.Column(db.Integer, db.ForeignKey('fighters.id'))
     fighter_1_votes = db.Column(db.Integer, default = 0)
     fighter_2_votes = db.Column(db.Integer, default = 0)
-    #fighter_1_odds = db.Column(db.Float, defualt = .00)
-     #fighter_2_odds = db.Column(db.Float, defualt = .00)
+    fighter_1_odds = db.Column(db.Integer, default = 0)
+    fighter_2_odds = db.Column(db.Integer, default = 0)
     fight_order = db.Column(db.Integer, default = 0)
 
     def __repr__(self):
         return f"<Event id='{self.id}' event_name='{self.event_name}' event_date='{self.event_date}' location='{self.location}'\
             division='{self.division}' fighter_1='{self.fighter_1}' fighter_2='{self.fighter_2}' fighter_1_votes='{self.fighter_1_votes}' \
-                fighter_2_votes='{self.fighter_2_votes}' fight_order='{self.fight_order}' >"
+                fighter_2_votes='{self.fighter_2_votes}' fighter_1_odds = '{self.fighter_1_odds}' fighter_2_odds = '{self.fighter_2_odds}' fight_order='{self.fight_order}' >"
 
-    def __init__(self, event_name, event_date, location, division, fighter_1, fighter_2, fighter_1_votes, fighter_2_votes, fight_order) -> None:
+    def __init__(self, event_name, event_date, location, division, fighter_1, fighter_2, fighter_1_votes, fighter_2_votes, fighter_1_odds, fighter_2_odds, fight_order) -> None:
         self.event_name = event_name
         self.event_date = event_date
         self.location = location
@@ -197,6 +197,8 @@ class Event(db.Model):
         self.fighter_2 = fighter_2
         self.fighter_1_votes = fighter_1_votes
         self.fighter_2_votes = fighter_2_votes
+        self.fighter_1_odds = fighter_1_odds
+        self.fighter_2_odds = fighter_2_odds
         self.fight_order = fight_order
 
     def insert(self):
@@ -225,5 +227,7 @@ class Event(db.Model):
             'fighter_2':self.fighter_2,
             'fighter_1_votes':self.fighter_1_votes,
             'fighter_2_votes':self.fighter_2_votes,
+            'fighter_1_odds':self.fighter_1_odds,
+            'fighter_2_odds':self.fighter_2_odds,
             'fight_order':self.fight_order
         }

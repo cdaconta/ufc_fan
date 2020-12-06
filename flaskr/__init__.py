@@ -220,6 +220,8 @@ def create_app(test_config=None):
       fighter_2 = form.fighter_2.data,  
       fighter_1_votes = 0,
       fighter_2_votes = 0,
+      fighter_1_odds = form.fighter_1_odds.data,
+      fighter_2_odds = form.fighter_2_odds.data,
       fight_order = form.fight_order.data, 
         )
       

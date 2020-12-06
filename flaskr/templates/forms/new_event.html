@@ -31,8 +31,16 @@
         {{ form.fighter_1(class_ = 'form-control', placeholder='John Doe',  autofocus = true) }}
       </div>
       <div class="form-group">
+        <label for="figher_1_odds">Fighter 1 odds</label>  
+        {{ form.fighter_1_odds(class_ = 'form-control', placeholder='ex. -100',  autofocus = true) }}
+      </div>
+      <div class="form-group">
         <label for="figher_2">Fighter 2</label>  
-        {{ form.fighter_2(class_ = 'form-control', placeholder='John Doe',  autofocus = true) }}
+        {{ form.fighter_2(class_ = 'form-control', placeholder='Joe Doe',  autofocus = true) }}
+      </div>
+      <div class="form-group">
+        <label for="figher_2_odds">Fighter 2 odds</label>  
+        {{ form.fighter_2_odds(class_ = 'form-control', placeholder='ex. -100',  autofocus = true) }}
       </div>
       <div class="form-group">
         <label for="fight_order">Match Position</label>  
