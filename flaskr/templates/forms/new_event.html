@@ -1,0 +1,42 @@
+{% extends 'main.html' %}
+{% block title %}New Event/Fighter{% endblock %}
+{% block content %}
+  <div class="form-wrapper">
+    <form method="post" class="form" >
+      <h3 class="form-heading">List a new event/fighter</h3>
+      <div class="form-group">
+          <label>Event Name, Date, and Location</label>
+          <div class="form-inline">
+            <div class="form-group">
+              {{ form.event_name(class_ = 'form-control', placeholder='UFC location', autofocus = true) }}
+            </div>
+            <div class="form-group">
+              {{ form.event_date(class_ = 'form-control', placeholder='Format to use: YYYY-MM-DD HH:MM:SS', autofocus = true) }}
+            </div>
+            <div class="form-group">
+              {{ form.location(class_ = 'form-control', placeholder='Somewhere', autofocus = true) }}
+            </div>
+          </div>
+      </div>
+      
+      <div class="form-group">
+          <label for="division">Division</label>
+          {{ form.division(class_ = 'form-control', placeholder='1 - 12', autofocus = true) }}
+      </div>
+      <div class="form-group">
+        <label for="figher_1">Fighter 1</label>  
+        {{ form.fighter_1(class_ = 'form-control', placeholder='John Doe',  autofocus = true) }}
+      </div>
+      <div class="form-group">
+        <label for="figher_2">Fighter 2</label>  
+        {{ form.fighter_2(class_ = 'form-control', placeholder='John Doe',  autofocus = true) }}
+      </div>
+      <div class="form-group">
+        <label for="fight_order">Match Position</label>  
+        {{ form.fight_order(class_ = 'form-control', placeholder='1 - 6',  autofocus = true) }}
+      </div>
+              
+      <input type="submit" value="Create Event/Fighter" class="btn btn-primary btn-lg btn-block">
+    </form>
+  </div>
+{% endblock %}

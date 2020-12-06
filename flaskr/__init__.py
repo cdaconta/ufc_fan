@@ -2,7 +2,7 @@ from flask import Flask, render_template, g, request, Response, flash, redirect,
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 from flask_cors import CORS
-from .models import setup_db, Fighter, Division, Event
+from .models import setup_db, db, Fighter, Division, Event
 from functools import wraps
 import json
 import babel
@@ -16,6 +16,7 @@ from authlib.integrations.flask_client import OAuth
 from six.moves.urllib.parse import urlencode
 
 from . import constants
+from .forms import *
 
 
 ENV_FILE = find_dotenv()
@@ -195,6 +196,36 @@ def create_app(test_config=None):
                               userinfo=session[constants.PROFILE_KEY],
                               userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data, events = event_info)
     
+  @app.route('/event/create', methods=['GET','POST'])
+  @requires_auth
+  def create_event_submission():
+    try:
+      # get form data and create 
+      form = EventForm()
+      form_event = Event(
+      event_name = form.event_name.data, 
+      event_date = form.event_date.data,
+      location = form.location.data,
+      division = form.division.data,
+      fighter_1 = form.fighter_1.data, 
+      fighter_2 = form.fighter_2.data,  
+      fighter_1_votes = 0,
+      fighter_2_votes = 0,
+      fight_order = form.fight_order.data, 
+        )
+      
+      # commit session to database
+      db.session.add(form_event)
+      db.session.commit()
+      # flash success 
+      #flash('Event ' + request.form['event_name'] + ' was successfully listed!')
+    except:
+      db.session.rollback()
+      #flash failure
+      #flash('An error occurred. Event ' + request.form['event_name'] + ' could not be listed.')
+    finally:
+      db.session.close()
+    return render_template('forms/new_event.html', userinfo=session[constants.PROFILE_KEY])
 
 
   

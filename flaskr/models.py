@@ -80,6 +80,12 @@ class Fighter(db.Model):
         db.session.delete(self)
         db.session.commit()
 
+    def rollback(self):
+        db.session.rollback()
+  
+    def close(self):
+        db.session.close()
+
     def format(self):
         return{
             'id':self.id,
@@ -137,6 +143,12 @@ men_middleweight, men_lightheavyweight, men_heavyweight, women_strawweight, wome
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+    
+    def rollback(self):
+        db.session.rollback()
+  
+    def close(self):
+        db.session.close()
 
     def format(self):
         return{
@@ -165,8 +177,6 @@ class Event(db.Model):
     division = db.Column(db.Integer, db.ForeignKey('divisions.id'))
     fighter_1 = db.Column(db.Integer, db.ForeignKey('fighters.id'))
     fighter_2 = db.Column(db.Integer, db.ForeignKey('fighters.id'))
-    """ fighter1 = db.relationship("Fighter", foreign_keys=[fighter_1])
-    fighter2 = db.relationship("Fighter", foreign_keys=[fighter_2]) """
     fighter_1_votes = db.Column(db.Integer, default = 0)
     fighter_2_votes = db.Column(db.Integer, default = 0)
     fight_order = db.Column(db.Integer, default = 0)
@@ -197,6 +207,12 @@ class Event(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+
+    def rollback(self):
+        db.session.rollback()
+  
+    def close(self):
+        db.session.close()
 
     def format(self):
         return {
