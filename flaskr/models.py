@@ -46,7 +46,7 @@ class Fighter(db.Model):
     draw = db.Column(db.Integer)
     division = db.Column(db.Integer, db.ForeignKey('divisions.id'))
     rank = db.Column(db.Integer)
-    events = db.relationship('Event', primaryjoin='or_(Fighter.id==Event.fighter_1, Fighter.id==Event.fighter_2)',  backref='figher_event', lazy='select', cascade='all, delete-orphan')
+    #events = db.relationship('Event', primaryjoin='or_(Fighter.id==Event.fighter_1, Fighter.id==Event.fighter_2)',  backref='figher_event', lazy='select', cascade='all, delete-orphan')
 
     def __repr__(self):
         return f"<Fighter id='{self.id}' first_name='{self.first_name}' last_name='{self.last_name}' age='{self.age}'\
@@ -175,8 +175,8 @@ class Event(db.Model):
     event_date = db.Column(db.DateTime) 
     location = db.Column(db.String)
     division = db.Column(db.Integer, db.ForeignKey('divisions.id'))
-    fighter_1 = db.Column(db.Integer, db.ForeignKey('fighters.id'))
-    fighter_2 = db.Column(db.Integer, db.ForeignKey('fighters.id'))
+    fighter_1 = db.Column(db.String)
+    fighter_2 = db.Column(db.String)
     fighter_1_votes = db.Column(db.Integer, default = 0)
     fighter_2_votes = db.Column(db.Integer, default = 0)
     fighter_1_odds = db.Column(db.Integer, default = 0)

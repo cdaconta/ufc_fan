@@ -19,10 +19,10 @@ class EventForm(FlaskForm):
     division = IntegerField(
         'division', validators=[DataRequired()]
     )
-    fighter_1 = IntegerField(
+    fighter_1 = StringField(
         'fighter_1', validators=[DataRequired()]
     )
-    fighter_2 = IntegerField(
+    fighter_2 = StringField(
         'fighter_2', validators=[DataRequired()]
     )
     fighter_1_odds = IntegerField(
