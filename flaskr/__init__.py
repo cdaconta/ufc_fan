@@ -202,7 +202,7 @@ def create_app(test_config=None):
   @requires_auth
   def get_event():
     event_info = []
-    event_data = Event.query.filter(Event.division == division_id).order_by(Event.event_date.desc()).limit(6)
+    event_data = Event.query.order_by(Event.event_date.desc()).limit(6)
     for item in event_data:
         event_info.append(
           {
