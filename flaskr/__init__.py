@@ -224,7 +224,7 @@ def create_app(test_config=None):
   @requires_auth  
   def create_event_form():
     form = EventForm()
-    return render_template('forms/new_event.html', form=form, userinfo=session[constants.PROFILE_KEY])
+    return render_template('forms/event.html', form=form, userinfo=session[constants.PROFILE_KEY])
   
   @app.route('/event/create', methods=['POST'])
   @requires_auth
