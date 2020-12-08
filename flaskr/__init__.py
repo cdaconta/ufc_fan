@@ -228,7 +228,7 @@ def create_app(test_config=None):
       # commit session to database
       db.session.add(form_event)
       db.session.commit()
-      # flash success 
+     
       flash('Event ' + request.form['event_name'] + ' was successfully listed!')
     except:
       db.session.rollback()
@@ -236,8 +236,8 @@ def create_app(test_config=None):
       flash('An error occurred. Event ' + request.form['event_name'] + ' could not be listed.')
     finally:
       db.session.close()
-    return render_template('index.html', userinfo=session[constants.PROFILE_KEY])
-
+    #return render_template('index.html', userinfo=session[constants.PROFILE_KEY])
+    return redirect(url_for('create_event_form'))
 
   
     
