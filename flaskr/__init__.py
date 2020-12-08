@@ -198,6 +198,28 @@ def create_app(test_config=None):
                               userinfo=session[constants.PROFILE_KEY],
                               userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data, events = event_info)
   
+ @app.route('/event')
+ @requires_auth
+ def get_event():
+  event_info = []
+   event_data = Event.query.filter(Event.division == division_id).order_by(Event.event_date.desc()).limit(6)
+   for item in event_data:
+      event_info.append(
+        {
+            'event_name':item.event_name, 
+            'event_date':format_datetime(str(item.event_date)), 
+            'division':item.division,
+            'fighter_1':item.fighter_1,
+            'fighter_2':item.fighter_2,
+            'fighter_1_votes':item.fighter_1_votes,
+            'fighter_2_votes':item.fighter_2_votes,
+            'fight_order':item.fight_order
+        }
+      )
+  return render_template('event.html',
+                              userinfo=session[constants.PROFILE_KEY],
+                              userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), events = event_info)
+ 
   @app.route('/event/create', methods=['GET']) 
   @requires_auth  
   def create_event_form():
