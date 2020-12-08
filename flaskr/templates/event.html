@@ -1,0 +1,17 @@
+{% extends "main.html" %}
+{% block content %} 
+
+
+    {% for item in events %}
+    
+        {% if item.event_order == 1 %}
+        <h2>Main Even</h2>
+        <p>Match {{item.fight_order}}: {{ item.fighter_1}} - Odds {{ item.fighter_1_odds }}VS {item.fighter_2} odds {{ fighter_2_odds }}</p>
+        {% else %}
+        <p>Match {{item.fight_order}}: {{ item.fighter_1}} - Odds {{ item.fighter_1_odds }}VS {item.fighter_2} odds {{ fighter_2_odds }}</p>
+
+    
+    {% endfor %}
+
+
+{% endblock %}
