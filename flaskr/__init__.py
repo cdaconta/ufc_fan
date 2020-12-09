@@ -143,19 +143,14 @@ def create_app(test_config=None):
       data.append(item.format())
     
     event_info = []
-    event_data = Event.query.order_by(Event.event_date.desc()).limit(6)
+    event_data = Event.query.order_by(Event.event_date.desc()).limit(1)
     
     for item in event_data:
       event_info.append(
         {
             'event_name':item.event_name, 
             'event_date':format_datetime(str(item.event_date)), 
-            'division':item.division,
-            'fighter_1':item.fighter_1,
-            'fighter_2':item.fighter_2,
-            'fighter_1_votes':item.fighter_1_votes,
-            'fighter_2_votes':item.fighter_2_votes,
-            'fight_order':item.fight_order
+            'location':item.location,         
         }
       )
 
@@ -175,7 +170,7 @@ def create_app(test_config=None):
       data.append(item.format())
     
     event_info = []
-    event_data = Event.query.filter(Event.division == division_id).order_by(Event.event_date.desc()).limit(1)
+    event_data = Event.query.filter(Event.division == division_id).order_by(Event.event_date.desc()).limit(6)
     #print(f'This is event_data - {event_data}')
     #event_data = Event.query.order_by(Event.event_date.desc())
 
@@ -186,6 +181,7 @@ def create_app(test_config=None):
             'event_name':item.event_name, 
             'event_date':format_datetime(str(item.event_date)), 
             'location':item.location,
+            'division':item.division,
         }
       )
 
