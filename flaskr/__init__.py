@@ -1,4 +1,4 @@
-from flask import Flask, render_template, g, request, Response, flash, redirect, url_for, session, jsonify
+from flask import Flask, render_template, g, request, jsonify, Response, flash, redirect, url_for, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 from flask_cors import CORS
@@ -255,7 +255,22 @@ def create_app(test_config=None):
     #return render_template('index.html', userinfo=session[constants.PROFILE_KEY])
     return redirect(url_for('create_event_form'))
 
-  
+  @app.route('/event/plus/<name>')
+  def get_event_fighter_votes(name):
+    
+    event_data = Event.query.filter(Event.fighter_1 == name | Event.fighter_2 == name).order_by(Event.event_date.desc()).limit(1)
+    
+    data = []
+    for item in event_data:
+        data.append( {     
+              'fighter_1_votes':item.fighter_1_votes,
+              'fighter_2_votes':item.fighter_2_votes, 
+          })
+        
+    return jsonify({
+      'success':True,
+      'fighters_votes':data,
+    })
     
   return app
 
