@@ -7,9 +7,9 @@
     
         {% if item.fight_order == 1 %}
         <h2>Main Event</h2>
-        <p>Match {{item.fight_order}}: {{ item.fighter_1}} - Odds {{ item.fighter_1_odds }}VS {{item.fighter_2}} odds {{ fighter_2_odds }}</p>
+        <p>Match {{item.fight_order}}: {{ item.fighter_1}} - Odds ({% if item.fighter_1_odds > 0 %}+{% endif %}{{ item.fighter_1_odds }}) VS {{item.fighter_2}} - Odds ({% if item.fighter_2_odds > 0 %}+{% endif %}{{ item.fighter_2_odds }})</p>
         {% else %}
-        <p>Match {{item.fight_order}}: {{ item.fighter_1}} - Odds {{ item.fighter_1_odds }}VS {{item.fighter_2}} odds {{ fighter_2_odds }}</p>
+        <p>Match {{item.fight_order}}: {{ item.fighter_1}} - Odds ({% if item.fighter_1_odds > 0 %}+{% endif %}{{ item.fighter_1_odds }}) VS {{item.fighter_2}} - Odds ({% if item.fighter_2_odds > 0 %}+{% endif %}{{ item.fighter_2_odds }})</p>
         {% endif %}
     
     {% endfor %}

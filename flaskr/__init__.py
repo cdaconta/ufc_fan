@@ -185,7 +185,7 @@ def create_app(test_config=None):
         {
             'event_name':item.event_name, 
             'event_date':format_datetime(str(item.event_date)), 
-            
+            'location':item.location,
         }
       )
 
@@ -202,12 +202,15 @@ def create_app(test_config=None):
         event_info.append(
           {
               'event_name':item.event_name, 
-              'event_date':format_datetime(str(item.event_date)), 
+              'event_date':format_datetime(str(item.event_date)),
+              'location':item.location, 
               'division':item.division,
               'fighter_1':item.fighter_1,
               'fighter_2':item.fighter_2,
               'fighter_1_votes':item.fighter_1_votes,
               'fighter_2_votes':item.fighter_2_votes,
+              'fighter_1_odds':item.fighter_1_odds,
+              'fighter_2_odds':item.fighter_2_odds,
               'fight_order':item.fight_order
           }
         )
