@@ -1,4 +1,4 @@
-from flask import Flask, render_template, g, request, Response, flash, redirect, url_for, session, jsonify
+from flask import Flask, render_template, g, request, jsonify, Response, flash, redirect, url_for, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 from flask_cors import CORS
@@ -143,19 +143,14 @@ def create_app(test_config=None):
       data.append(item.format())
     
     event_info = []
-    event_data = Event.query.order_by(Event.event_date.desc()).limit(6)
+    event_data = Event.query.order_by(Event.event_date.desc()).limit(1)
     
     for item in event_data:
       event_info.append(
         {
             'event_name':item.event_name, 
             'event_date':format_datetime(str(item.event_date)), 
-            'division':item.division,
-            'fighter_1':item.fighter_1,
-            'fighter_2':item.fighter_2,
-            'fighter_1_votes':item.fighter_1_votes,
-            'fighter_2_votes':item.fighter_2_votes,
-            'fight_order':item.fight_order
+            'location':item.location,         
         }
       )
 
@@ -185,12 +180,8 @@ def create_app(test_config=None):
         {
             'event_name':item.event_name, 
             'event_date':format_datetime(str(item.event_date)), 
+            'location':item.location,
             'division':item.division,
-            'fighter_1':item.fighter_1,
-            'fighter_2':item.fighter_2,
-            'fighter_1_votes':item.fighter_1_votes,
-            'fighter_2_votes':item.fighter_2_votes,
-            'fight_order':item.fight_order
         }
       )
 
@@ -202,17 +193,20 @@ def create_app(test_config=None):
   @requires_auth
   def get_event():
     event_info = []
-    event_data = Event.query.filter(Event.division == division_id).order_by(Event.event_date.desc()).limit(6)
+    event_data = Event.query.order_by(Event.event_date.desc()).limit(6)
     for item in event_data:
         event_info.append(
           {
               'event_name':item.event_name, 
-              'event_date':format_datetime(str(item.event_date)), 
+              'event_date':format_datetime(str(item.event_date)),
+              'location':item.location, 
               'division':item.division,
               'fighter_1':item.fighter_1,
               'fighter_2':item.fighter_2,
               'fighter_1_votes':item.fighter_1_votes,
               'fighter_2_votes':item.fighter_2_votes,
+              'fighter_1_odds':item.fighter_1_odds,
+              'fighter_2_odds':item.fighter_2_odds,
               'fight_order':item.fight_order
           }
         )
@@ -232,7 +226,7 @@ def create_app(test_config=None):
     try:
       # get form data and create 
       form = EventForm()
-      print(f'This is form: {form}')
+      #print(f'This is form: {form}')
       form_event = Event(
       event_name = form.event_name.data, 
       event_date = form.event_date.data,
@@ -261,7 +255,22 @@ def create_app(test_config=None):
     #return render_template('index.html', userinfo=session[constants.PROFILE_KEY])
     return redirect(url_for('create_event_form'))
 
-  
+  @app.route('/event/plus/<name>')
+  def get_event_fighter_votes(name):
+    
+    event_data = Event.query.filter(Event.fighter_1 == name | Event.fighter_2 == name).order_by(Event.event_date.desc()).limit(1)
+    
+    data = []
+    for item in event_data:
+        data.append( {     
+              'fighter_1_votes':item.fighter_1_votes,
+              'fighter_2_votes':item.fighter_2_votes, 
+          })
+        
+    return jsonify({
+      'success':True,
+      'fighters_votes':data,
+    })
     
   return app
 
