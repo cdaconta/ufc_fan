@@ -1,6 +1,6 @@
 from flask import Flask, render_template, g, request, jsonify, Response, flash, redirect, url_for, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import text
+from sqlalchemy import text, or_
 from flask_cors import CORS
 from .models import setup_db, db, Fighter, Division, Event
 from functools import wraps
@@ -18,6 +18,7 @@ from six.moves.urllib.parse import urlencode
 from . import constants
 #from .forms import EventForm #was *
 from .forms import EventForm
+import html
 
 
 
@@ -257,8 +258,9 @@ def create_app(test_config=None):
 
   @app.route('/event/plus/<name>')
   def get_event_fighter_votes(name):
-    
-    event_data = Event.query.filter(Event.fighter_1 == name | Event.fighter_2 == name).order_by(Event.event_date.desc()).limit(1)
+    print(html.unescape(name))
+    clean_name = html.unescape(name)
+    event_data = Event.query.filter(or_(Event.fighter_1 == clean_name, Event.fighter_2 == clean_name)).order_by(Event.event_date.desc()).limit(1)
     
     data = []
     for item in event_data:
@@ -270,7 +272,8 @@ def create_app(test_config=None):
     return jsonify({
       'success':True,
       'fighters_votes':data,
-    })
+    }), 200
+    
     
   return app
 
