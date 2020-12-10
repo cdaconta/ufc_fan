@@ -256,18 +256,34 @@ def create_app(test_config=None):
     #return render_template('index.html', userinfo=session[constants.PROFILE_KEY])
     return redirect(url_for('create_event_form'))
 
-  @app.route('/event/plus/<name>')
-  def get_event_fighter_votes(name):
-    print(html.unescape(name))
+  @app.route('/event/plus/<name>/<number>', methods=['PATCH'])
+  def get_event_fighter_votes(name, number):
+    #print(html.unescape(name))
     clean_name = html.unescape(name)
-    event_data = Event.query.filter(or_(Event.fighter_1 == clean_name, Event.fighter_2 == clean_name)).order_by(Event.event_date.desc()).limit(1)
-    
-    data = []
-    for item in event_data:
+    fighter_number = number
+
+    if(fighter_number == '1'):
+      #event_data = Event.query.filter(or_(Event.fighter_1 == clean_name, Event.fighter_2 == clean_name)).order_by(Event.event_date.desc()).limit(1)
+      event_data = Event.query.filter(Event.fighter_1 == clean_name).order_by(Event.event_date.desc()).limit(1)
+      #print(f'Event data is {event_data[0].fighter_1_votes}')
+      vote_number = event_data[0].fighter_1_votes + 1
+      #print(f'This is vote num - {vote_number}')
+      event_data[0].fighter_1_votes = vote_number
+      session.commit()
+
+      data = []
+      for item in event_data:
         data.append( {     
               'fighter_1_votes':item.fighter_1_votes,
-              'fighter_2_votes':item.fighter_2_votes, 
           })
+    else:
+       event_data = Event.query.filter(Event.fighter_2 == clean_name).order_by(Event.event_date.desc()).limit(1)
+
+       data = []
+       for item in event_data:
+            data.append( {     
+                  'fighter_2_votes':item.fighter_2_votes, 
+              })
         
     return jsonify({
       'success':True,
