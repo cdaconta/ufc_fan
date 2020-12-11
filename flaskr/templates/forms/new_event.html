@@ -9,7 +9,7 @@
           
             <div class="form-group">
               <label for="event_name">Event</label>
-              {{ form.event_name(class_ = 'form-control', placeholder='UFC location', autofocus = true) }}
+              {{ form.event_name(class_ = 'form-control', placeholder='Event Name', autofocus = true) }}
             </div>
             <div class="form-group">
               <label for="event_date">Date</label>
@@ -17,7 +17,7 @@
             </div>
             <div class="form-group">
               <label for="location">Location</label>
-              {{ form.location(class_ = 'form-control', placeholder='Somewhere', autofocus = true) }}
+              {{ form.location(class_ = 'form-control', placeholder='Fight Location', autofocus = true) }}
             </div>
           
       </div>
@@ -42,7 +42,7 @@
       </div>
       <div class="form-group">
         <label for="figher_1">Fighter 1</label>  
-        {{ form.fighter_1(class_ = 'form-control', placeholder='John Doe',  autofocus = true) }}
+        {{ form.fighter_1(class_ = 'form-control', placeholder='Last Name ONLY use (-)hyphen on multiple',  autofocus = true) }}
       </div>
       <div class="form-group">
         <label for="figher_1_odds">Fighter 1 odds</label>  
@@ -50,7 +50,7 @@
       </div>
       <div class="form-group">
         <label for="figher_2">Fighter 2</label>  
-        {{ form.fighter_2(class_ = 'form-control', placeholder='Joe Doe',  autofocus = true) }}
+        {{ form.fighter_2(class_ = 'form-control', placeholder='Last Name ONLY',  autofocus = true) }}
       </div>
       <div class="form-group">
         <label for="figher_2_odds">Fighter 2 odds</label>  
@@ -58,7 +58,7 @@
       </div>
       <div class="form-group">
         <label for="fight_order">Match Position</label>  
-        {{ form.fight_order(class_ = 'form-control', placeholder='1 - 6',  autofocus = true) }}
+        {{ form.fight_order(class_ = 'form-control', placeholder='Match number',  autofocus = true) }}
       </div>
               
       <input type="submit" value="Create Event/Fighter" class="btn btn-primary btn-lg btn-block">

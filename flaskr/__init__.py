@@ -170,7 +170,7 @@ def create_app(test_config=None):
     for item in division_fighters:
       data.append(item.format())
     
-    event_info = []
+    """ event_info = []
     event_data = Event.query.filter(Event.division == division_id).order_by(Event.event_date.desc()).limit(6)
     #print(f'This is event_data - {event_data}')
     #event_data = Event.query.order_by(Event.event_date.desc())
@@ -184,17 +184,19 @@ def create_app(test_config=None):
             'location':item.location,
             'division':item.division,
         }
-      )
+      ) """
 
     return render_template('division_fighters.html',
                               userinfo=session[constants.PROFILE_KEY],
-                              userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data, events = event_info)
+                              userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data) #events = event_info)
   
-  @app.route('/event')
+  @app.route('/event/<date>')
   @requires_auth
-  def get_event():
+  def get_event(date):
+    clean_date = html.unescape(date)
     event_info = []
-    event_data = Event.query.order_by(Event.event_date.desc()).limit(6)
+    #event_data = Event.query.order_by(Event.event_date.desc()).limit(6)
+    event_data = Event.query.filter(Event.event_date == clean_date)
     for item in event_data:
         event_info.append(
           {
@@ -277,7 +279,10 @@ def create_app(test_config=None):
               'fighter_number':1,     
               'fighter_1_votes':item.fighter_1_votes,
           })
-      #data = {}
+        return jsonify({
+        'success':True,
+        'fighter_votes':data,
+        }), 200
     else:
        event_data = Event.query.filter(Event.fighter_2 == clean_name).order_by(Event.event_date.desc()).limit(1)
        vote_number = event_data[0].fighter_2_votes + 1
@@ -292,10 +297,10 @@ def create_app(test_config=None):
               'fighter_2_votes':item.fighter_2_votes, 
               })
         
-    return jsonify({
-      'success':True,
-      'fighter_votes':data,
-    }), 200
+            return jsonify({
+              'success':True,
+              'fighter_votes':data,
+            }), 200
     
     
   return app
