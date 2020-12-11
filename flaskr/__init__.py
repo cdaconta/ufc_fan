@@ -269,7 +269,7 @@ def create_app(test_config=None):
       vote_number = event_data[0].fighter_1_votes + 1
       #print(f'This is vote num - {vote_number}')
       event_data[0].fighter_1_votes = vote_number
-      session.commit()
+      db.session.commit()
 
       data = []
       for item in event_data:

@@ -75,10 +75,10 @@
   function update_vote(name)
   {
     const fighter_number = document.querySelector('#' + name);
-    number = fighter_number.dataset.fighter;
-      //alert(name);
-    fetch('/event/plus/' + name +'/' + number,{
-        method="PATCH",
+    number_fighter = fighter_number.dataset.fighter;
+      //alert(number);
+    fetch('/event/plus/' + name +'/' + number_fighter,{
+        method:"PATCH",
         body: JSON.stringify({ "message":"success" }),
         headers: { "Content-Type":"application/json"}
     })
