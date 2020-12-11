@@ -270,24 +270,31 @@ def create_app(test_config=None):
       #print(f'This is vote num - {vote_number}')
       event_data[0].fighter_1_votes = vote_number
       db.session.commit()
-
+      
       data = []
       for item in event_data:
-        data.append( {     
+        data.append( {
+              'fighter_number':1,     
               'fighter_1_votes':item.fighter_1_votes,
           })
+      #data = {}
     else:
        event_data = Event.query.filter(Event.fighter_2 == clean_name).order_by(Event.event_date.desc()).limit(1)
+       vote_number = event_data[0].fighter_2_votes + 1
+       #print(f'This is vote num - {vote_number}')
+       event_data[0].fighter_2_votes = vote_number
+       db.session.commit()
 
        data = []
        for item in event_data:
-            data.append( {     
-                  'fighter_2_votes':item.fighter_2_votes, 
+            data.append( {  
+              'fighter_number':2,   
+              'fighter_2_votes':item.fighter_2_votes, 
               })
         
     return jsonify({
       'success':True,
-      'fighters_votes':data,
+      'fighter_votes':data,
     }), 200
     
     

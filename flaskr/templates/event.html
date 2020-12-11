@@ -5,8 +5,8 @@
     <div class="card m-4 shadow-sm">
     {% for item in events %}
     
-        {% if item.fight_order == 1 %}
-            <h2>Main Event</h2>
+        
+            
             <p>Match {{item.fight_order}}: {{ item.fighter_1}} - Odds ({% if item.fighter_1_odds > 0 %}+{% endif %}{{ item.fighter_1_odds }}) VS {{item.fighter_2}} - Odds ({% if item.fighter_2_odds > 0 %}+{% endif %}{{ item.fighter_2_odds }})</p>
             <div class="card-deck">
                 <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
@@ -14,12 +14,12 @@
                         POLL
                     </div>
                     <div class="card-body text-center">
-                    <p class="card-text" id="fighter_1_poll">0</p>
+                    <p class="card-text" id="{{item.fighter_1}}_poll">0</p>
                     </div>
                     <div class="card-footer text-center">
-                    <p class="card-text" id="{{item.fighter_1}}" data-fighter="1" onClick="update_vote(this.id)">
+                    <p class="card-text" >
                         Vote for {{item.fighter_1}}
-                            <svg  width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <svg  id="{{item.fighter_1}}" data-fighter1="1" onClick="update_vote(this.id)" width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-plus-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
                                 <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
                             </svg>
@@ -31,12 +31,12 @@
                         POLL
                     </div>
                     <div class="card-body text-center">
-                    <p class="card-text" id="fighter_2_poll">0</p>
+                    <p class="card-text" id="{{item.fighter_2}}_poll">0</p>
                     </div>
                     <div class="card-footer text-center">
-                    <p class="card-text" id="{{item.fighter_2}}" data-fighter="2" onClick="update_vote(this.id)">
+                    <p class="card-text" >
                         Vote for {{item.fighter_2}}
-                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <svg id="{{item.fighter_2}}" data-fighter2="2" onClick="update_vote(this.id)" width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-plus-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
                                 <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
                             </svg>
@@ -44,25 +44,8 @@
                     </div>
                 </div>
             </div>
-        {% else %}
-            <p>Match {{item.fight_order}}: {{ item.fighter_1}} - Odds ({% if item.fighter_1_odds > 0 %}+{% endif %}{{ item.fighter_1_odds }}) VS {{item.fighter_2}} - Odds ({% if item.fighter_2_odds > 0 %}+{% endif %}{{ item.fighter_2_odds }})</p>
         
-            <p>
-                <span class="text-danger">Who do you vote for?</span>
-                {{ item.fighter_1 }}
-                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-                    <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                </svg>
-                
-                &nbsp;
-                {{ item.fighter_2 }}
-                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-                    <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                </svg>
-            </p>
-        {% endif %}
+        
     
     {% endfor %}
     </div>
@@ -75,7 +58,16 @@
   function update_vote(name)
   {
     const fighter_number = document.querySelector('#' + name);
-    number_fighter = fighter_number.dataset.fighter;
+    let number_fighter;
+    //"params" in object.dataset)
+    //"fighter1" in fighter_number.dataset
+    if (fighter_number.dataset == "fighter1") {
+        number_fighter = fighter_number.dataset.fighter1;
+        }else {
+        number_fighter = fighter_number.dataset.fighter2;
+        }
+
+    
       //alert(number);
     fetch('/event/plus/' + name +'/' + number_fighter,{
         method:"PATCH",
@@ -91,8 +83,21 @@
       }
 
       // Examine the text in the response
-      response.json().then(function(data) {
-        console.log(data);
+       response.json().then(function(data) {
+       let fighter_num = data.fighter_votes[0].fighter_number;
+
+       if (fighter_num == 1){
+        let total_votes = data.fighter_votes[0].fighter_1_votes;
+        let poll_div = document.querySelector('#' + name + '_poll');
+        console.log("This is poll_div " + poll_div);
+        poll_div.innerHTML = total_votes;
+       } else {
+        let total_votes = data.fighter_votes[0].fighter_2_votes; 
+        let poll_div = document.querySelector('#' + name + '_poll');  
+        poll_div.innerHTML = total_votes;
+       }
+   //console.log("This is data obj " + data.fighter_votes[0].fighter_number);
+
       });
     }
   )
