@@ -169,22 +169,6 @@ def create_app(test_config=None):
 
     for item in division_fighters:
       data.append(item.format())
-    
-    """ event_info = []
-    event_data = Event.query.filter(Event.division == division_id).order_by(Event.event_date.desc()).limit(6)
-    #print(f'This is event_data - {event_data}')
-    #event_data = Event.query.order_by(Event.event_date.desc())
-
-
-    for item in event_data:
-      event_info.append(
-        {
-            'event_name':item.event_name, 
-            'event_date':format_datetime(str(item.event_date)), 
-            'location':item.location,
-            'division':item.division,
-        }
-      ) """
 
     return render_template('division_fighters.html',
                               userinfo=session[constants.PROFILE_KEY],
@@ -260,49 +244,50 @@ def create_app(test_config=None):
 
   @app.route('/event/plus/<name>/<number>', methods=['PATCH'])
   def get_event_fighter_votes(name, number):
-    #print(html.unescape(name))
-    clean_name = html.unescape(name)
-    fighter_number = number
+      #print(html.unescape(name))
+      clean_name = html.unescape(name)
+      fighter_number = number
 
-    if(fighter_number == '1'):
-      #event_data = Event.query.filter(or_(Event.fighter_1 == clean_name, Event.fighter_2 == clean_name)).order_by(Event.event_date.desc()).limit(1)
-      event_data = Event.query.filter(Event.fighter_1 == clean_name).order_by(Event.event_date.desc()).limit(1)
-      #print(f'Event data is {event_data[0].fighter_1_votes}')
-      vote_number = event_data[0].fighter_1_votes + 1
-      #print(f'This is vote num - {vote_number}')
-      event_data[0].fighter_1_votes = vote_number
-      db.session.commit()
-      
-      data = []
-      for item in event_data:
-        data.append( {
-              'fighter_number':1,     
-              'fighter_1_votes':item.fighter_1_votes,
-          })
-        return jsonify({
-        'success':True,
-        'fighter_votes':data,
-        }), 200
-    else:
-       event_data = Event.query.filter(Event.fighter_2 == clean_name).order_by(Event.event_date.desc()).limit(1)
-       vote_number = event_data[0].fighter_2_votes + 1
-       #print(f'This is vote num - {vote_number}')
-       event_data[0].fighter_2_votes = vote_number
-       db.session.commit()
-
-       data = []
-       for item in event_data:
-            data.append( {  
-              'fighter_number':2,   
-              'fighter_2_votes':item.fighter_2_votes, 
+      if(fighter_number == '1'):
+          #event_data = Event.query.filter(or_(Event.fighter_1 == clean_name, Event.fighter_2 == clean_name)).order_by(Event.event_date.desc()).limit(1)
+          event_data = Event.query.filter(Event.fighter_1 == clean_name).order_by(Event.event_date.desc()).limit(1)
+          #print(f'Event data is {event_data[0].fighter_1_votes}')
+          vote_number = event_data[0].fighter_1_votes + 1
+          #print(f'This is vote num - {vote_number}')
+          event_data[0].fighter_1_votes = vote_number
+          db.session.commit()
+          
+          data = []
+          for item in event_data:
+            data.append( {
+                  'fighter_number':1,     
+                  'fighter_1_votes':item.fighter_1_votes,
               })
-        
             return jsonify({
-              'success':True,
-              'fighter_votes':data,
+            'success':True,
+            'fighter_votes':data,
             }), 200
-    
-    
+      else:
+          event_data = Event.query.filter(Event.fighter_2 == clean_name).order_by(Event.event_date.desc()).limit(1)
+          vote_number = event_data[0].fighter_2_votes + 1
+          #print(f'This is vote num - {vote_number}')
+          event_data[0].fighter_2_votes = vote_number
+          db.session.commit()
+
+          data = []
+          for item in event_data:
+                data.append( {  
+                  'fighter_number':2,   
+                  'fighter_2_votes':item.fighter_2_votes, 
+                  })
+            
+                return jsonify({
+                  'success':True,
+                  'fighter_votes':data,
+                }), 200
+
+  
+
   return app
 
     

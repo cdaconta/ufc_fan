@@ -1,7 +1,7 @@
 {% extends "main.html" %}
 {% block content %} 
 
-<div class="d-flex justify-content-center">
+<div class="d-flex justify-content-center" id="event_page">
     <div class="card m-4 shadow-sm">
     {% for item in events %}
     
@@ -14,7 +14,7 @@
                         POLL
                     </div>
                     <div class="card-body text-center">
-                    <p class="card-text" id="{{item.fighter_1}}_poll">0</p>
+                    <p class="card-text" id="{{item.fighter_1}}_poll">{{item.fighter_1_votes}}</p>
                     </div>
                     <div class="card-footer text-center">
                     <p class="card-text" >
@@ -31,7 +31,7 @@
                         POLL
                     </div>
                     <div class="card-body text-center">
-                    <p class="card-text" id="{{item.fighter_2}}_poll">0</p>
+                    <p class="card-text" id="{{item.fighter_2}}_poll">{{item.fighter_2_votes}}</p>
                     </div>
                     <div class="card-footer text-center">
                     <p class="card-text" >
@@ -53,8 +53,7 @@
 
     
 <script type="text/javascript">
-    
-
+  
   function update_vote(name)
   {
     const fighter_number = document.querySelector('#' + name);
@@ -81,7 +80,7 @@
        if (fighter_num == 1){
         let total_votes = data.fighter_votes[0].fighter_1_votes;
         let poll_div = document.querySelector('#' + name + '_poll');
-        console.log("This is poll_div " + poll_div);
+        //console.log("This is poll_div " + poll_div);
         poll_div.innerHTML = total_votes;
        } else {
         let total_votes = data.fighter_votes[0].fighter_2_votes; 
@@ -95,7 +94,7 @@
   )
   .catch(function(err) {
     console.log('Fetch Error :-S', err);
-  });
+    });
   }
 </script>
 
