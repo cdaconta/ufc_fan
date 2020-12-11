@@ -180,7 +180,7 @@ def create_app(test_config=None):
     clean_date = html.unescape(date)
     event_info = []
     #event_data = Event.query.order_by(Event.event_date.desc()).limit(6)
-    event_data = Event.query.filter(Event.event_date == clean_date)
+    event_data = Event.query.filter(Event.event_date == clean_date).order_by(Event.fight_order)
     for item in event_data:
         event_info.append(
           {
