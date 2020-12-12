@@ -47,7 +47,7 @@ def create_app(test_config=None):
   app.debug = True
 
   #----------------------------------------------------------------------------#
-  # Filters.
+  # Filter
   #----------------------------------------------------------------------------#
   # use a string for the value arg when calling this function
   def format_datetime(value, format='medium'):
@@ -59,7 +59,7 @@ def create_app(test_config=None):
     return babel.dates.format_datetime(date, format)
   
   app.jinja_env.filters['datetime'] = format_datetime
-  
+  #----------------------------------------------------------------------------#
   @app.after_request
   def after_request(response):
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
@@ -249,7 +249,7 @@ def create_app(test_config=None):
       fighter_number = number
 
       if(fighter_number == '1'):
-          #event_data = Event.query.filter(or_(Event.fighter_1 == clean_name, Event.fighter_2 == clean_name)).order_by(Event.event_date.desc()).limit(1)
+          #event_data
           event_data = Event.query.filter(Event.fighter_1 == clean_name).order_by(Event.event_date.desc()).limit(1)
           #print(f'Event data is {event_data[0].fighter_1_votes}')
           vote_number = event_data[0].fighter_1_votes + 1
