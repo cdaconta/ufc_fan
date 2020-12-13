@@ -16,18 +16,19 @@
               <img src="/static/img/male.png" class="img-fluid" alt="Responsive image">
               {% else %}
               <img src="/static/img/female.png" class="img-fluid" alt="Responsive image">
-              {% endif %}
-              <div class="card-body">               
-                <p class="card-text">{{ fighters[0].first_name}} {{ fighters[0].last_name }}</p>
-                
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                  </div>
-                  <small class="text-muted">9 mins</small>
+              {% endif %}             
+                <div class="card-body">
+                  <h6 class="card-title"><span class="badge badge-primary badge-pill">Champ</span> {{ fighters[0].first_name}} {{ fighters[0].last_name }}</h6>
                 </div>
-              </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><span class="badge badge-primary badge-pill">Age</span> {{ fighters[0].age}}</li>
+                  <li class="list-group-item"><span class="badge badge-primary badge-pill">Height</span> {{ fighters[0].height}}</li>
+                  <li class="list-group-item"><span class="badge badge-primary badge-pill">Weight</span> {{ fighters[0].weight}}</li>
+                  <li class="list-group-item"><span class="badge badge-primary badge-pill">Arm Reach</span> {{ fighters[0].arm_reach}}</li>
+                  <li class="list-group-item"><span class="badge badge-primary badge-pill">Leg Reach</span> {{ fighters[0].leg_reach}}</li>
+                  <li class="list-group-item"><span class="badge badge-primary badge-pill">Win/Loss/Draw</span> {{ fighters[0].win}}/{{ fighters[0].loss }}/{{ fighters[0].draw }}</li>
+                  
+                </ul>     
             </div>
           </div>
         </div>
