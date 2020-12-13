@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField
+from wtforms import StringField, FloatField, SelectField, SelectMultipleField, DateTimeField, BooleanField
 from wtforms.fields.core import IntegerField 
 from wtforms.validators import DataRequired, AnyOf, URL
 
@@ -35,4 +35,48 @@ class EventForm(FlaskForm):
     fight_order = IntegerField(
         'fight_order', validators=[DataRequired()]
     )    
-        
+
+
+class FighterForm(FlaskForm):
+    first_name = StringField(
+        'first_name', validators=[DataRequired()]
+    )
+    last_name = StringField(
+        'last_name', validators=[DataRequired()]
+    )
+    age = IntegerField(
+        'age',
+        validators=[DataRequired()]
+    )
+    height = FloatField(
+        'height', validators=[DataRequired()]  
+    )
+    weight = FloatField(
+        'weight', validators=[DataRequired()]
+    )
+    arm_reach = FloatField(
+        'arm_reach', validators=[DataRequired()]
+    )
+    leg_reach = FloatField(
+        'leg_reach', validators=[DataRequired()]
+    )
+    sex = StringField(
+        'sex', validators=[DataRequired()]
+    )
+    win = IntegerField(
+        'win', validators=[DataRequired()]
+    )
+
+    loss = IntegerField(
+        'loss', validators=[DataRequired()]
+    )  
+    draw = IntegerField(
+        'draw', validators=[DataRequired()]
+    )
+
+    division = IntegerField(
+        'division', validators=[DataRequired()]
+    )      
+    rank = IntegerField(
+        'rank', validators=[DataRequired()]
+    )   

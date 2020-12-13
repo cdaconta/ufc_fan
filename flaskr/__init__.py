@@ -17,7 +17,7 @@ from six.moves.urllib.parse import urlencode
 
 from . import constants
 #from .forms import EventForm #was *
-from .forms import EventForm
+from .forms import EventForm, FighterForm
 import html
 
 
@@ -174,10 +174,19 @@ def create_app(test_config=None):
 
     for item in division_fighters:
       data.append(item.format())
+    
+    division_name = Division.query.filter(Division.id == division_id )
+
+    names = []
+    for item in division_name:
+      names.append({
+        'id':item.id,
+        'name':item.name
+      })
 
     return render_template('division_fighters.html',
                               userinfo=session[constants.PROFILE_KEY],
-                              userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data) #events = event_info)
+                              userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data, names=names) #events = event_info)
   
   @app.route('/event/<date>')
   @requires_auth
@@ -220,6 +229,47 @@ def create_app(test_config=None):
       form = EventForm()
       #print(f'This is form: {form}')
       form_event = Event(
+      event_name = form.event_name.data, 
+      event_date = form.event_date.data,
+      location = form.location.data,
+      division = form.division.data,
+      fighter_1 = form.fighter_1.data, 
+      fighter_2 = form.fighter_2.data,  
+      fighter_1_votes = 0,
+      fighter_2_votes = 0,
+      fighter_1_odds = form.fighter_1_odds.data,
+      fighter_2_odds = form.fighter_2_odds.data,
+      fight_order = form.fight_order.data, 
+        )
+      
+      # commit session to database
+      db.session.add(form_event)
+      db.session.commit()
+     
+      flash('Event ' + request.form['event_name'] + ' was successfully listed!')
+    except:
+      db.session.rollback()
+      #flash failure
+      flash('An error occurred. Event ' + request.form['event_name'] + ' could not be listed.')
+    finally:
+      db.session.close()
+    #return render_template('index.html', userinfo=session[constants.PROFILE_KEY])
+    return redirect(url_for('create_event_form'))
+
+  @app.route('/fighter/edit', methods=['GET']) 
+  @requires_auth  
+  def fighter_edit_form():
+    form = FighterForm()
+    return render_template('forms/edit_fighter.html', form=form, userinfo=session[constants.PROFILE_KEY])
+  
+  @app.route('/fighter/edit', methods=['POST'])
+  @requires_auth
+  def edit_fighters():
+    try:
+      # get form data and create 
+      form = FighterForm()
+      #print(f'This is form: {form}')
+      form_event = Fighter(
       event_name = form.event_name.data, 
       event_date = form.event_date.data,
       location = form.location.data,

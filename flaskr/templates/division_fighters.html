@@ -6,31 +6,10 @@
     <div class="album py-5 bg-light">
       <div class="container">
         
-        {% if fighters[0].division == 1 %}
-        <div class="h3 text-center">Men's Flyweight - Champ & Top 5</div>
-        {% elif fighters[0].division == 2 %}
-        <div class="h3 text-center">Men's Bantamweight - Champ & Top 5</div>
-        {% elif fighters[0].division == 3 %}
-        <div class="h3 text-center">Men's Featherweight - Champ & Top 5</div>
-        {% elif fighters[0].division == 4 %}
-        <div class="h3 text-center">Men's Lightweight - Champ & Top 5</div>
-        {% elif fighters[0].division == 5 %}
-        <div class="h3 text-center">Men's Welterweight - Champ & Top 5</div>
-        {% elif fighters[0].division == 6 %}
-        <div class="h3 text-center">Men's Middleweight - Champ & Top 5</div>
-        {% elif fighters[0].division == 7 %}
-        <div class="h3 text-center">Men's Light Heavyweight - Champ & Top 5</div>
-        {% elif fighters[0].division == 8 %}
-        <div class="h3 text-center">Men's Heavyweight - Champ & Top 5</div>
-        {% elif fighters[0].division == 9 %}
-        <div class="h3 text-center">Women's Strawweight - Champ & Top 5</div>
-        {% elif fighters[0].division == 10 %}
-        <div class="h3 text-center">Women's Flyweight - Champ & Top 5</div>
-        {% elif fighters[0].division == 11 %}
-        <div class="h3 text-center">Women's Bantamweight - Champ & Top 5</div>
-        {% else %}
-        <div class="h3 text-center">Women's Featherweight - Champ & Top 5</div>
-        {% endif %}
+          {% if fighters[0].division == names[0].id %}
+          <div class="h3 text-center">{{ names[0].name }} - Champ & Top 5</div>
+          {% endif %}
+        
         
         <div class="d-flex justify-content-center">
           <div class="col-md-4">
