@@ -256,35 +256,43 @@ def create_app(test_config=None):
     #return render_template('index.html', userinfo=session[constants.PROFILE_KEY])
     return redirect(url_for('create_event_form'))
 
-  @app.route('/fighter/edit', methods=['GET']) 
+  @app.route('/fighter/edit/<int:fighter_id>', methods=['GET']) 
   @requires_auth  
-  def fighter_edit_form():
+  def fighter_edit_form(fighter_id):
     form = FighterForm()
-    return render_template('forms/edit_fighter.html', form=form, userinfo=session[constants.PROFILE_KEY])
+    fighter = Fighter.query.get(fighter_id)
+    fighter_details = Fighter.format(fighter)
+    return render_template('forms/edit_fighter.html', form=form, fighter = fighter, userinfo=session[constants.PROFILE_KEY])
   
-  @app.route('/fighter/edit', methods=['POST'])
+  @app.route('/fighter/edit/<int:fighter_id', methods=['PATCH'])
   @requires_auth
-  def edit_fighters():
+  def edit_fighters(fighter_id):
     try:
+      fighter = Fighter.query.get(fighter_id)
+      fighter_details = Fighter.format(fighter)
+
       # get form data and create 
       form = FighterForm()
       #print(f'This is form: {form}')
-      form_event = Fighter(
-      event_name = form.event_name.data, 
-      event_date = form.event_date.data,
-      location = form.location.data,
-      division = form.division.data,
-      fighter_1 = form.fighter_1.data, 
-      fighter_2 = form.fighter_2.data,  
-      fighter_1_votes = 0,
-      fighter_2_votes = 0,
-      fighter_1_odds = form.fighter_1_odds.data,
-      fighter_2_odds = form.fighter_2_odds.data,
-      fight_order = form.fight_order.data, 
-        )
+      
+      fighter_details['first_name'] = form.first_name.data, 
+      fighter_details['last_name'] = form.last_name.data,
+      fighter_details['age'] = form.age.data,
+      fighter_details['height'] = form.height.data,
+      fighter_details['weight'] = form.weight.data, 
+      fighter_details['arm_reach'] = form.arm_reach.data,  
+      fighter_details['leg_reach'] = form.leg_reach.data,
+      fighter_details['sex'] = form.sex.data,
+      fighter_details['win'] = form.win.data,
+      fighter_details['loss'] = form.loss.data,
+      fighter_details['draw'] = form.draw.data, 
+      fighter_details['division'] = form.division.data,
+      fighter_details['rank'] = form.rank.data,
+       
+      
       
       # commit session to database
-      db.session.add(form_event)
+      db.session.add(fighter_details)
       db.session.commit()
      
       flash('Event ' + request.form['event_name'] + ' was successfully listed!')
