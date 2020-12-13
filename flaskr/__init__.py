@@ -159,6 +159,11 @@ def create_app(test_config=None):
                               userinfo=session[constants.PROFILE_KEY],
                               userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data, events = event_info)
 
+  @app.route('/knockouts')
+  @requires_auth
+  def get_knockout_page():
+    return render_template('knockouts.html',  userinfo=session[constants.PROFILE_KEY])
+
   @app.route('/division_fighters/<int:division_id>')
   @requires_auth
   def get_division_fighters(division_id):
