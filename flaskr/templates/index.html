@@ -6,7 +6,7 @@
   
       <div class="h4 mt-3 text-center"  >
         {% for item in events %}
-        <a style="text-decoration: none; color: inherit;" href="/event/{{item.event_date}}""> {{ item.event_name }} - {{ item.event_date|datetime('full') }}</a>
+        <a style="text-decoration: none; color: inherit;" href="/event/{{item.event_date}}""><span class="black-outline" style="font-family: ninjaFont; color:red;">Upcoming Event:</span> {{ item.event_name }} - {{ item.event_date|datetime('full') }}</a>
         {% endfor %}
       </div>  
     

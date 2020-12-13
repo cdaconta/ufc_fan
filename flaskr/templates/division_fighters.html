@@ -6,7 +6,31 @@
     <div class="album py-5 bg-light">
       <div class="container">
         
-        
+        {% if fighters[0].division == 1 %}
+        <div class="h3 text-center">Men's Flyweight - Champ & Top 5</div>
+        {% elif fighters[0].division == 2 %}
+        <div class="h3 text-center">Men's Bantamweight - Champ & Top 5</div>
+        {% elif fighters[0].division == 3 %}
+        <div class="h3 text-center">Men's Featherweight - Champ & Top 5</div>
+        {% elif fighters[0].division == 4 %}
+        <div class="h3 text-center">Men's Lightweight - Champ & Top 5</div>
+        {% elif fighters[0].division == 5 %}
+        <div class="h3 text-center">Men's Welterweight - Champ & Top 5</div>
+        {% elif fighters[0].division == 6 %}
+        <div class="h3 text-center">Men's Middleweight - Champ & Top 5</div>
+        {% elif fighters[0].division == 7 %}
+        <div class="h3 text-center">Men's Light Heavyweight - Champ & Top 5</div>
+        {% elif fighters[0].division == 8 %}
+        <div class="h3 text-center">Men's Heavyweight - Champ & Top 5</div>
+        {% elif fighters[0].division == 9 %}
+        <div class="h3 text-center">Women's Strawweight - Champ & Top 5</div>
+        {% elif fighters[0].division == 10 %}
+        <div class="h3 text-center">Women's Flyweight - Champ & Top 5</div>
+        {% elif fighters[0].division == 11 %}
+        <div class="h3 text-center">Women's Bantamweight - Champ & Top 5</div>
+        {% else %}
+        <div class="h3 text-center">Women's Featherweight - Champ & Top 5</div>
+        {% endif %}
         
         <div class="d-flex justify-content-center">
           <div class="col-md-4">
@@ -41,15 +65,17 @@
               <img src="/static/img/female2.jpg" class="img-fluid" alt="Responsive image">
               {% endif %}
               <div class="card-body">
-                <p class="card-text">{{ fighters[1].first_name}} {{ fighters[1].last_name }}</p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                  </div>
-                  <small class="text-muted">9 mins</small>
-                </div>
+                <h6 class="card-title"><span class="badge badge-primary badge-pill">Champ</span> {{ fighters[1].first_name}} {{ fighters[1].last_name }}</h6>
               </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Age</span> {{ fighters[1].age}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Height</span> {{ fighters[1].height}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Weight</span> {{ fighters[1].weight}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Arm Reach</span> {{ fighters[1].arm_reach}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Leg Reach</span> {{ fighters[1].leg_reach}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Win/Loss/Draw</span> {{ fighters[1].win}}/{{ fighters[1].loss }}/{{ fighters[1].draw }}</li>
+                
+              </ul>   
             </div>
           </div>
           <div class="col-md-4">
@@ -60,15 +86,17 @@
               <img src="/static/img/female2.jpg" class="img-fluid" alt="Responsive image">
               {% endif %}
               <div class="card-body">
-                <p class="card-text">{{ fighters[2].first_name}} {{ fighters[2].last_name }}</p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                  </div>
-                  <small class="text-muted">9 mins</small>
-                </div>
+                <h6 class="card-title"><span class="badge badge-primary badge-pill">Champ</span> {{ fighters[2].first_name}} {{ fighters[2].last_name }}</h6>
               </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Age</span> {{ fighters[2].age}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Height</span> {{ fighters[2].height}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Weight</span> {{ fighters[2].weight}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Arm Reach</span> {{ fighters[2].arm_reach}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Leg Reach</span> {{ fighters[2].leg_reach}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Win/Loss/Draw</span> {{ fighters[2].win}}/{{ fighters[2].loss }}/{{ fighters[2].draw }}</li>
+                
+              </ul>   
             </div>
           </div>
         </div>
@@ -81,15 +109,17 @@
               <img src="/static/img/female2.jpg" class="img-fluid" alt="Responsive image">
               {% endif %}
               <div class="card-body">
-                <p class="card-text">{{ fighters[3].first_name}} {{ fighters[3].last_name }}</p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                  </div>
-                  <small class="text-muted">9 mins</small>
-                </div>
+                <h6 class="card-title"><span class="badge badge-primary badge-pill">Champ</span> {{ fighters[3].first_name}} {{ fighters[3].last_name }}</h6>
               </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Age</span> {{ fighters[3].age}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Height</span> {{ fighters[3].height}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Weight</span> {{ fighters[3].weight}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Arm Reach</span> {{ fighters[3].arm_reach}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Leg Reach</span> {{ fighters[3].leg_reach}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Win/Loss/Draw</span> {{ fighters[3].win}}/{{ fighters[3].loss }}/{{ fighters[3].draw }}</li>
+                
+              </ul>   
             </div>
           </div>
           <div class="col-md-4">
@@ -100,15 +130,17 @@
               <img src="/static/img/female2.jpg" class="img-fluid" alt="Responsive image">
               {% endif %}
               <div class="card-body">
-                <p class="card-text">{{ fighters[4].first_name}} {{ fighters[4].last_name }}</p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                  </div>
-                  <small class="text-muted">9 mins</small>
-                </div>
+                <h6 class="card-title"><span class="badge badge-primary badge-pill">Champ</span> {{ fighters[4].first_name}} {{ fighters[4].last_name }}</h6>
               </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Age</span> {{ fighters[4].age}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Height</span> {{ fighters[4].height}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Weight</span> {{ fighters[4].weight}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Arm Reach</span> {{ fighters[4].arm_reach}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Leg Reach</span> {{ fighters[4].leg_reach}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Win/Loss/Draw</span> {{ fighters[4].win}}/{{ fighters[4].loss }}/{{ fighters[4].draw }}</li>
+
+              </ul>   
             </div>
           </div>
           <div class="col-md-4">
@@ -119,15 +151,17 @@
               <img src="/static/img/female2.jpg" class="img-fluid" alt="Responsive image">
               {% endif %}
               <div class="card-body">
-                <p class="card-text">{{ fighters[5].first_name}} {{ fighters[5].last_name }}</p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                  </div>
-                  <small class="text-muted">9 mins</small>
-                </div>
+                <h6 class="card-title"><span class="badge badge-primary badge-pill">Champ</span> {{ fighters[5].first_name}} {{ fighters[5].last_name }}</h6>
               </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Age</span> {{ fighters[5].age}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Height</span> {{ fighters[5].height}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Weight</span> {{ fighters[5].weight}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Arm Reach</span> {{ fighters[5].arm_reach}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Leg Reach</span> {{ fighters[5].leg_reach}}</li>
+                <li class="list-group-item"><span class="badge badge-primary badge-pill">Win/Loss/Draw</span> {{ fighters[5].win}}/{{ fighters[5].loss }}/{{ fighters[5].draw }}</li>
+                
+              </ul>   
             </div>
           </div>
         </div>  
