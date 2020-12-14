@@ -264,7 +264,7 @@ def create_app(test_config=None):
     fighter_details = Fighter.format(fighter)
     return render_template('forms/edit_fighter.html', form=form, fighter = fighter, userinfo=session[constants.PROFILE_KEY])
   
-  @app.route('/fighter/edit/<int:fighter_id', methods=['PATCH'])
+  @app.route('/fighter/edit/<int:fighter_id>', methods=['PATCH'])
   @requires_auth
   def edit_fighters(fighter_id):
     try:
@@ -291,19 +291,17 @@ def create_app(test_config=None):
        
       
       
-      # commit session to database
-      db.session.add(fighter_details)
-      db.session.commit()
+      fighter_details.update()
      
-      flash('Event ' + request.form['event_name'] + ' was successfully listed!')
+      flash('Event ' + request.form['first_name'] + ' was successfully listed!')
     except:
       db.session.rollback()
       #flash failure
-      flash('An error occurred. Event ' + request.form['event_name'] + ' could not be listed.')
+      flash('An error occurred. Event ' + request.form['first_name'] + ' could not be listed.')
     finally:
       db.session.close()
     #return render_template('index.html', userinfo=session[constants.PROFILE_KEY])
-    return redirect(url_for('create_event_form'))
+    return redirect(url_for('fighter_edit_form'))
 
   @app.route('/event/plus/<name>/<number>', methods=['PATCH'])
   def get_event_fighter_votes(name, number):
