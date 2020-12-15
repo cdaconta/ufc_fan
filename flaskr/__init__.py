@@ -135,29 +135,29 @@ def create_app(test_config=None):
   @app.route('/index')
   @requires_auth
   def get_all_fighters():
-    #Here I get all the fighters
-    all_fighters = Fighter.query.all()
+      #Here I get all the fighters
+      all_fighters = Fighter.query.all()
 
-    data = []
+      data = []
 
-    for item in all_fighters:
-      data.append(item.format())
-    
-    event_info = []
-    event_data = Event.query.order_by(Event.event_date.desc()).limit(1)
-    
-    for item in event_data:
-      event_info.append(
-        {
-            'event_name':item.event_name, 
-            'event_date':format_datetime(str(item.event_date)), 
-            'location':item.location,         
-        }
-      )
+      for item in all_fighters:
+        data.append(item.format())
+      
+      event_info = []
+      event_data = Event.query.order_by(Event.event_date.desc()).limit(1)
+      
+      for item in event_data:
+        event_info.append(
+          {
+              'event_name':item.event_name, 
+              'event_date':format_datetime(str(item.event_date)), 
+              'location':item.location,         
+          }
+        )
 
-    return render_template('index.html',
-                              userinfo=session[constants.PROFILE_KEY],
-                              userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data, events = event_info)
+      return render_template('index.html',
+                                userinfo=session[constants.PROFILE_KEY],
+                                userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data, events = event_info)
 
   @app.route('/knockouts')
   @requires_auth
@@ -278,13 +278,13 @@ def create_app(test_config=None):
         form_data = request.get_json()
         fighter_details = fighter.format()
 
-        print(f'This is fighter id -- { form_data }')
+        print(f'This is fighter id -- { form_data.first_name }')
 
         # get form data and create 
-        form = FighterForm()
+        #form = FighterForm()
         #print(f'This is form: {form}')
         
-        fighter_details['first_name'] = form.first_name.data, 
+        """ fighter_details['first_name'] =  form.first_name.data,
         fighter_details['last_name'] = form.last_name.data,
         fighter_details['age'] = form.age.data,
         fighter_details['height'] = form.height.data,
@@ -296,7 +296,7 @@ def create_app(test_config=None):
         fighter_details['loss'] = form.loss.data,
         fighter_details['draw'] = form.draw.data, 
         fighter_details['division'] = form.division.data,
-        fighter_details['rank'] = form.rank.data,
+        fighter_details['rank'] = form.rank.data, """
         
         
         

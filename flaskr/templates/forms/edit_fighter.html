@@ -2,7 +2,7 @@
 {% block title %}Edit Fighter{% endblock %}
 {% block content %}
   <div class="form-wrapper">
-    <form class="form" method="patch" <!-- action="/fighter/edit/{{ fighters.id }}" -->>
+    <form class="form" method="patch" action="/fighter/edit/{{ fighters.id }}">
       <h3 class="form-heading">Edit Fighter - {{fighters.first_name}}</h3>
       
       <div class="form-group">
