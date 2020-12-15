@@ -262,50 +262,55 @@ def create_app(test_config=None):
     
     fighter = Fighter.query.get(fighter_id)
     #fighter_details = Fighter.format(fighter)
+    fighter_details = fighter.format()
     
     #Here we populate the form from the database
     form = FighterForm(obj = fighter) #was fighter_detail
 
-    return render_template('forms/edit_fighter.html', form=form, userinfo=session[constants.PROFILE_KEY])
+    return render_template('forms/edit_fighter.html', form=form, fighters = fighter_details, userinfo=session[constants.PROFILE_KEY])
   
   @app.route('/fighter/edit/<int:fighter_id>', methods=['PATCH'])
   @requires_auth
   def edit_fighters(fighter_id):
-    try:
-      fighter = Fighter.query.get(fighter_id)
-      fighter_details = Fighter.format(fighter)
+      try:
+        fighter = Fighter.query.get(fighter_id)
+        #fighter_details = Fighter.format(fighter)
+        form_data = request.get_json()
+        fighter_details = fighter.format()
 
-      # get form data and create 
-      form = FighterForm()
-      #print(f'This is form: {form}')
+        print(f'This is fighter id -- { form_data }')
+
+        # get form data and create 
+        form = FighterForm()
+        #print(f'This is form: {form}')
+        
+        fighter_details['first_name'] = form.first_name.data, 
+        fighter_details['last_name'] = form.last_name.data,
+        fighter_details['age'] = form.age.data,
+        fighter_details['height'] = form.height.data,
+        fighter_details['weight'] = form.weight.data, 
+        fighter_details['arm_reach'] = form.arm_reach.data,  
+        fighter_details['leg_reach'] = form.leg_reach.data,
+        fighter_details['sex'] = form.sex.data,
+        fighter_details['win'] = form.win.data,
+        fighter_details['loss'] = form.loss.data,
+        fighter_details['draw'] = form.draw.data, 
+        fighter_details['division'] = form.division.data,
+        fighter_details['rank'] = form.rank.data,
+        
+        
+        
+        fighter_details.update()
       
-      fighter_details['first_name'] = form.first_name.data, 
-      fighter_details['last_name'] = form.last_name.data,
-      fighter_details['age'] = form.age.data,
-      fighter_details['height'] = form.height.data,
-      fighter_details['weight'] = form.weight.data, 
-      fighter_details['arm_reach'] = form.arm_reach.data,  
-      fighter_details['leg_reach'] = form.leg_reach.data,
-      fighter_details['sex'] = form.sex.data,
-      fighter_details['win'] = form.win.data,
-      fighter_details['loss'] = form.loss.data,
-      fighter_details['draw'] = form.draw.data, 
-      fighter_details['division'] = form.division.data,
-      fighter_details['rank'] = form.rank.data,
-       
-      
-      
-      fighter_details.update()
-     
-      flash('Event ' + request.form['first_name'] + ' was successfully listed!')
-    except:
-      db.session.rollback()
-      #flash failure
-      flash('An error occurred. Event ' + request.form['first_name'] + ' could not be listed.')
-    finally:
-      db.session.close()
-    #return render_template('index.html', userinfo=session[constants.PROFILE_KEY])
-    return redirect(url_for('fighter_edit_form'))
+        flash('Event ' + request.form['first_name'] + ' was successfully listed!')
+      except:
+        db.session.rollback()
+        #flash failure
+        flash('An error occurred. Event ' + request.form['first_name'] + ' could not be listed.')
+      finally:
+        db.session.close()
+      #return render_template('index.html', userinfo=session[constants.PROFILE_KEY])
+      return redirect(url_for('fighter_edit_form'))
 
   @app.route('/event/plus/<name>/<number>', methods=['PATCH'])
   def get_event_fighter_votes(name, number):
