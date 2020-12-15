@@ -261,10 +261,12 @@ def create_app(test_config=None):
   def fighter_edit_form(fighter_id):
     
     fighter = Fighter.query.get(fighter_id)
-    fighter_details = Fighter.format(fighter)
+    #fighter_details = Fighter.format(fighter)
     
-    form = FighterForm(obj = fighter_details)
-    return render_template('forms/edit_fighter.html', form=form, fighter = fighter_details, userinfo=session[constants.PROFILE_KEY])
+    #Here we populate the form from the database
+    form = FighterForm(obj = fighter) #was fighter_detail
+
+    return render_template('forms/edit_fighter.html', form=form, userinfo=session[constants.PROFILE_KEY])
   
   @app.route('/fighter/edit/<int:fighter_id>', methods=['PATCH'])
   @requires_auth
