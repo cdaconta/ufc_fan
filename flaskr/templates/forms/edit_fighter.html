@@ -1,55 +1,79 @@
-{% extends 'layouts/main.html' %}
-{% block title %}Edit Artist{% endblock %}
+{% extends 'main.html' %}
+{% block title %}Edit Fighter{% endblock %}
 {% block content %}
   <div class="form-wrapper">
-    <form class="form" method="patch" action="/artists/{{artist.id}}/edit">
-      <h3 class="form-heading">Edit artist <em>{{ artist.name }}</em></h3>
+    <form class="form" method="patch" action="/fighter/edit/{{ fighter.id }}">
+      <h3 class="form-heading">Edit Fighter <em>{{ fighter.first_name }} {{ fighter.last_name }}</em></h3>
+      
       <div class="form-group">
-        <label for="name">Name</label>
-        {{ form.name(class_ = 'form-control', autofocus = true) }}
+        <label for="first_name">First Name</label>
+        {{ form.first_name(class_ = 'form-control', placeholder='Test', autofocus = true) }}
       </div>
       <div class="form-group">
-          <label>City & State</label>
-          <div class="form-inline">
-            <div class="form-group">
-              {{ form.city(class_ = 'form-control', placeholder='City', autofocus = true) }}
-            </div>
-            <div class="form-group">
-              {{ form.state(class_ = 'form-control', placeholder='State', autofocus = true) }}
-            </div>
-          </div>
+        <label for="last_name">Last Name</label>
+        {{ form.last_name(class_ = 'form-control',  autofocus = true) }}
       </div>
       <div class="form-group">
-        <label for="phone">Phone</label>
-        {{ form.phone(class_ = 'form-control', placeholder='xxx-xxx-xxxx', autofocus = true) }}
-    </div>
-    <div class="form-group">
-      <label for="genres">Genres</label>
-      <small>Ctrl+Click to select multiple</small> 
-      {{ form.genres(class_ = 'form-control', placeholder='Genres, separated by commas',  autofocus = true) }}
-    </div>
-    <div class="form-group">
-      <label for="website">Website</label>  
-      {{ form.website(class_ = 'form-control', placeholder='http://',  autofocus = true) }}
-    </div>
-    <div class="form-group">
-      <label for="image_link">Image Link</label> 
-      {{ form.image_link(class_ = 'form-control', placeholder='http://',  autofocus = true) }}
-    </div>
-    <div class="form-group">
-      <label for="facebook_link">Facebook Link</label>
-      {{ form.facebook_link(class_ = 'form-control', placeholder='http://',  autofocus = true) }}
-    </div>
-    
-    <div class="form-group">
-      <label for="seeking_venue">Seeking Venue</label>
-      {{ form.seeking_venue(class_ = 'form-control ',  autofocus = true) }}
-    </div>
-    <div class="form-group">
-      <label for="seeking_description">Seeking Description</label>
-      {{ form.seeking_description(class_ = 'form-control', placeholder='Looking',  autofocus = true) }}
-    </div>  
-      <input type="submit" value="Edit Artist" class="btn btn-primary btn-lg btn-block">
+        <label for="age">Age</label>
+        {{ form.age(class_ = 'form-control',  autofocus = true) }}
+      </div>
+
+      <div class="form-group">
+        <label for="height">Height</label>
+        {{ form.height(class_ = 'form-control', autofocus = true) }}
+      </div>
+      <div class="form-group">
+        <label for="weight">Weight</label>
+        {{ form.weight(class_ = 'form-control', autofocus = true) }}
+      </div>
+      <div class="form-group">
+        <label for="arm_reach">Arm Reach</label>
+        {{ form.arm_reach(class_ = 'form-control', autofocus = true) }}
+      </div>
+
+      <div class="form-group">
+        <label for="leg_reach">Leg Reach</label>
+        {{ form.leg_reach(class_ = 'form-control' autofocus = true) }}
+      </div>
+      <div class="form-group">
+        <label for="sex">Sex</label>
+        {{ form.sex(class_ = 'form-control', autofocus = true) }}
+      </div>
+      <div class="form-group">
+        <label for="win">Win</label>
+        {{ form.win(class_ = 'form-control', autofocus = true) }}
+      </div>
+      <div class="form-group">
+        <label for="loss">Loss</label>
+        {{ form.loss(class_ = 'form-control', autofocus = true) }}
+      </div>
+      <div class="form-group">
+        <label for="draw">Draw</label>
+        {{ form.draw(class_ = 'form-control', autofocus = true) }}
+      </div>
+      <div class="form-group">
+        <label for="division">Division</label>
+        <ol>
+          <li>men_flyweight</li>
+          <li>men_bantamweight</li>
+          <li>men_featherweight</li>
+          <li>men_lightweight</li>
+          <li>men_welterweight</li>
+          <li>men_middleweight</li>
+          <li>men_lightheavyweight</li>
+          <li>men_heavyweight</li>
+          <li>women_strawweight</li>
+          <li>women_flyweight</li>
+          <li>women_bantamweight</li>
+          <li>women_featherweight</li>
+        </ol>
+        {{ form.division(class_ = 'form-control', placeholder='1 - 12', autofocus = true) }}
+      </div>  
+      <div class="form-group">
+        <label for="rank">Location</label>
+        {{ form.rank(class_ = 'form-control', autofocus = true) }}
+      </div>      
+      <input type="submit" value="Edit Fighter" class="btn btn-primary btn-lg btn-block">
     </form>
   </div>
 {% endblock %}
