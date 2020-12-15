@@ -1,9 +1,11 @@
-{% extends 'main.html' %}
+{% extends 'form.html' %}
 {% block title %}Edit Fighter{% endblock %}
 {% block content %}
   <div class="form-wrapper">
-    <form class="form" method="patch" action="/fighter/edit/{{ fighter.id }}">
+    <form class="form" method="patch">
       <h3 class="form-heading">Edit Fighter <em>{{ fighter.first_name }} {{ fighter.last_name }}</em></h3>
+      
+      <div class="form-group">
       
       <div class="form-group">
         <label for="first_name">First Name</label>
@@ -33,7 +35,7 @@
 
       <div class="form-group">
         <label for="leg_reach">Leg Reach</label>
-        {{ form.leg_reach(class_ = 'form-control' autofocus = true) }}
+        {{ form.leg_reach(class_ = 'form-control', autofocus = true) }}
       </div>
       <div class="form-group">
         <label for="sex">Sex</label>
@@ -67,7 +69,7 @@
           <li>women_bantamweight</li>
           <li>women_featherweight</li>
         </ol>
-        {{ form.division(class_ = 'form-control', placeholder='1 - 12', autofocus = true) }}
+        {{ form.division(class_ = 'form-control', autofocus = true) }}
       </div>  
       <div class="form-group">
         <label for="rank">Location</label>
