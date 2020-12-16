@@ -137,7 +137,42 @@ def create_app(test_config=None):
   def get_all_fighters():
       #Here I get all the fighters
       all_fighters = Fighter.query.all()
+      div_1 = Fighter.query.filter(Fighter.division == 1).order_by(Fighter.rank).all()
+      div_1_data = [item.format() for item in div_1]
 
+      div_2 = Fighter.query.filter(Fighter.division == 2).order_by(Fighter.rank).all()
+      div_2_data = [item.format() for item in div_2]
+
+      div_3 = Fighter.query.filter(Fighter.division == 3).order_by(Fighter.rank).all()
+      div_3_data = [item.format() for item in div_3]
+
+      div_4 = Fighter.query.filter(Fighter.division == 4).order_by(Fighter.rank).all()
+      div_4_data = [item.format() for item in div_4]
+
+      div_5 = Fighter.query.filter(Fighter.division == 5).order_by(Fighter.rank).all()
+      div_5_data = [item.format() for item in div_5]
+
+      div_6 = Fighter.query.filter(Fighter.division == 6).order_by(Fighter.rank).all()
+      div_6_data = [item.format() for item in div_6]
+
+      div_7 = Fighter.query.filter(Fighter.division == 7).order_by(Fighter.rank).all()
+      div_7_data = [item.format() for item in div_7]
+
+      div_8 = Fighter.query.filter(Fighter.division == 8).order_by(Fighter.rank).all()
+      div_8_data = [item.format() for item in div_8]
+
+      div_9 = Fighter.query.filter(Fighter.division == 9).order_by(Fighter.rank).all()
+      div_9_data = [item.format() for item in div_9]
+
+      div_10 = Fighter.query.filter(Fighter.division == 10).order_by(Fighter.rank).all()
+      div_10_data = [item.format() for item in div_10]
+
+      div_11 = Fighter.query.filter(Fighter.division == 11).order_by(Fighter.rank).all()
+      div_11_data = [item.format() for item in div_11]
+
+      div_12 = Fighter.query.filter(Fighter.division == 12).order_by(Fighter.rank).all()
+      div_12_data = [item.format() for item in div_12]
+      
       data = []
 
       for item in all_fighters:
@@ -157,7 +192,7 @@ def create_app(test_config=None):
 
       return render_template('index.html',
                                 userinfo=session[constants.PROFILE_KEY],
-                                userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data, events = event_info)
+                                userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data, events = event_info, div_1 = div_1_data, div_2 = div_2_data, div_3 = div_3_data, div_4 = div_4_data, div_5 = div_5_data, div_6 = div_6_data, div_7 = div_7_data, div_8 = div_8_data, div_9 = div_9_data, div_10 = div_10_data, div_11 = div_11_data, div_12 = div_12_data)
 
   @app.route('/knockouts')
   @requires_auth
@@ -213,7 +248,7 @@ def create_app(test_config=None):
           }
         )
     division_info = []
-    division_data = Division.query(Division.id, Division.name).all()
+    division_data = Division.query.with_entities(Division.id, Division.name).all()
     for item in division_data:
       division_info.append({
         'id':item.id,

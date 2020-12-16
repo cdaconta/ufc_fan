@@ -10,19 +10,22 @@
         {% endfor %}
       </div>  
     
+    
     <div class="card-deck p-3">
         <div class="card" style="width: 18rem;">
           <div class="card-header text-white bg-danger h4"><a href="/division_fighters/1" style="text-decoration: none; color: inherit;">Men's Flyweight</a></div>
           <div class="card-body">
-            <h4 class="card-title"><span class="badge badge-primary badge-pill">Champ</span> {{ fighters[0].first_name}} {{ fighters[0].last_name }}</h4>
+            <h4 class="card-title"><span class="badge badge-primary badge-pill">Champ</span> {{ div_1[0].first_name}} {{ div_1[0].last_name }}</h4>
           </div>
+          
           <ul class="list-group list-group-flush">
-            <li class="list-group-item"><span class="badge badge-primary badge-pill">1</span> {{ fighters[1].first_name}} {{ fighters[1].last_name }}</li>
-            <li class="list-group-item"><span class="badge badge-primary badge-pill">2</span> {{ fighters[2].first_name}} {{ fighters[2].last_name }}</li>
-            <li class="list-group-item"><span class="badge badge-primary badge-pill">3</span> {{ fighters[3].first_name}} {{ fighters[3].last_name }}</li>
-            <li class="list-group-item"><span class="badge badge-primary badge-pill">4</span> {{ fighters[4].first_name}} {{ fighters[4].last_name }}</li>
-            <li class="list-group-item"><span class="badge badge-primary badge-pill">5</span> {{ fighters[5].first_name}} {{ fighters[5].last_name }}</li>
+            <li class="list-group-item"><span class="badge badge-primary badge-pill">1</span> {{ div_1[1].first_name}} {{ div_1[1].last_name }}</li>
+            <li class="list-group-item"><span class="badge badge-primary badge-pill">2</span> {{ div_1[2].first_name}} {{ div_1[2].last_name }}</li>
+            <li class="list-group-item"><span class="badge badge-primary badge-pill">3</span> {{ div_1[3].first_name}} {{ div_1[3].last_name }}</li>
+            <li class="list-group-item"><span class="badge badge-primary badge-pill">4</span> {{ div_1[4].first_name}} {{ div_1[4].last_name }}</li>
+            <li class="list-group-item"><span class="badge badge-primary badge-pill">5</span> {{ div_1[5].first_name}} {{ div_1[5].last_name }}</li>
           </ul>
+        
         </div>
         <div class="card" style="width: 18rem;">
           <div class="card-header text-white bg-danger h4"><a href="/division_fighters/2" style="text-decoration: none; color: inherit;">Men's Bantamweight</a></div>
@@ -171,8 +174,7 @@
         <li class="list-group-item"><span class="badge badge-primary badge-pill">5</span> {{ fighters[71].first_name}} {{ fighters[71].last_name }}</li></li>       
       </ul>
     </div>
-</div>
-        
+</div>     
   
   </main>
 
