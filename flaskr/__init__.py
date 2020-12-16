@@ -63,7 +63,7 @@ def create_app(test_config=None):
   @app.after_request
   def after_request(response):
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH')
     return response
    
   #This endpoint handles GET requests for categories
@@ -279,29 +279,7 @@ def create_app(test_config=None):
         if fighter is None:
           abort(404)
         form = FighterForm(obj = fighter)
-
-        """ data = request.get_json()
-
-        fighter_details = fighter.format()
-
-        print(f"This is fighter id -- { data.get('first_name') } """
-
-        """ 
-        fighter_details['first_name'] =  data.get('first_name')
-        fighter_details['last_name'] = data.get('last_name')
-        fighter_details['age'] = data.get('age')
-        fighter_details['height'] = data.get('height')
-        fighter_details['weight'] = data.get('weight')
-        fighter_details['arm_reach'] = data.get('arm_reach') 
-        fighter_details['leg_reach'] = data.get('leg_reach')
-        fighter_details['sex'] = data.get('sex')
-        fighter_details['win'] = data.get('win')
-        fighter_details['loss'] = data.get('loss')
-        fighter_details['draw'] = data.get('draw')
-        fighter_details['division'] = data.get('division')
-        fighter_details['rank'] = data.get('rank')
-         """
-        
+   
         form.populate_obj(fighter)
         db.session.commit()
       
@@ -313,7 +291,7 @@ def create_app(test_config=None):
       finally:
         db.session.close()
       #return render_template('index.html', userinfo=session[constants.PROFILE_KEY])
-      return redirect(url_for('fighter_edit_form'))
+      return redirect(url_for('fighter_edit_form', fighter_id = fighter_id))
 
   @app.route('/event/plus/<name>/<number>', methods=['PATCH'])
   def get_event_fighter_votes(name, number):

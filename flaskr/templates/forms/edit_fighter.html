@@ -78,4 +78,50 @@
       <input type="submit" value="Edit Fighter" class="btn btn-primary btn-lg btn-block">
     </form>
   </div>
+
+<script type="text/javascript">
+  function update_vote(name)
+  {
+    const fighter_number = document.querySelector('#' + name);
+    let number_fighter = fighter_number.dataset.fighter;
+    
+      //alert(number);
+    fetch('/event/plus/' + name +'/' + number_fighter,{
+        method:"PATCH",
+        body: JSON.stringify({ "message":"success" }),
+        headers: { "Content-Type":"application/json"}
+    })
+    .then(
+    function(response) {
+      if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+          response.status);
+        return;
+      }
+
+      // Examine the text in the response
+       response.json().then(function(data) {
+       let fighter_num = data.fighter_votes[0].fighter_number;
+
+       if (fighter_num == 1){
+        let total_votes = data.fighter_votes[0].fighter_1_votes;
+        let poll_div = document.querySelector('#' + name + '_poll');
+        //console.log("This is poll_div " + poll_div);
+        poll_div.innerHTML = total_votes;
+       } else {
+        let total_votes = data.fighter_votes[0].fighter_2_votes; 
+        let poll_div = document.querySelector('#' + name + '_poll');  
+        poll_div.innerHTML = total_votes;
+       }
+   //console.log("This is data obj " + data.fighter_votes[0].fighter_number);
+
+      });
+    }
+  )
+  .catch(function(err) {
+    console.log('Fetch Error :-S', err);
+    });
+  }
+</script>
+
 {% endblock %}
