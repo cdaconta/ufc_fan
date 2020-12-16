@@ -1,4 +1,4 @@
-from flask import Flask, render_template, g, request, jsonify, Response, flash, redirect, url_for, session, jsonify
+from flask import Flask, render_template, g, abort, request, jsonify, Response, flash, redirect, url_for, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text, or_
 from flask_cors import CORS
@@ -269,44 +269,47 @@ def create_app(test_config=None):
 
     return render_template('forms/edit_fighter.html', form=form, fighters = fighter_details, userinfo=session[constants.PROFILE_KEY])
   
-  @app.route('/fighter/edit/<int:fighter_id>', methods=['PATCH'])
+  @app.route('/fighter/edit/<int:fighter_id>', methods=['POST'])
   @requires_auth
   def edit_fighters(fighter_id):
       try:
-        fighter = Fighter.query.get(fighter_id)
+        fighter = Fighter.query.filter(Fighter.id == fighter_id).one_or_none()
         #fighter_details = Fighter.format(fighter)
-        form_data = request.get_json()
+        print(f'This is fighter -- {fighter}')
+        if fighter is None:
+          abort(404)
+        form = FighterForm(obj = fighter)
+
+        """ data = request.get_json()
+
         fighter_details = fighter.format()
 
-        print(f'This is fighter id -- { form_data.first_name }')
+        print(f"This is fighter id -- { data.get('first_name') } """
 
-        # get form data and create 
-        #form = FighterForm()
-        #print(f'This is form: {form}')
+        """ 
+        fighter_details['first_name'] =  data.get('first_name')
+        fighter_details['last_name'] = data.get('last_name')
+        fighter_details['age'] = data.get('age')
+        fighter_details['height'] = data.get('height')
+        fighter_details['weight'] = data.get('weight')
+        fighter_details['arm_reach'] = data.get('arm_reach') 
+        fighter_details['leg_reach'] = data.get('leg_reach')
+        fighter_details['sex'] = data.get('sex')
+        fighter_details['win'] = data.get('win')
+        fighter_details['loss'] = data.get('loss')
+        fighter_details['draw'] = data.get('draw')
+        fighter_details['division'] = data.get('division')
+        fighter_details['rank'] = data.get('rank')
+         """
         
-        """ fighter_details['first_name'] =  form.first_name.data,
-        fighter_details['last_name'] = form.last_name.data,
-        fighter_details['age'] = form.age.data,
-        fighter_details['height'] = form.height.data,
-        fighter_details['weight'] = form.weight.data, 
-        fighter_details['arm_reach'] = form.arm_reach.data,  
-        fighter_details['leg_reach'] = form.leg_reach.data,
-        fighter_details['sex'] = form.sex.data,
-        fighter_details['win'] = form.win.data,
-        fighter_details['loss'] = form.loss.data,
-        fighter_details['draw'] = form.draw.data, 
-        fighter_details['division'] = form.division.data,
-        fighter_details['rank'] = form.rank.data, """
-        
-        
-        
-        fighter_details.update()
+        form.populate_obj(fighter)
+        db.session.commit()
       
-        flash('Event ' + request.form['first_name'] + ' was successfully listed!')
+        #flash('Event ' + request.form['first_name'] + ' was successfully listed!')
       except:
         db.session.rollback()
         #flash failure
-        flash('An error occurred. Event ' + request.form['first_name'] + ' could not be listed.')
+        #flash('An error occurred. Event ' + request.form['first_name'] + ' could not be listed.')
       finally:
         db.session.close()
       #return render_template('index.html', userinfo=session[constants.PROFILE_KEY])
@@ -356,6 +359,13 @@ def create_app(test_config=None):
                   'fighter_votes':data,
                 }), 200
 
+  @app.errorhandler(404)
+  def resource_not_found(error):
+        return jsonify({
+            "success": False,
+            "error": 404,
+            "message": "resource not found"
+        }), 404
   
 
   return app
