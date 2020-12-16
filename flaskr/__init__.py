@@ -168,7 +168,7 @@ def create_app(test_config=None):
   @requires_auth
   def get_division_fighters(division_id):
     #Here I get all the fighters - questions = Question.query.filter(Question.category==category_id).all()
-    division_fighters = Fighter.query.filter(Fighter.division == division_id).all()
+    division_fighters = Fighter.query.filter(Fighter.division == division_id).order_by(Fighter.rank).all()
 
     data = []
 
@@ -272,10 +272,13 @@ def create_app(test_config=None):
   @app.route('/fighter/edit/<int:fighter_id>', methods=['POST'])
   @requires_auth
   def edit_fighters(fighter_id):
+      fighter_division = 0
       try:
         fighter = Fighter.query.filter(Fighter.id == fighter_id).one_or_none()
         #fighter_details = Fighter.format(fighter)
-        print(f'This is fighter -- {fighter}')
+        print(f'This is fighter -- {fighter.division}')
+        fighter_division = fighter.division
+
         if fighter is None:
           abort(404)
         form = FighterForm(obj = fighter)
@@ -291,7 +294,7 @@ def create_app(test_config=None):
       finally:
         db.session.close()
       #return render_template('index.html', userinfo=session[constants.PROFILE_KEY])
-      return redirect(url_for('fighter_edit_form', fighter_id = fighter_id))
+      return redirect(url_for('get_division_fighters', division_id = fighter_division))
 
   @app.route('/event/plus/<name>/<number>', methods=['PATCH'])
   def get_event_fighter_votes(name, number):
