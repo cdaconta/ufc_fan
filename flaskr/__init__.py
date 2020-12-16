@@ -195,6 +195,7 @@ def create_app(test_config=None):
     event_info = []
     #event_data = Event.query.order_by(Event.event_date.desc()).limit(6)
     event_data = Event.query.filter(Event.event_date == clean_date).order_by(Event.fight_order)
+   
     for item in event_data:
         event_info.append(
           {
@@ -211,9 +212,16 @@ def create_app(test_config=None):
               'fight_order':item.fight_order
           }
         )
+    division_info = []
+    division_data = Division.query(Division.id, Division.name).all()
+    for item in division_data:
+      division_info.append({
+        'id':item.id,
+        'name':item.name
+      })
     return render_template('event.html',
                                 userinfo=session[constants.PROFILE_KEY],
-                                userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), events = event_info)
+                                userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), events = event_info, divisions = division_info)
  
   @app.route('/event/create', methods=['GET']) 
   @requires_auth  
