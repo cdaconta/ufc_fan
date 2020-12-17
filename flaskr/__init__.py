@@ -135,8 +135,7 @@ def create_app(test_config=None):
   @app.route('/index')
   @requires_auth
   def get_all_fighters():
-      #Here I get all the fighters
-      all_fighters = Fighter.query.all()
+      #Here I get all the fighters by division
       div_1 = Fighter.query.filter(Fighter.division == 1).order_by(Fighter.rank).all()
       div_1_data = [item.format() for item in div_1]
 
@@ -173,11 +172,6 @@ def create_app(test_config=None):
       div_12 = Fighter.query.filter(Fighter.division == 12).order_by(Fighter.rank).all()
       div_12_data = [item.format() for item in div_12]
       
-      data = []
-
-      for item in all_fighters:
-        data.append(item.format())
-      
       event_info = []
       event_data = Event.query.order_by(Event.event_date.desc()).limit(1)
       
@@ -192,7 +186,7 @@ def create_app(test_config=None):
 
       return render_template('index.html',
                                 userinfo=session[constants.PROFILE_KEY],
-                                userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data, events = event_info, div_1 = div_1_data, div_2 = div_2_data, div_3 = div_3_data, div_4 = div_4_data, div_5 = div_5_data, div_6 = div_6_data, div_7 = div_7_data, div_8 = div_8_data, div_9 = div_9_data, div_10 = div_10_data, div_11 = div_11_data, div_12 = div_12_data)
+                                userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), events = event_info, div_1 = div_1_data, div_2 = div_2_data, div_3 = div_3_data, div_4 = div_4_data, div_5 = div_5_data, div_6 = div_6_data, div_7 = div_7_data, div_8 = div_8_data, div_9 = div_9_data, div_10 = div_10_data, div_11 = div_11_data, div_12 = div_12_data)
 
   @app.route('/knockouts')
   @requires_auth
