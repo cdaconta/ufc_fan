@@ -341,7 +341,8 @@ def create_app(test_config=None):
   @app.route('/event/<date>', methods=['DELETE'])
   @requires_auth
   def delete_event(date):
-    events = Event.query.filter(Event.event_date == date).all()
+    clean_date = html.unescape(date)
+    events = Event.query.filter(Event.event_date == clean_date).all()
 
     events.delete()
     return jsonify({
