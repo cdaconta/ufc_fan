@@ -7,15 +7,30 @@
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
-        <link href="../static/css/app.css" rel="stylesheet">
+        <link href="/static/css/app.css" rel="stylesheet">
+        <style>
+    
+          @font-face {
+          font-family: ninjaFont;
+          src: url(../static/css/aAssassinNinja.ttf);
+          }
+    
+          .black-outline{
+          -webkit-text-stroke: 1.11px black; /* stroke width and color */
+          color: rgb(255, 255, 255);
+          -webkit-font-smoothing: antialiased;
+          /* font-weight: bold; */
+          }
+    
+        </style>
     </head>
     <body class="home">
         <div class="container">
             <div class="login-page clearfix">
               <div class="login-box auth0-box before">
-                <img src="https://i.cloudup.com/StzWWrY34s.png" />
-                <h3>Auth0 Example</h3>
-                <p>Zero friction identity infrastructure, built for developers</p>
+                <img src="/static/img/USflag.jpg" style="max-height: 24rem;"/>
+                <div class="h1 black-outline" style="font-family: ninjaFont; color:red;">UFC FAN</div>
+                
                 <a id="qsLoginBtn" class="btn btn-primary btn-lg" href="/login">Log In</a>
               </div>
             </div>
