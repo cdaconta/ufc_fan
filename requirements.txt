@@ -20,3 +20,4 @@ Werkzeug
 python-dotenv
 requests
 authlib>=0.14.1
+python-jose-cryptodome==1.3.2

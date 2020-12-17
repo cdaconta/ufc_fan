@@ -338,7 +338,7 @@ def create_app(test_config=None):
                   'fighter_votes':data,
                 }), 200
 
-  @app.route('/event/<date>', methods="DELETE")
+  @app.route('/event/<date>', methods=['DELETE'])
   @requires_auth
   def delete_event(date):
     events = Event.query.filter(Event.event_date == date).all()
