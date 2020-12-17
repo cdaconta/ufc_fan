@@ -14,7 +14,7 @@ from werkzeug.exceptions import HTTPException
 from dotenv import load_dotenv, find_dotenv
 from authlib.integrations.flask_client import OAuth
 from six.moves.urllib.parse import urlencode
-from .auth import AuthError, requires_auth
+#from .auth import AuthError, requires_auth
 
 from . import constants
 #from .forms import EventForm #was *
@@ -90,14 +90,14 @@ def create_app(test_config=None):
   )
 
 
-  """ def requires_auth(f):
+  def requires_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if constants.PROFILE_KEY not in session:
             return redirect('/')
         return f(*args, **kwargs)
 
-    return decorated """
+    return decorated 
 
 
     # Controllers API
@@ -135,7 +135,7 @@ def create_app(test_config=None):
 
   @app.route('/index')
   @requires_auth()
-  def get_all_fighters(token):
+  def get_all_fighters():
       #Here I get all the fighters by division
       div_1 = Fighter.query.filter(Fighter.division == 1).order_by(Fighter.rank).all()
       div_1_data = [item.format() for item in div_1]
@@ -191,12 +191,12 @@ def create_app(test_config=None):
 
   @app.route('/knockouts')
   @requires_auth()
-  def get_knockout_page(token):
+  def get_knockout_page():
     return render_template('knockouts.html',  userinfo=session[constants.PROFILE_KEY])
 
   @app.route('/division_fighters/<int:division_id>')
   @requires_auth()
-  def get_division_fighters(token, division_id):
+  def get_division_fighters(division_id):
     #Here I get all the fighters - questions = Question.query.filter(Question.category==category_id).all()
     division_fighters = Fighter.query.filter(Fighter.division == division_id).order_by(Fighter.rank).all()
 
@@ -220,7 +220,7 @@ def create_app(test_config=None):
   
   @app.route('/event/<date>')
   @requires_auth()
-  def get_event(token, date):
+  def get_event(date):
     clean_date = html.unescape(date)
     event_info = []
     #event_data = Event.query.order_by(Event.event_date.desc()).limit(6)
@@ -255,13 +255,13 @@ def create_app(test_config=None):
  
   @app.route('/event/create', methods=['GET']) 
   @requires_auth()  
-  def create_event_form(token):
+  def create_event_form():
     form = EventForm()
     return render_template('forms/new_event.html', form=form, userinfo=session[constants.PROFILE_KEY])
   
   @app.route('/event/create', methods=['POST'])
   @requires_auth()
-  def create_event(token):
+  def create_event():
     try:
       # get form data and create 
       form = EventForm()
@@ -340,7 +340,7 @@ def create_app(test_config=None):
 
   @app.route('/event/<date>', methods=['DELETE'])
   @requires_auth()
-  def delete_event(token, date):
+  def delete_event(date):
     events = Event.query.filter(Event.event_date == date).all()
 
     events.delete()
@@ -352,7 +352,7 @@ def create_app(test_config=None):
 
   @app.route('/fighter/edit/<int:fighter_id>', methods=['GET']) 
   @requires_auth()  
-  def fighter_edit_form(token, fighter_id):
+  def fighter_edit_form(fighter_id):
     
     fighter = Fighter.query.get(fighter_id)
     #fighter_details = Fighter.format(fighter)
@@ -365,7 +365,7 @@ def create_app(test_config=None):
   
   @app.route('/fighter/edit/<int:fighter_id>', methods=['POST'])
   @requires_auth()
-  def edit_fighters(token, fighter_id):
+  def edit_fighters(fighter_id):
       fighter_division = 0
       try:
         fighter = Fighter.query.filter(Fighter.id == fighter_id).one_or_none()
