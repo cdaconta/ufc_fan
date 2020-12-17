@@ -14,7 +14,7 @@ from werkzeug.exceptions import HTTPException
 from dotenv import load_dotenv, find_dotenv
 from authlib.integrations.flask_client import OAuth
 from six.moves.urllib.parse import urlencode
-#from .auth.auth import AuthError, requires_auth
+from .auth.auth import AuthError, requires_auth
 
 from . import constants
 #from .forms import EventForm #was *
@@ -90,14 +90,14 @@ def create_app(test_config=None):
   )
 
 
-  def requires_auth(f):
+  """ def requires_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if constants.PROFILE_KEY not in session:
             return redirect('/')
         return f(*args, **kwargs)
 
-    return decorated
+    return decorated """
 
 
     # Controllers API
