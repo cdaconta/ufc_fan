@@ -338,6 +338,51 @@ def create_app(test_config=None):
                   'fighter_votes':data,
                 }), 200
 
+  @app.route('/event/edit/<date>', methods=['GET']) 
+  @requires_auth 
+  def edit_event_form(date):
+    clean_date = html.unescape(date)
+    events = Event.query.filter(Event.event_date == clean_date).all()
+    events_data = [item.format() for item in events]
+    #form = EventForm()
+    return render_template('edit_event.html', events = events_data, userinfo=session[constants.PROFILE_KEY])
+  
+  """ @app.route('/event/edit/<date>', methods=['POST'])
+  @requires_auth
+  def edit_event(date):
+    clean_date = html.unescape(date)
+    try:
+      # get form data and create 
+      form = EventForm()
+      #print(f'This is form: {form}')
+      form_event = Event(
+      event_name = form.event_name.data, 
+      event_date = form.event_date.data,
+      location = form.location.data,
+      division = form.division.data,
+      fighter_1 = form.fighter_1.data, 
+      fighter_2 = form.fighter_2.data,  
+      fighter_1_votes = 0,
+      fighter_2_votes = 0,
+      fighter_1_odds = form.fighter_1_odds.data,
+      fighter_2_odds = form.fighter_2_odds.data,
+      fight_order = form.fight_order.data, 
+        )
+      
+      # commit session to database
+      db.session.add(form_event)
+      db.session.commit()
+     
+      flash('Event ' + request.form['event_name'] + ' was successfully listed!')
+    except:
+      db.session.rollback()
+      #flash failure
+      flash('An error occurred. Event ' + request.form['event_name'] + ' could not be listed.')
+    finally:
+      db.session.close()
+    #return render_template('index.html', userinfo=session[constants.PROFILE_KEY])
+    return redirect(url_for('create_event_form')) """
+
   @app.route('/event/delete/<date>', methods=['DELETE'])
   @requires_auth
   def delete_event(date):
@@ -345,10 +390,11 @@ def create_app(test_config=None):
     events = Event.query.filter(Event.event_date == clean_date).all()
 
     events.delete()
-    return jsonify({
+    """ return jsonify({
       'success': True,
       'delete': date,
-    }), 200
+    }), 200 """
+    return redirect(url_for('get_all_fighters'))
 
 
   @app.route('/fighter/edit/<int:fighter_id>', methods=['GET']) 
