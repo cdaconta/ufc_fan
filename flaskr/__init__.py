@@ -14,7 +14,7 @@ from werkzeug.exceptions import HTTPException
 from dotenv import load_dotenv, find_dotenv
 from authlib.integrations.flask_client import OAuth
 from six.moves.urllib.parse import urlencode
-from .auth.auth import AuthError, requires_auth
+from .auth import AuthError, requires_auth
 
 from . import constants
 #from .forms import EventForm #was *
