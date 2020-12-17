@@ -14,6 +14,7 @@ from werkzeug.exceptions import HTTPException
 from dotenv import load_dotenv, find_dotenv
 from authlib.integrations.flask_client import OAuth
 from six.moves.urllib.parse import urlencode
+#from .auth.auth import AuthError, requires_auth
 
 from . import constants
 #from .forms import EventForm #was *
@@ -293,46 +294,6 @@ def create_app(test_config=None):
     #return render_template('index.html', userinfo=session[constants.PROFILE_KEY])
     return redirect(url_for('create_event_form'))
 
-  @app.route('/fighter/edit/<int:fighter_id>', methods=['GET']) 
-  @requires_auth  
-  def fighter_edit_form(fighter_id):
-    
-    fighter = Fighter.query.get(fighter_id)
-    #fighter_details = Fighter.format(fighter)
-    fighter_details = fighter.format()
-    
-    #Here we populate the form from the database
-    form = FighterForm(obj = fighter) #was fighter_detail
-
-    return render_template('forms/edit_fighter.html', form=form, fighters = fighter_details, userinfo=session[constants.PROFILE_KEY])
-  
-  @app.route('/fighter/edit/<int:fighter_id>', methods=['POST'])
-  @requires_auth
-  def edit_fighters(fighter_id):
-      fighter_division = 0
-      try:
-        fighter = Fighter.query.filter(Fighter.id == fighter_id).one_or_none()
-        #fighter_details = Fighter.format(fighter)
-        print(f'This is fighter -- {fighter.division}')
-        fighter_division = fighter.division
-
-        if fighter is None:
-          abort(404)
-        form = FighterForm(obj = fighter)
-   
-        form.populate_obj(fighter)
-        db.session.commit()
-      
-        #flash('Event ' + request.form['first_name'] + ' was successfully listed!')
-      except:
-        db.session.rollback()
-        #flash failure
-        #flash('An error occurred. Event ' + request.form['first_name'] + ' could not be listed.')
-      finally:
-        db.session.close()
-      #return render_template('index.html', userinfo=session[constants.PROFILE_KEY])
-      return redirect(url_for('get_division_fighters', division_id = fighter_division))
-
   @app.route('/event/plus/<name>/<number>', methods=['PATCH'])
   def get_event_fighter_votes(name, number):
       #print(html.unescape(name))
@@ -376,6 +337,60 @@ def create_app(test_config=None):
                   'success':True,
                   'fighter_votes':data,
                 }), 200
+
+  @app.route('/event/<date>', methods="DELETE")
+  @requires_auth
+  def delete_event(date):
+    events = Event.query.filter(Event.event_date == date).all()
+
+    events.delete()
+    return jsonify({
+      'success': True,
+      'delete': date,
+    }), 200
+
+
+  @app.route('/fighter/edit/<int:fighter_id>', methods=['GET']) 
+  @requires_auth  
+  def fighter_edit_form(fighter_id):
+    
+    fighter = Fighter.query.get(fighter_id)
+    #fighter_details = Fighter.format(fighter)
+    fighter_details = fighter.format()
+    
+    #Here we populate the form from the database
+    form = FighterForm(obj = fighter) #was fighter_detail
+
+    return render_template('forms/edit_fighter.html', form=form, fighters = fighter_details, userinfo=session[constants.PROFILE_KEY])
+  
+  @app.route('/fighter/edit/<int:fighter_id>', methods=['POST'])
+  @requires_auth
+  def edit_fighters(fighter_id):
+      fighter_division = 0
+      try:
+        fighter = Fighter.query.filter(Fighter.id == fighter_id).one_or_none()
+        #fighter_details = Fighter.format(fighter)
+        print(f'This is fighter -- {fighter.division}')
+        fighter_division = fighter.division
+
+        if fighter is None:
+          abort(404)
+        form = FighterForm(obj = fighter)
+   
+        form.populate_obj(fighter)
+        db.session.commit()
+      
+        #flash('Event ' + request.form['first_name'] + ' was successfully listed!')
+      except:
+        db.session.rollback()
+        #flash failure
+        #flash('An error occurred. Event ' + request.form['first_name'] + ' could not be listed.')
+      finally:
+        db.session.close()
+      #return render_template('index.html', userinfo=session[constants.PROFILE_KEY])
+      return redirect(url_for('get_division_fighters', division_id = fighter_division))
+
+  
 
   @app.errorhandler(404)
   def resource_not_found(error):
