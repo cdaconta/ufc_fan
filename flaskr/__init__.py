@@ -134,7 +134,7 @@ def create_app(test_config=None):
 
 
   @app.route('/index')
-  @requires_auth()
+  @requires_auth
   def get_all_fighters():
       #Here I get all the fighters by division
       div_1 = Fighter.query.filter(Fighter.division == 1).order_by(Fighter.rank).all()
@@ -190,12 +190,12 @@ def create_app(test_config=None):
                                 userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), events = event_info, div_1 = div_1_data, div_2 = div_2_data, div_3 = div_3_data, div_4 = div_4_data, div_5 = div_5_data, div_6 = div_6_data, div_7 = div_7_data, div_8 = div_8_data, div_9 = div_9_data, div_10 = div_10_data, div_11 = div_11_data, div_12 = div_12_data)
 
   @app.route('/knockouts')
-  @requires_auth()
+  @requires_auth
   def get_knockout_page():
     return render_template('knockouts.html',  userinfo=session[constants.PROFILE_KEY])
 
   @app.route('/division_fighters/<int:division_id>')
-  @requires_auth()
+  @requires_auth
   def get_division_fighters(division_id):
     #Here I get all the fighters - questions = Question.query.filter(Question.category==category_id).all()
     division_fighters = Fighter.query.filter(Fighter.division == division_id).order_by(Fighter.rank).all()
@@ -219,7 +219,7 @@ def create_app(test_config=None):
                               userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data, names=names) #events = event_info)
   
   @app.route('/event/<date>')
-  @requires_auth()
+  @requires_auth
   def get_event(date):
     clean_date = html.unescape(date)
     event_info = []
@@ -254,13 +254,13 @@ def create_app(test_config=None):
                                 userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), events = event_info, divisions = division_info)
  
   @app.route('/event/create', methods=['GET']) 
-  @requires_auth()  
+  @requires_auth 
   def create_event_form():
     form = EventForm()
     return render_template('forms/new_event.html', form=form, userinfo=session[constants.PROFILE_KEY])
   
   @app.route('/event/create', methods=['POST'])
-  @requires_auth()
+  @requires_auth
   def create_event():
     try:
       # get form data and create 
@@ -339,7 +339,7 @@ def create_app(test_config=None):
                 }), 200
 
   @app.route('/event/<date>', methods=['DELETE'])
-  @requires_auth()
+  @requires_auth
   def delete_event(date):
     events = Event.query.filter(Event.event_date == date).all()
 
@@ -351,7 +351,7 @@ def create_app(test_config=None):
 
 
   @app.route('/fighter/edit/<int:fighter_id>', methods=['GET']) 
-  @requires_auth()  
+  @requires_auth 
   def fighter_edit_form(fighter_id):
     
     fighter = Fighter.query.get(fighter_id)
@@ -364,7 +364,7 @@ def create_app(test_config=None):
     return render_template('forms/edit_fighter.html', form=form, fighters = fighter_details, userinfo=session[constants.PROFILE_KEY])
   
   @app.route('/fighter/edit/<int:fighter_id>', methods=['POST'])
-  @requires_auth()
+  @requires_auth
   def edit_fighters(fighter_id):
       fighter_division = 0
       try:
