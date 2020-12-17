@@ -220,6 +220,7 @@ class Event(db.Model):
 
     def format(self):
         return {
+            'id':self.id,
             'event_name':self.event_name, 
             'event_date':self.event_date, 
             'division':self.division,

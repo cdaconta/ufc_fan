@@ -390,11 +390,11 @@ def create_app(test_config=None):
     events = Event.query.filter(Event.event_date == clean_date).all()
 
     events.delete()
-    """ return jsonify({
+    return jsonify({
       'success': True,
       'delete': date,
-    }), 200 """
-    return redirect(url_for('get_all_fighters'))
+    }), 200 
+   #return redirect(url_for('get_all_fighters'))
 
 
   @app.route('/fighter/edit/<int:fighter_id>', methods=['GET']) 

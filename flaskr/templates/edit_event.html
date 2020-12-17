@@ -2,13 +2,44 @@
 {% block content %} 
 
 <div class="container">
+    <h1 class="text-center">{{events[0].event_name}}</h1>
+    <h3 class="text-center">{{events[0].event_date}}</h3>
   {% for item in events %}
-    <div class="text-center">{{ item.event_name }}</div>
-    <div class="text-center">{{ item.event_date }}</div>
-
+    <div class="text-center">ID: {{  item.id }} - {{ item.fighter_1 }} vs {{item.fighter_2}}</div>
   {% endfor %}
 
 </div>
-
+<script type="text/javascript">
+  
+    function deleteEvent(event_date)
+    {
+      
+      
+        //alert(number);
+      fetch('/event/delete/' + event_date,{
+          method:"DELETE",
+          body: JSON.stringify({ "message":"success" }),
+          headers: { "Content-Type":"application/json"}
+      })
+      .then(
+      function(response) {
+        if (response.status !== 200) {
+          console.log('Looks like there was a problem. Status Code: ' +
+            response.status);
+          return;
+        }
+  
+        // Examine the text in the response
+         response.json().then(function(data) {
+         console.log(data)
+  
+        });
+      }
+    )
+    .catch(function(err) {
+      console.log('Fetch Error :-S', err);
+      });
+    }
+  </script>
 
 {% endblock %}
