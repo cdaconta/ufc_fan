@@ -389,13 +389,29 @@ def create_app(test_config=None):
     clean_date = html.unescape(date)
     events = Event.query.filter(Event.event_date == clean_date).all()
 
-    events.delete()
+    
+    [item.delete() for item in events]
+    
+    
     return jsonify({
       'success': True,
       'delete': date,
     }), 200 
-   #return redirect(url_for('get_all_fighters'))
+   
+  @app.route('/event/delete/<int:id>', methods=['DELETE'])
+  @requires_auth
+  def delete_event_id(id):
+    
+    event = Event.query.filter(Event.id == id).one_or_none()
 
+    
+    event.delete()
+    
+    
+    return jsonify({
+      'success': True,
+      'delete': id,
+    }), 200 
 
   @app.route('/fighter/edit/<int:fighter_id>', methods=['GET']) 
   @requires_auth 

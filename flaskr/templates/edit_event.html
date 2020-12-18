@@ -2,12 +2,16 @@
 {% block content %} 
 
 <div class="container">
-    <h1 class="text-center">{{events[0].event_name}}</h1>
-    <h3 class="text-center">{{events[0].event_date}}</h3>
-  {% for item in events %}
-    <div class="text-center">ID: {{  item.id }} - {{ item.fighter_1 }} vs {{item.fighter_2}}</div>
-  {% endfor %}
-
+    <button class="mt-2 btn btn-primary" id="{{ events[0].event_date }}" onclick="deleteEvent(this.id)">Delete All</button>  
+    <div class="h4 text-danger text-center" id="event_deleted"></div>
+    <div id="event_container">
+      <h1 class="text-center">{{events[0].event_name}}</h1>
+      <h3 class="text-center">{{events[0].event_date}}</h3>
+      
+        {% for item in events %}
+          <div class="text-center">ID: {{  item.id }} - {{ item.fighter_1 }} vs. {{item.fighter_2}} <span id="{{ item.id }}" class="btn-primary btn-sm" onclick="deleteOne(this.id)">Delete</span></div>
+        {% endfor %}
+    </div>
 </div>
 <script type="text/javascript">
   
@@ -31,7 +35,47 @@
   
         // Examine the text in the response
          response.json().then(function(data) {
-         console.log(data)
+         console.log(data);
+         if(data.success == true){
+           let deleteSpan = document.querySelector('#event_deleted');
+           deleteSpan.innerHTML = 'ID Deleted: ' + data.deleted;
+           document.querySelector('#event_container').style.display = "none";
+          }
+  
+        });
+      }
+    )
+    .catch(function(err) {
+      console.log('Fetch Error :-S', err);
+      });
+    }
+
+    function deleteOne(event_id)
+    {
+      /* ------------------------------------------------fix id can't be a number-------- */
+      
+        //alert(number);
+      fetch('/event/delete/' + event_id,{
+          method:"DELETE",
+          body: JSON.stringify({ "message":"success" }),
+          headers: { "Content-Type":"application/json"}
+      })
+      .then(
+      function(response) {
+        if (response.status !== 200) {
+          console.log('Looks like there was a problem. Status Code: ' +
+            response.status);
+          return;
+        }
+  
+        // Examine the text in the response
+         response.json().then(function(data) {
+         console.log(data);
+         if(data.success == true){
+           let deleteSpan = document.querySelector('#event_deleted');
+           deleteSpan.innerHTML = 'Event Deleted!';
+           document.querySelector('#' + event_id).style.display = "none";
+          }
   
         });
       }
