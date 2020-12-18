@@ -345,7 +345,7 @@ def create_app(test_config=None):
     events = Event.query.filter(Event.event_date == clean_date).all()
     events_data = [item.format() for item in events]
     #form = EventForm()
-    return render_template('edit_event.html', events = events_data, userinfo=session[constants.PROFILE_KEY])
+    return render_template('delete_event.html', events = events_data, userinfo=session[constants.PROFILE_KEY])
   
 
   @app.route('/event/delete/<date>', methods=['DELETE'])
