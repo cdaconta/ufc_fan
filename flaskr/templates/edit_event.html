@@ -2,31 +2,31 @@
 {% block content %} 
 
 <div class="container">
-    <button class="mt-2 btn btn-primary" id="{{ events[0].event_date }}" onclick="deleteEvent(this.id)">Delete All</button>  
+    <button class="mt-2 btn btn-primary" id="delete_all" data-event="{{ events[0].event_date }}" onclick="deleteEvent(this.id)">Delete All</button>  
     <div class="h4 text-danger text-center" id="event_deleted"></div>
     <div id="event_container">
       <h1 class="text-center">{{events[0].event_name}}</h1>
       <h3 class="text-center">{{events[0].event_date}}</h3>
       
         {% for item in events %}
-          <div class="text-center">ID: {{  item.id }} - {{ item.fighter_1 }} vs. {{item.fighter_2}} <span id="{{ item.id }}" class="btn-primary btn-sm" onclick="deleteOne(this.id)">Delete</span></div>
+          <div id="one_event" class="text-center">ID: {{  item.id }} - {{ item.fighter_1 }} vs. {{item.fighter_2}} <span id="delete_one" data-event="{{ item.id }}" class="btn-primary btn-sm" onclick="deleteOne(this.id)">Delete</span></div>
         {% endfor %}
     </div>
 </div>
 <script type="text/javascript">
   
-    function deleteEvent(event_date)
+  function deleteEvent(all_id)
     {
+      event_div = document.querySelector('#'+ all_id);
+      event_date = event_div.dataset.event; 
       
-      
-        //alert(number);
       fetch('/event/delete/' + event_date,{
           method:"DELETE",
           body: JSON.stringify({ "message":"success" }),
           headers: { "Content-Type":"application/json"}
       })
       .then(
-      function(response) {
+        function(response) {
         if (response.status !== 200) {
           console.log('Looks like there was a problem. Status Code: ' +
             response.status);
@@ -37,8 +37,8 @@
          response.json().then(function(data) {
          console.log(data);
          if(data.success == true){
-           let deleteSpan = document.querySelector('#event_deleted');
-           deleteSpan.innerHTML = 'ID Deleted: ' + data.deleted;
+           let deleteDiv = document.querySelector('#event_deleted');
+           deleteDiv.innerHTML = 'ID Deleted: ' + data.deleted;
            document.querySelector('#event_container').style.display = "none";
           }
   
@@ -50,9 +50,10 @@
       });
     }
 
-    function deleteOne(event_id)
+  function deleteOne(one_id)
     {
-      /* ------------------------------------------------fix id can't be a number-------- */
+      event_div = document.querySelector('#'+ one_id);
+      event_id = event_div.dataset.event; 
       
         //alert(number);
       fetch('/event/delete/' + event_id,{
@@ -72,9 +73,9 @@
          response.json().then(function(data) {
          console.log(data);
          if(data.success == true){
-           let deleteSpan = document.querySelector('#event_deleted');
-           deleteSpan.innerHTML = 'Event Deleted!';
-           document.querySelector('#' + event_id).style.display = "none";
+           let deleteDiv = document.querySelector('#event_deleted');
+           deleteDiv.innerHTML = 'ID Deleted: ' + data.deleted;
+           document.querySelector('#one_event').style.display = "none";
           }
   
         });
