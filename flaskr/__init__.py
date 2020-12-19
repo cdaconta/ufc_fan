@@ -14,12 +14,12 @@ from werkzeug.exceptions import HTTPException
 from dotenv import load_dotenv, find_dotenv
 from authlib.integrations.flask_client import OAuth
 from six.moves.urllib.parse import urlencode
-#from .auth import AuthError, requires_auth
+from .auth import AuthError, requires_auth
 
 from . import constants
-#from .forms import EventForm #was *
 from .forms import EventForm, FighterForm
 import html
+import jwt
 
 
 
@@ -74,6 +74,17 @@ def create_app(test_config=None):
     response.status_code = (ex.code if isinstance(ex, HTTPException) else 500)
     return response
 
+  def login_address():
+    address = 'https://'
+    address += AUTH0_DOMAIN
+    address += '/authorize?'
+    address += 'audience=' + AUTH0_AUDIENCE + '&'
+    address += 'response_type=token&'
+    address += 'client_id=' + AUTH0_CLIENT_ID + '&'
+    address += 'redirect_uri=' + AUTH0_CALLBACK_URL
+    return address
+  # add login link function to jinja context
+  app.jinja_env.globals.update(login_address=login_address)
 
   oauth = OAuth(app)
 
@@ -90,14 +101,14 @@ def create_app(test_config=None):
   )
 
 
-  def requires_auth(f):
+  """ def requires_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if constants.PROFILE_KEY not in session:
             return redirect('/')
         return f(*args, **kwargs)
 
-    return decorated 
+    return decorated  """
 
 
     # Controllers API
@@ -108,18 +119,20 @@ def create_app(test_config=None):
 
   @app.route('/callback')
   def callback_handling():
-        auth0.authorize_access_token()
+        token = auth0.authorize_access_token()
         resp = auth0.get('userinfo')
         userinfo = resp.json()
-
+        
         session[constants.JWT_PAYLOAD] = userinfo
         session[constants.PROFILE_KEY] = {
             'user_id': userinfo['sub'],
             'name': userinfo['name'],
             'picture': userinfo['picture']
         }
+        session[constants.JWT] = token['access_token']
+        
         return redirect('/index')
-
+       
 
   @app.route('/login')
   def login():
@@ -132,9 +145,18 @@ def create_app(test_config=None):
         params = {'returnTo': url_for('home', _external=True), 'client_id': AUTH0_CLIENT_ID}
         return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
+  @app.route('/dashboard')
+  def dashboard():
+    return render_template('/dashboard.html',
+                           userinfo=session[constants.PROFILE_KEY],
+                           userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4),
+                           user_token = session[constants.JWT])
+
+  @app.route('/api-key')
+  def get_api_key():
+    return render_template('api_key.html')
 
   @app.route('/index')
-  @requires_auth
   def get_all_fighters():
       #Here I get all the fighters by division
       div_1 = Fighter.query.filter(Fighter.division == 1).order_by(Fighter.rank).all()
@@ -190,12 +212,10 @@ def create_app(test_config=None):
                                 userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), events = event_info, div_1 = div_1_data, div_2 = div_2_data, div_3 = div_3_data, div_4 = div_4_data, div_5 = div_5_data, div_6 = div_6_data, div_7 = div_7_data, div_8 = div_8_data, div_9 = div_9_data, div_10 = div_10_data, div_11 = div_11_data, div_12 = div_12_data)
 
   @app.route('/knockouts')
-  @requires_auth
   def get_knockout_page():
     return render_template('knockouts.html',  userinfo=session[constants.PROFILE_KEY])
 
   @app.route('/division_fighters/<int:division_id>')
-  @requires_auth
   def get_division_fighters(division_id):
     #Here I get all the fighters - questions = Question.query.filter(Question.category==category_id).all()
     division_fighters = Fighter.query.filter(Fighter.division == division_id).order_by(Fighter.rank).all()
@@ -219,7 +239,6 @@ def create_app(test_config=None):
                               userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data, names=names) #events = event_info)
   
   @app.route('/event/<date>')
-  @requires_auth
   def get_event(date):
     clean_date = html.unescape(date)
     event_info = []
@@ -253,15 +272,15 @@ def create_app(test_config=None):
                                 userinfo=session[constants.PROFILE_KEY],
                                 userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), events = event_info, divisions = division_info)
  
-  @app.route('/event/create', methods=['GET']) 
-  @requires_auth 
-  def create_event_form():
+  @app.route('/event-create', methods=['GET']) 
+  @requires_auth('get:event-create')
+  def create_event_form(token):
     form = EventForm()
     return render_template('forms/new_event.html', form=form, userinfo=session[constants.PROFILE_KEY])
   
-  @app.route('/event/create', methods=['POST'])
-  @requires_auth
-  def create_event():
+  @app.route('/event-create', methods=['POST'])
+  @requires_auth('post:event-create')
+  def create_event(token):
     try:
       # get form data and create 
       form = EventForm()
@@ -338,9 +357,9 @@ def create_app(test_config=None):
                   'fighter_votes':data,
                 }), 200
 
-  @app.route('/event/edit/<date>', methods=['GET']) 
-  @requires_auth 
-  def edit_event_form(date):
+  @app.route('/event-delete/<date>', methods=['GET']) 
+  @requires_auth('get:event-delete')
+  def edit_event_form(token, date):
     clean_date = html.unescape(date)
     events = Event.query.filter(Event.event_date == clean_date).all()
     events_data = [item.format() for item in events]
@@ -348,9 +367,9 @@ def create_app(test_config=None):
     return render_template('delete_event.html', events = events_data, userinfo=session[constants.PROFILE_KEY])
   
 
-  @app.route('/event/delete/<date>', methods=['DELETE'])
-  @requires_auth
-  def delete_event(date):
+  @app.route('/event-delete/<date>', methods=['DELETE'])
+  @requires_auth('delete:event-delete')
+  def delete_event(token, date):
     clean_date = html.unescape(date)
     events = Event.query.filter(Event.event_date == clean_date).all()
     if (len(events) == 0):
@@ -364,9 +383,9 @@ def create_app(test_config=None):
       'deleted': date,
     }), 200 
    
-  @app.route('/event/delete/<int:id>', methods=['DELETE'])
-  @requires_auth
-  def delete_event_id(id):
+  @app.route('/event-delete/<int:id>', methods=['DELETE'])
+  @requires_auth('delete:event-delete')
+  def delete_event_id(token, id):
     
     event = Event.query.filter(Event.id == id).one_or_none()
     if event is None:
@@ -380,9 +399,9 @@ def create_app(test_config=None):
       'deleted': id,
     }), 200 
 
-  @app.route('/fighter/edit/<int:fighter_id>', methods=['GET']) 
-  @requires_auth 
-  def fighter_edit_form(fighter_id):
+  @app.route('/fighter-edit/<int:fighter_id>', methods=['GET']) 
+  @requires_auth('get:fighter-edit')
+  def fighter_edit_form(token, fighter_id):
     
     fighter = Fighter.query.get(fighter_id)
     #fighter_details = Fighter.format(fighter)
@@ -393,9 +412,9 @@ def create_app(test_config=None):
 
     return render_template('forms/edit_fighter.html', form=form, fighters = fighter_details, userinfo=session[constants.PROFILE_KEY])
   
-  @app.route('/fighter/edit/<int:fighter_id>', methods=['POST'])
-  @requires_auth
-  def edit_fighters(fighter_id):
+  @app.route('/fighter-edit/<int:fighter_id>', methods=['POST'])
+  @requires_auth('get:fighter-edit')
+  def edit_fighters(token, fighter_id):
       fighter_division = 0
       try:
         fighter = Fighter.query.filter(Fighter.id == fighter_id).one_or_none()

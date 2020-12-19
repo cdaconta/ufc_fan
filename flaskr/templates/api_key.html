@@ -1,0 +1,29 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<div class="container">
+    <p>UFC FAN data can be accessed via the API. The token is a Bearer JSON Web Token (JWT)
+        and is required for some API endpoints. 
+    </p>
+</div>
+<p>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample"
+        aria-expanded="false" aria-controls="collapseExample">
+        Click to show API key
+    </button>
+</p>
+<div class="container">
+    <div class="collapse" id="collapseExample">
+        {% if 'JWT' in session %}
+        <div class="card card-body api-key-card">
+            {{ session['JWT'] }}
+        </div>
+        {% else %}
+        <div class="card card-body">
+            <a href="/login">Login to reveal API key</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
