@@ -131,10 +131,7 @@ def create_app(test_config=None):
             'picture': userinfo['picture']
         }
         session[constants.JWT] = token['access_token']
-        """ #auth = request.GET.get('access_token')
-        auth = request.args.get('access_token', '')
-        jwt_info = jwt.decode(auth, algorithms=['HS256'])
-        print(f'This is user info - {jwt_info}') """
+        
         return redirect('/index')
        
 
@@ -149,12 +146,12 @@ def create_app(test_config=None):
         params = {'returnTo': url_for('home', _external=True), 'client_id': AUTH0_CLIENT_ID}
         return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
-  """ @app.route('/dashboard')
-  @requires_auth()
-  def dashboard(token):
+  @app.route('/dashboard')
+  def dashboard():
     return render_template('dashboard.html',
                            userinfo=session[constants.PROFILE_KEY],
-                           userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4)) """
+                           userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4),
+                           user_token = session[constants.JWT])
 
   @app.route('/index')
   def get_all_fighters():
