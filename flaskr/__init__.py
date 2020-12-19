@@ -75,6 +75,17 @@ def create_app(test_config=None):
     response.status_code = (ex.code if isinstance(ex, HTTPException) else 500)
     return response
 
+  def login_address():
+    address = 'https://'
+    address += AUTH0_DOMAIN
+    address += '/authorize?'
+    address += 'audience=' + AUTH0_AUDIENCE + '&'
+    address += 'response_type=token&'
+    address += 'client_id=' + AUTH0_CLIENT_ID + '&'
+    address += 'redirect_uri=' + AUTH0_CALLBACK_URL
+    return address
+  # add login link function to jinja context
+  app.jinja_env.globals.update(login_address=login_address)
 
   oauth = OAuth(app)
 
