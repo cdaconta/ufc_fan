@@ -20,6 +20,7 @@ from . import constants
 #from .forms import EventForm #was *
 from .forms import EventForm, FighterForm
 import html
+import jwt
 
 
 
@@ -108,18 +109,23 @@ def create_app(test_config=None):
 
   @app.route('/callback')
   def callback_handling():
-        auth0.authorize_access_token()
+        token = auth0.authorize_access_token()
         resp = auth0.get('userinfo')
         userinfo = resp.json()
-
+        
         session[constants.JWT_PAYLOAD] = userinfo
         session[constants.PROFILE_KEY] = {
             'user_id': userinfo['sub'],
             'name': userinfo['name'],
             'picture': userinfo['picture']
         }
+        session[constants.JWT] = token['access_token']
+        """ #auth = request.GET.get('access_token')
+        auth = request.args.get('access_token', '')
+        jwt_info = jwt.decode(auth, algorithms=['HS256'])
+        print(f'This is user info - {jwt_info}') """
         return redirect('/index')
-
+       
 
   @app.route('/login')
   def login():
@@ -132,6 +138,12 @@ def create_app(test_config=None):
         params = {'returnTo': url_for('home', _external=True), 'client_id': AUTH0_CLIENT_ID}
         return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
+  @app.route('/dashboard')
+  @requires_auth
+  def dashboard():
+    return render_template('dashboard.html',
+                           userinfo=session[constants.PROFILE_KEY],
+                           userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4))
 
   @app.route('/index')
   @requires_auth
@@ -253,13 +265,13 @@ def create_app(test_config=None):
                                 userinfo=session[constants.PROFILE_KEY],
                                 userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), events = event_info, divisions = division_info)
  
-  @app.route('/event/create', methods=['GET']) 
-  @requires_auth 
+  @app.route('/event-create', methods=['GET']) 
+  @requires_auth
   def create_event_form():
     form = EventForm()
     return render_template('forms/new_event.html', form=form, userinfo=session[constants.PROFILE_KEY])
   
-  @app.route('/event/create', methods=['POST'])
+  @app.route('/event-create', methods=['POST'])
   @requires_auth
   def create_event():
     try:
@@ -338,8 +350,8 @@ def create_app(test_config=None):
                   'fighter_votes':data,
                 }), 200
 
-  @app.route('/event/edit/<date>', methods=['GET']) 
-  @requires_auth 
+  @app.route('/event/delete/<date>', methods=['GET']) 
+  @requires_auth
   def edit_event_form(date):
     clean_date = html.unescape(date)
     events = Event.query.filter(Event.event_date == clean_date).all()
@@ -381,7 +393,7 @@ def create_app(test_config=None):
     }), 200 
 
   @app.route('/fighter/edit/<int:fighter_id>', methods=['GET']) 
-  @requires_auth 
+  @requires_auth
   def fighter_edit_form(fighter_id):
     
     fighter = Fighter.query.get(fighter_id)
