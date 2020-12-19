@@ -17,7 +17,6 @@ from six.moves.urllib.parse import urlencode
 from .auth import AuthError, requires_auth
 
 from . import constants
-#from .forms import EventForm #was *
 from .forms import EventForm, FighterForm
 import html
 import jwt
@@ -148,10 +147,14 @@ def create_app(test_config=None):
 
   @app.route('/dashboard')
   def dashboard():
-    return render_template('dashboard.html',
+    return render_template('/dashboard.html',
                            userinfo=session[constants.PROFILE_KEY],
                            userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4),
                            user_token = session[constants.JWT])
+
+  @app.route('/api-key')
+  def get_api_key():
+    return render_template('api_key.html')
 
   @app.route('/index')
   def get_all_fighters():
