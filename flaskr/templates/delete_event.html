@@ -20,7 +20,7 @@
       event_div = document.querySelector('#'+ all_id);
       event_date = event_div.dataset.event; 
       
-      fetch('/event/delete/' + event_date,{
+      fetch('/event-delete/' + event_date,{
           method:"DELETE",
           body: JSON.stringify({ "message":"success" }),
           headers: { "Content-Type":"application/json"}
@@ -56,7 +56,7 @@
       event_id = event_div.dataset.event; 
       
         //alert(number);
-      fetch('/event/delete/' + event_id,{
+      fetch('/event-delete/' + event_id,{
           method:"DELETE",
           body: JSON.stringify({ "message":"success" }),
           headers: { "Content-Type":"application/json"}
