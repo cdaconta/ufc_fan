@@ -448,6 +448,14 @@ def create_app(test_config=None):
             "error": 404,
             "message": "resource not found"
         }), 404
+
+  @app.errorhandler(401)
+  def unauthorized(error):
+        return jsonify({
+            "success": False,
+            "error": 401,
+            "message": "You are NOT Authorized!"
+        }), 401
   
 
   return app
