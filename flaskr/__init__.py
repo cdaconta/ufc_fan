@@ -145,12 +145,13 @@ def create_app(test_config=None):
         params = {'returnTo': url_for('home', _external=True), 'client_id': AUTH0_CLIENT_ID}
         return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
-  @app.route('/dashboard')
+  """ @app.route('/dashboard')
   def dashboard():
+    #json_jwt = json.loads(constants.JWT_PAYLOAD)
     return render_template('/dashboard.html',
                            userinfo=session[constants.PROFILE_KEY],
                            userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4),
-                           user_token = session[constants.JWT])
+                           user_token = session[constants.JWT]) """
 
   @app.route('/api-key')
   def get_api_key():
@@ -158,8 +159,9 @@ def create_app(test_config=None):
 
   @app.route('/index')
   def get_all_fighters():
-      decoded = jwt.decode(constants.JWT, constants.SECRET_KEY, algorithms=['HS256'])
-      print(f'This is decoded jwt {decoded}')
+
+      session['Admin'] = env.get('APP_ADMIN')
+      session['Event Editor'] = env.get('EVENT_EDITOR')
 
       #Here I get all the fighters by division
       div_1 = Fighter.query.filter(Fighter.division == 1).order_by(Fighter.rank).all()
