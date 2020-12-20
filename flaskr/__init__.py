@@ -20,6 +20,7 @@ from . import constants
 from .forms import EventForm, FighterForm
 import html
 import jwt
+import http.client
 
 
 
@@ -110,7 +111,6 @@ def create_app(test_config=None):
 
     return decorated  """
 
-
     # Controllers API
   @app.route('/')
   def home():
@@ -158,6 +158,9 @@ def create_app(test_config=None):
 
   @app.route('/index')
   def get_all_fighters():
+      decoded = jwt.decode(constants.JWT, constants.SECRET_KEY, algorithms=['HS256'])
+      print(f'This is decoded jwt {decoded}')
+
       #Here I get all the fighters by division
       div_1 = Fighter.query.filter(Fighter.division == 1).order_by(Fighter.rank).all()
       div_1_data = [item.format() for item in div_1]
