@@ -145,14 +145,6 @@ def create_app(test_config=None):
         params = {'returnTo': url_for('home', _external=True), 'client_id': AUTH0_CLIENT_ID}
         return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
-  """ @app.route('/dashboard')
-  def dashboard():
-    #json_jwt = json.loads(constants.JWT_PAYLOAD)
-    return render_template('/dashboard.html',
-                           userinfo=session[constants.PROFILE_KEY],
-                           userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4),
-                           user_token = session[constants.JWT]) """
-
   @app.route('/api-key')
   def get_api_key():
     return render_template('api_key.html')
