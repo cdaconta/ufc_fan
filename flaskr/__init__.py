@@ -63,12 +63,6 @@ def create_app(test_config=None):
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH')
     return response
-   
-  @app.errorhandler(Exception)
-  def handle_auth_error(ex):
-    response = jsonify(message=str(ex))
-    response.status_code = (ex.code if isinstance(ex, HTTPException) else 500)
-    return response
 
   def login_address():
     address = 'https://'
@@ -425,7 +419,13 @@ def create_app(test_config=None):
       #return render_template('index.html', userinfo=session[constants.PROFILE_KEY])
       return redirect(url_for('get_division_fighters', division_id = fighter_division))
 
-  
+  @app.errorhandler(405)
+  def method_not_allowed(error):
+        return jsonify({
+            "success": False,
+            "error": 405,
+            "message": "method not allowed"
+        }), 405
 
   @app.errorhandler(404)
   def resource_not_found(error):
@@ -442,7 +442,28 @@ def create_app(test_config=None):
             "error": 401,
             "message": "You are NOT Authorized!"
         }), 401
-  
+
+  @app.errorhandler(400)
+  def bad_request(error):
+        return jsonify({
+            "success": False,
+            "error": 400,
+            "message": "bad request"
+        }), 400
+
+  @app.errorhandler(422)
+  def unprocessable(error):
+        return jsonify({
+            "success": False,
+            "error": 422,
+            "message": "unprocessable"
+        }), 422
+
+  @app.errorhandler(Exception)
+  def handle_auth_error(ex):
+    response = jsonify(message=str(ex))
+    response.status_code = (ex.code if isinstance(ex, HTTPException) else 500)
+    return response
 
   return app
 
