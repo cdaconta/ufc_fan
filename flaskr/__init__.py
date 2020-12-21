@@ -181,15 +181,14 @@ def create_app(test_config=None):
       event_info = []
       event_data = Event.query.order_by(Event.event_date.desc()).limit(1)
       
-      for item in event_data:
-        event_info.append(
+      event_info.append(
           {
-              'event_name':item.event_name, 
-              'event_date':format_datetime(str(item.event_date)), 
-              'location':item.location,         
+              'event_name':event_data[0].event_name, 
+              'event_date':format_datetime(str(event_data[0].event_date)), 
+              'location':event_data[0].location,         
           }
         )
-
+      session['Upcoming Event'] = '/event/' + format_datetime(str(event_data[0].event_date))
       return render_template('index.html',
                                 userinfo=session[constants.PROFILE_KEY],
                                 userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), events = event_info, div_1 = div_1_data, div_2 = div_2_data, div_3 = div_3_data, div_4 = div_4_data, div_5 = div_5_data, div_6 = div_6_data, div_7 = div_7_data, div_8 = div_8_data, div_9 = div_9_data, div_10 = div_10_data, div_11 = div_11_data, div_12 = div_12_data)
