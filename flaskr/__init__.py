@@ -143,40 +143,40 @@ def create_app(test_config=None):
 
       #Here I get all the fighter by division
       div_1 = Fighter.query.filter(Fighter.division == 1).order_by(Fighter.rank).all()
-      div_1_data = [item.format() for item in div_1]
+      div_1_data = [event.format() for event in div_1]
 
       div_2 = Fighter.query.filter(Fighter.division == 2).order_by(Fighter.rank).all()
-      div_2_data = [item.format() for item in div_2]
+      div_2_data = [event.format() for event in div_2]
 
       div_3 = Fighter.query.filter(Fighter.division == 3).order_by(Fighter.rank).all()
-      div_3_data = [item.format() for item in div_3]
+      div_3_data = [event.format() for event in div_3]
 
       div_4 = Fighter.query.filter(Fighter.division == 4).order_by(Fighter.rank).all()
-      div_4_data = [item.format() for item in div_4]
+      div_4_data = [event.format() for event in div_4]
 
       div_5 = Fighter.query.filter(Fighter.division == 5).order_by(Fighter.rank).all()
-      div_5_data = [item.format() for item in div_5]
+      div_5_data = [event.format() for event in div_5]
 
       div_6 = Fighter.query.filter(Fighter.division == 6).order_by(Fighter.rank).all()
-      div_6_data = [item.format() for item in div_6]
+      div_6_data = [event.format() for event in div_6]
 
       div_7 = Fighter.query.filter(Fighter.division == 7).order_by(Fighter.rank).all()
-      div_7_data = [item.format() for item in div_7]
+      div_7_data = [event.format() for event in div_7]
 
       div_8 = Fighter.query.filter(Fighter.division == 8).order_by(Fighter.rank).all()
-      div_8_data = [item.format() for item in div_8]
+      div_8_data = [event.format() for event in div_8]
 
       div_9 = Fighter.query.filter(Fighter.division == 9).order_by(Fighter.rank).all()
-      div_9_data = [item.format() for item in div_9]
+      div_9_data = [event.format() for event in div_9]
 
       div_10 = Fighter.query.filter(Fighter.division == 10).order_by(Fighter.rank).all()
-      div_10_data = [item.format() for item in div_10]
+      div_10_data = [event.format() for event in div_10]
 
       div_11 = Fighter.query.filter(Fighter.division == 11).order_by(Fighter.rank).all()
-      div_11_data = [item.format() for item in div_11]
+      div_11_data = [event.format() for event in div_11]
 
       div_12 = Fighter.query.filter(Fighter.division == 12).order_by(Fighter.rank).all()
-      div_12_data = [item.format() for item in div_12]
+      div_12_data = [event.format() for event in div_12]
       
       event_info = []
       event_data = Event.query.order_by(Event.event_date.desc()).limit(1)
@@ -188,6 +188,7 @@ def create_app(test_config=None):
               'location':event_data[0].location,         
           }
         )
+      #Here I set a session variable so I can link to the event page from the main.html
       session['Upcoming Event'] = '/event/' + format_datetime(str(event_data[0].event_date))
       return render_template('index.html',
                                 userinfo=session[constants.PROFILE_KEY],
@@ -232,35 +233,31 @@ def create_app(test_config=None):
   def get_event(date):
     clean_date = html.unescape(date)
     event_info = []
-    #event_data = Event.query.order_by(Event.event_date.desc()).limit(6)
-    event_data = Event.query.filter(Event.event_date == clean_date).order_by(Event.fight_order)
+    #Here we join Events table and Division table 
+    event_data = db.session.query(Event,Division).join(Division).filter(Event.event_date == clean_date).order_by(Event.fight_order)
    
-    for item in event_data:
+    for event, division in event_data:
         event_info.append(
           {
-              'event_name':item.event_name, 
-              'event_date':format_datetime(str(item.event_date)),
-              'location':item.location, 
-              'division':item.division,
-              'fighter_1':item.fighter_1,
-              'fighter_2':item.fighter_2,
-              'fighter_1_votes':item.fighter_1_votes,
-              'fighter_2_votes':item.fighter_2_votes,
-              'fighter_1_odds':item.fighter_1_odds,
-              'fighter_2_odds':item.fighter_2_odds,
-              'fight_order':item.fight_order
+              'event_name':event.event_name, 
+              'event_date':format_datetime(str(event.event_date)),
+              'location':event.location, 
+              'division':event.division,
+              'fighter_1':event.fighter_1,
+              'fighter_2':event.fighter_2,
+              'fighter_1_votes':event.fighter_1_votes,
+              'fighter_2_votes':event.fighter_2_votes,
+              'fighter_1_odds':event.fighter_1_odds,
+              'fighter_2_odds':event.fighter_2_odds,
+              'fight_order':event.fight_order,
+              'div_id':division.id,
+              'div_name':division.name,
           }
         )
-    division_info = []
-    division_data = Division.query.with_entities(Division.id, Division.name).all()
-    for item in division_data:
-      division_info.append({
-        'id':item.id,
-        'name':item.name
-      })
+ 
     return render_template('event.html',
                                 userinfo=session[constants.PROFILE_KEY],
-                                userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), events = event_info, divisions = division_info)
+                                userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), events = event_info) #, divisions = division_info)
  
   @app.route('/event-create', methods=['GET']) 
   @requires_auth('get:event-create')
@@ -272,9 +269,8 @@ def create_app(test_config=None):
   @requires_auth('post:event-create')
   def create_event(token):
     try:
-      # get form data and create 
+      # get form data and create new obj
       form = EventForm()
-      #print(f'This is form: {form}')
       form_event = Event(
       event_name = form.event_name.data, 
       event_date = form.event_date.data,
@@ -319,10 +315,10 @@ def create_app(test_config=None):
           db.session.commit()
           
           data = []
-          for item in event_data:
+          for event in event_data:
             data.append( {
                   'fighter_number':1,     
-                  'fighter_1_votes':item.fighter_1_votes,
+                  'fighter_1_votes':event.fighter_1_votes,
               })
             return jsonify({
             'success':True,
@@ -336,10 +332,10 @@ def create_app(test_config=None):
           db.session.commit()
 
           data = []
-          for item in event_data:
+          for event in event_data:
                 data.append( {  
                   'fighter_number':2,   
-                  'fighter_2_votes':item.fighter_2_votes, 
+                  'fighter_2_votes':event.fighter_2_votes, 
                   })
             
                 return jsonify({
@@ -352,7 +348,7 @@ def create_app(test_config=None):
   def edit_event_form(token, date):
     clean_date = html.unescape(date)
     events = Event.query.filter(Event.event_date == clean_date).all()
-    events_data = [item.format() for item in events]
+    events_data = [event.format() for event in events]
     #form = EventForm()
     return render_template('delete_event.html', events = events_data, userinfo=session[constants.PROFILE_KEY])
   
@@ -365,7 +361,7 @@ def create_app(test_config=None):
     if (len(events) == 0):
             abort(404)
     
-    [item.delete() for item in events]
+    [event.delete() for event in events]
     
     
     return jsonify({

@@ -10,11 +10,9 @@
       <div class="h2 text-center">{{ events[0].event_name }}</div> 
       <div class="h4 text-center">{{ events[0].event_date|datetime('full') }}</div>
     {% for item in events %}
-          {% for thing in divisions%}
-            {% if item.division == thing.id %}
-            <div class="h4 text-center">Match {{item.fight_order}}: <span class="h4 text-danger">{{ thing.name }}</span></div>
-            {% endif %}
-          {% endfor %}
+          
+            <div class="h4 text-center">Match {{item.fight_order}}: <span class="h4 text-danger">{{ item.div_name }}</span></div>
+         
             <p class="font-weight-bold text-center"><mark>{{ item.fighter_1}}</mark> - Odds (<span class="text-primary">{% if item.fighter_1_odds > 0 %}+{% endif %}{{ item.fighter_1_odds }}</span>) VS. <mark>{{item.fighter_2}}</mark> - Odds (<span class="text-primary">{% if item.fighter_2_odds > 0 %}+{% endif %}{{ item.fighter_2_odds }}</span>)</p>
             <div class="card-deck">
                 <div class="card text-white bg-success mb-3" style="min-width: 16rem;">
