@@ -19,11 +19,8 @@ from .auth import AuthError, requires_auth
 from . import constants
 from .forms import EventForm, FighterForm
 import html
-import jwt
-import http.client
 
-
-
+#Authentication data variables
 ENV_FILE = find_dotenv()
 if ENV_FILE:
     load_dotenv(ENV_FILE)
@@ -41,7 +38,6 @@ def create_app(test_config=None):
   setup_db(app)
 
 
-  
   #This sets up CORS to Allow '*' for origins. 
   CORS(app)
 
@@ -68,7 +64,6 @@ def create_app(test_config=None):
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH')
     return response
    
-  #This endpoint handles GET requests for categories
   @app.errorhandler(Exception)
   def handle_auth_error(ex):
     response = jsonify(message=str(ex))
@@ -84,7 +79,7 @@ def create_app(test_config=None):
     address += 'client_id=' + AUTH0_CLIENT_ID + '&'
     address += 'redirect_uri=' + AUTH0_CALLBACK_URL
     return address
-  # add login link function to jinja context
+  # add login_address function to jinja context
   app.jinja_env.globals.update(login_address=login_address)
 
   oauth = OAuth(app)
@@ -102,16 +97,7 @@ def create_app(test_config=None):
   )
 
 
-  """ def requires_auth(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        if constants.PROFILE_KEY not in session:
-            return redirect('/')
-        return f(*args, **kwargs)
-
-    return decorated  """
-
-    # Controllers API
+  # Controllers API
   @app.route('/')
   def home():
         return render_template('home.html')
@@ -155,7 +141,7 @@ def create_app(test_config=None):
       session['Admin'] = env.get('APP_ADMIN')
       session['Event Editor'] = env.get('EVENT_EDITOR')
 
-      #Here I get all the fighters by division
+      #Here I get all the fighter by division
       div_1 = Fighter.query.filter(Fighter.division == 1).order_by(Fighter.rank).all()
       div_1_data = [item.format() for item in div_1]
 
@@ -214,26 +200,34 @@ def create_app(test_config=None):
 
   @app.route('/division_fighters/<int:division_id>')
   def get_division_fighters(division_id):
-    #Here I get all the fighters - questions = Question.query.filter(Question.category==category_id).all()
-    division_fighters = Fighter.query.filter(Fighter.division == division_id).order_by(Fighter.rank).all()
+    #Here I join Fighters and Divisions Tables
+    division_fighters = db.session.query(Fighter,Division).join(Division).filter(Fighter.division == division_id).all()
 
     data = []
 
-    for item in division_fighters:
-      data.append(item.format())
-    
-    division_name = Division.query.filter(Division.id == division_id )
-
-    names = []
-    for item in division_name:
-      names.append({
-        'id':item.id,
-        'name':item.name
-      })
-
+    for fighter, division in division_fighters:
+      data.append({
+                  'id':fighter.id,
+                  'first_name':fighter.first_name,
+                  'last_name':fighter.last_name,
+                  'age':fighter.age,
+                  'height':fighter.height,
+                  'weight':fighter.weight,
+                  'arm_reach':fighter.arm_reach,
+                  'leg_reach':fighter.leg_reach,
+                  'sex':fighter.sex,
+                  'win':fighter.win,
+                  'loss':fighter.loss,
+                  'draw':fighter.draw,
+                  'division':fighter.division,
+                  'rank':fighter.rank,
+                  'div_id':division.id,
+                  'div_name':division.name,
+                  }
+                )
     return render_template('division_fighters.html',
                               userinfo=session[constants.PROFILE_KEY],
-                              userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data, names=names) #events = event_info)
+                              userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data) #names=names) #events = event_info)
   
   @app.route('/event/<date>')
   def get_event(date):
@@ -407,7 +401,7 @@ def create_app(test_config=None):
     #Here we populate the form from the database
     form = FighterForm(obj = fighter) #was fighter_detail
 
-    return render_template('forms/edit_fighter.html', form=form, fighters = fighter_details, userinfo=session[constants.PROFILE_KEY])
+    return render_template('forms/edit_fighter.html', form=form, fighter = fighter_details, userinfo=session[constants.PROFILE_KEY])
   
   @app.route('/fighter-edit/<int:fighter_id>', methods=['POST'])
   @requires_auth('get:fighter-edit')

@@ -6,8 +6,8 @@
     <div class="album py-5 bg-light">
       <div class="container">
         
-          {% if fighters[0].division == names[0].id %}
-          <div class="h3 text-center">{{ names[0].name }} - Champ & Top 5</div>
+          {% if fighters[0].division == fighters[0].div_id %}
+          <div class="h3 text-center">{{ fighters[0].div_name }} - Champ & Top 5</div>
           {% endif %}
         
         

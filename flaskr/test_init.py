@@ -7,6 +7,9 @@ from flask_sqlalchemy import SQLAlchemy
 from .__init__ import create_app
 from .models import setup_db, Fighter, Event, Division
 
+user = os.environ.get('USER')
+password = os.environ.get('PASSWORD')
+
 
 class UfcFanTestCase(unittest.TestCase):
     """This class represents the plant survey test case"""
@@ -20,8 +23,7 @@ class UfcFanTestCase(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client
         self.database_name = "ufc_fan"
-        self.database_path = "postgres://{}/{}".format(
-            'localhost:5432', self.database_name)
+        self.database_path = "postgres://{}/{}".format(f'{user}:{password}@localhost:5432', self.database_name)
         setup_db(self.app, self.database_path)
 
         # binds the app to the current context
