@@ -227,7 +227,7 @@ def create_app(test_config=None):
                 )
     return render_template('division_fighters.html',
                               userinfo=session[constants.PROFILE_KEY],
-                              userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data) #names=names) #events = event_info)
+                              userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data) 
   
   @app.route('/event/<date>')
   def get_event(date):
