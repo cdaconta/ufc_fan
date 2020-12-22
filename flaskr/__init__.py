@@ -430,6 +430,81 @@ def create_app(test_config=None):
       finally:
         db.session.close()   
       return redirect(url_for('get_division_fighters', division_id = fighter_division)),200
+  #------------------------------------------------------------------------------------------------------------#
+  # API 
+  #------------------------------------------------------------------------------------------------------------#
+
+  @app.route('api/index')
+  def get_all_fighters_api():
+      try:
+          #Here I get all the fighter by division
+          div_1 = Fighter.query.filter(Fighter.division == 1).order_by(Fighter.rank).all()
+          div_1_data = [event.format() for event in div_1]
+
+          div_2 = Fighter.query.filter(Fighter.division == 2).order_by(Fighter.rank).all()
+          div_2_data = [event.format() for event in div_2]
+
+          div_3 = Fighter.query.filter(Fighter.division == 3).order_by(Fighter.rank).all()
+          div_3_data = [event.format() for event in div_3]
+
+          div_4 = Fighter.query.filter(Fighter.division == 4).order_by(Fighter.rank).all()
+          div_4_data = [event.format() for event in div_4]
+
+          div_5 = Fighter.query.filter(Fighter.division == 5).order_by(Fighter.rank).all()
+          div_5_data = [event.format() for event in div_5]
+
+          div_6 = Fighter.query.filter(Fighter.division == 6).order_by(Fighter.rank).all()
+          div_6_data = [event.format() for event in div_6]
+
+          div_7 = Fighter.query.filter(Fighter.division == 7).order_by(Fighter.rank).all()
+          div_7_data = [event.format() for event in div_7]
+
+          div_8 = Fighter.query.filter(Fighter.division == 8).order_by(Fighter.rank).all()
+          div_8_data = [event.format() for event in div_8]
+
+          div_9 = Fighter.query.filter(Fighter.division == 9).order_by(Fighter.rank).all()
+          div_9_data = [event.format() for event in div_9]
+
+          div_10 = Fighter.query.filter(Fighter.division == 10).order_by(Fighter.rank).all()
+          div_10_data = [event.format() for event in div_10]
+
+          div_11 = Fighter.query.filter(Fighter.division == 11).order_by(Fighter.rank).all()
+          div_11_data = [event.format() for event in div_11]
+
+          div_12 = Fighter.query.filter(Fighter.division == 12).order_by(Fighter.rank).all()
+          div_12_data = [event.format() for event in div_12]
+      except BaseException as e:
+          print(e)
+          abort(404)
+
+      event_info = []
+      event_data = Event.query.order_by(Event.event_date.desc()).limit(1)
+      if event_data is None:
+          abort(404)
+
+      event_info.append(
+          {
+              'event_name':event_data[0].event_name, 
+              'event_date':format_datetime(str(event_data[0].event_date)), 
+              'location':event_data[0].location,         
+          }
+        )
+      return jsonify({
+          'success':True,
+           'events':event_info,
+           'div_1':div_1_data, 
+           'div_2':div_2_data, 
+           'div_3':div_3_data, 
+           'div_4':div_4_data,
+           'div_5':div_5_data, 
+           'div_6':div_6_data, 
+           'div_7':div_7_data, 
+           'div_8':div_8_data, 
+           'div_9':div_9_data, 
+           'div_10':div_10_data, 
+           'div_11':div_11_data,
+          ' div_12':div_12_data
+      }),200
 
   @app.errorhandler(405)
   def method_not_allowed(error):

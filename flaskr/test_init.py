@@ -48,7 +48,7 @@ class UfcFanTestCase(unittest.TestCase):
             )}
 
     def test_get_knockouts(self):
-        """Tests Get All Fighters"""
+        """Tests Get knockouts"""
         res = self.client().get('/knockouts')
         data = json.loads(res.data)
 
@@ -56,11 +56,31 @@ class UfcFanTestCase(unittest.TestCase):
     
     def test_get_all_fighters(self):
         """Tests Get All Fighters"""
-        res = self.client().get('/index')
+        res = self.client().get('api/index')
+        data = json.loads(res.data)
+         self.assertEqual(data['success'], True)
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['events']))
+        self.assertTrue(data['div_1']))
+        self.assertTrue(data['div_2']))
+        self.assertTrue(data['div_3']))
+        self.assertTrue(data['div_4']))
+        self.assertTrue(data['div_5']))
+        self.assertTrue(data['div_6']))
+        self.assertTrue(data['div_7']))
+        self.assertTrue(data['div_8']))
+        self.assertTrue(data['div_9']))
+        self.assertTrue(data['div_10']))
+        self.assertTrue(data['div_11']))
+        self.assertTrue(data['div_12']))
+
+    def test_get_division_fighters(self):
+        """Tests Get Division Fighters"""
+        res = self.client().get('/division_fighters/1')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
-       
+        
 
     test_fighter = {
         'first_name':'Test',
