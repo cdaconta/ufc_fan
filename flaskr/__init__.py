@@ -134,47 +134,52 @@ def create_app(test_config=None):
 
       session['Admin'] = env.get('APP_ADMIN')
       session['Event Editor'] = env.get('EVENT_EDITOR')
+      try:
+          #Here I get all the fighter by division
+          div_1 = Fighter.query.filter(Fighter.division == 1).order_by(Fighter.rank).all()
+          div_1_data = [event.format() for event in div_1]
 
-      #Here I get all the fighter by division
-      div_1 = Fighter.query.filter(Fighter.division == 1).order_by(Fighter.rank).all()
-      div_1_data = [event.format() for event in div_1]
+          div_2 = Fighter.query.filter(Fighter.division == 2).order_by(Fighter.rank).all()
+          div_2_data = [event.format() for event in div_2]
 
-      div_2 = Fighter.query.filter(Fighter.division == 2).order_by(Fighter.rank).all()
-      div_2_data = [event.format() for event in div_2]
+          div_3 = Fighter.query.filter(Fighter.division == 3).order_by(Fighter.rank).all()
+          div_3_data = [event.format() for event in div_3]
 
-      div_3 = Fighter.query.filter(Fighter.division == 3).order_by(Fighter.rank).all()
-      div_3_data = [event.format() for event in div_3]
+          div_4 = Fighter.query.filter(Fighter.division == 4).order_by(Fighter.rank).all()
+          div_4_data = [event.format() for event in div_4]
 
-      div_4 = Fighter.query.filter(Fighter.division == 4).order_by(Fighter.rank).all()
-      div_4_data = [event.format() for event in div_4]
+          div_5 = Fighter.query.filter(Fighter.division == 5).order_by(Fighter.rank).all()
+          div_5_data = [event.format() for event in div_5]
 
-      div_5 = Fighter.query.filter(Fighter.division == 5).order_by(Fighter.rank).all()
-      div_5_data = [event.format() for event in div_5]
+          div_6 = Fighter.query.filter(Fighter.division == 6).order_by(Fighter.rank).all()
+          div_6_data = [event.format() for event in div_6]
 
-      div_6 = Fighter.query.filter(Fighter.division == 6).order_by(Fighter.rank).all()
-      div_6_data = [event.format() for event in div_6]
+          div_7 = Fighter.query.filter(Fighter.division == 7).order_by(Fighter.rank).all()
+          div_7_data = [event.format() for event in div_7]
 
-      div_7 = Fighter.query.filter(Fighter.division == 7).order_by(Fighter.rank).all()
-      div_7_data = [event.format() for event in div_7]
+          div_8 = Fighter.query.filter(Fighter.division == 8).order_by(Fighter.rank).all()
+          div_8_data = [event.format() for event in div_8]
 
-      div_8 = Fighter.query.filter(Fighter.division == 8).order_by(Fighter.rank).all()
-      div_8_data = [event.format() for event in div_8]
+          div_9 = Fighter.query.filter(Fighter.division == 9).order_by(Fighter.rank).all()
+          div_9_data = [event.format() for event in div_9]
 
-      div_9 = Fighter.query.filter(Fighter.division == 9).order_by(Fighter.rank).all()
-      div_9_data = [event.format() for event in div_9]
+          div_10 = Fighter.query.filter(Fighter.division == 10).order_by(Fighter.rank).all()
+          div_10_data = [event.format() for event in div_10]
 
-      div_10 = Fighter.query.filter(Fighter.division == 10).order_by(Fighter.rank).all()
-      div_10_data = [event.format() for event in div_10]
+          div_11 = Fighter.query.filter(Fighter.division == 11).order_by(Fighter.rank).all()
+          div_11_data = [event.format() for event in div_11]
 
-      div_11 = Fighter.query.filter(Fighter.division == 11).order_by(Fighter.rank).all()
-      div_11_data = [event.format() for event in div_11]
+          div_12 = Fighter.query.filter(Fighter.division == 12).order_by(Fighter.rank).all()
+          div_12_data = [event.format() for event in div_12]
+      except BaseException as e:
+          print(e)
+          abort(404)
 
-      div_12 = Fighter.query.filter(Fighter.division == 12).order_by(Fighter.rank).all()
-      div_12_data = [event.format() for event in div_12]
-      
       event_info = []
       event_data = Event.query.order_by(Event.event_date.desc()).limit(1)
-      
+      if event_data is None:
+          abort(404)
+
       event_info.append(
           {
               'event_name':event_data[0].event_name, 
@@ -186,17 +191,18 @@ def create_app(test_config=None):
       session['Upcoming Event'] = '/event/' + format_datetime(str(event_data[0].event_date))
       return render_template('index.html',
                                 userinfo=session[constants.PROFILE_KEY],
-                                userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), events = event_info, div_1 = div_1_data, div_2 = div_2_data, div_3 = div_3_data, div_4 = div_4_data, div_5 = div_5_data, div_6 = div_6_data, div_7 = div_7_data, div_8 = div_8_data, div_9 = div_9_data, div_10 = div_10_data, div_11 = div_11_data, div_12 = div_12_data)
+                                userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), events = event_info, div_1 = div_1_data, div_2 = div_2_data, div_3 = div_3_data, div_4 = div_4_data, div_5 = div_5_data, div_6 = div_6_data, div_7 = div_7_data, div_8 = div_8_data, div_9 = div_9_data, div_10 = div_10_data, div_11 = div_11_data, div_12 = div_12_data),200
 
   @app.route('/knockouts')
   def get_knockout_page():
-    return render_template('knockouts.html',  userinfo=session[constants.PROFILE_KEY])
+    return render_template('knockouts.html',  userinfo=session[constants.PROFILE_KEY]),200
 
   @app.route('/division_fighters/<int:division_id>')
   def get_division_fighters(division_id):
     #Here I join Fighters and Divisions Tables
     division_fighters = db.session.query(Fighter,Division).join(Division).filter(Fighter.division == division_id).all()
-
+    if division_fighters is None:
+        abort(404)
     data = []
 
     for fighter, division in division_fighters:
@@ -221,7 +227,7 @@ def create_app(test_config=None):
                 )
     return render_template('division_fighters.html',
                               userinfo=session[constants.PROFILE_KEY],
-                              userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data) 
+                              userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data),200 
   
   @app.route('/event/<date>')
   def get_event(date):
@@ -229,7 +235,9 @@ def create_app(test_config=None):
     event_info = []
     #Here we join Events table and Division table 
     event_data = db.session.query(Event,Division).join(Division).filter(Event.event_date == clean_date).order_by(Event.fight_order)
-   
+    if event_data is None:
+        abort(404)
+
     for event, division in event_data:
         event_info.append(
           {
@@ -251,13 +259,13 @@ def create_app(test_config=None):
  
     return render_template('event.html',
                                 userinfo=session[constants.PROFILE_KEY],
-                                userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), events = event_info) #, divisions = division_info)
+                                userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), events = event_info),200
  
   @app.route('/event-create', methods=['GET']) 
   @requires_auth('get:event-create')
   def create_event_form(token):
-    form = EventForm()
-    return render_template('forms/new_event.html', form=form, userinfo=session[constants.PROFILE_KEY])
+      form = EventForm()
+      return render_template('forms/new_event.html', form=form, userinfo=session[constants.PROFILE_KEY]),200
   
   @app.route('/event-create', methods=['POST'])
   @requires_auth('post:event-create')
@@ -280,34 +288,38 @@ def create_app(test_config=None):
         )
       
       # commit session to database
-      db.session.add(form_event)
-      db.session.commit()
-     
-      flash('Event ' + request.form['event_name'] + ' was successfully listed!')
+      form_event.insert()
+      #Success
+      flash('Event insert was successfully listed!')
     except:
       db.session.rollback()
       #flash failure
-      flash('An error occurred. Event ' + request.form['event_name'] + ' could not be listed.')
+      flash('An error occurred. Event could not be listed.')
+      abort(422)
     finally:
       db.session.close()
-    #return render_template('index.html', userinfo=session[constants.PROFILE_KEY])
-    return redirect(url_for('create_event_form'))
+    
+    return redirect(url_for('create_event_form')),200
 
   @app.route('/event/plus/<name>/<number>', methods=['PATCH'])
   def get_event_fighter_votes(name, number):
-      #print(html.unescape(name))
+      
       clean_name = html.unescape(name)
       fighter_number = number
 
       if(fighter_number == '1'):
-          #event_data
+          #event_data for latest event
           event_data = Event.query.filter(Event.fighter_1 == clean_name).order_by(Event.event_date.desc()).limit(1)
-          #print(f'Event data is {event_data[0].fighter_1_votes}')
+          if event_data is None:
+              abort(404)
           vote_number = event_data[0].fighter_1_votes + 1
-          #print(f'This is vote num - {vote_number}')
           event_data[0].fighter_1_votes = vote_number
-          db.session.commit()
-          
+          try:
+            db.session.commit()
+          except BaseException as e:
+              print(e)
+              abort(422)
+
           data = []
           for event in event_data:
             data.append( {
@@ -320,10 +332,16 @@ def create_app(test_config=None):
             }), 200
       else:
           event_data = Event.query.filter(Event.fighter_2 == clean_name).order_by(Event.event_date.desc()).limit(1)
+          if event_data is None:
+              abort(404)
+
           vote_number = event_data[0].fighter_2_votes + 1
-          #print(f'This is vote num - {vote_number}')
           event_data[0].fighter_2_votes = vote_number
-          db.session.commit()
+          try:
+              db.session.commit()
+          except BaseException as e:
+              print(e)
+              abort(422)
 
           data = []
           for event in event_data:
@@ -344,7 +362,7 @@ def create_app(test_config=None):
     events = Event.query.filter(Event.event_date == clean_date).all()
     events_data = [event.format() for event in events]
     #form = EventForm()
-    return render_template('delete_event.html', events = events_data, userinfo=session[constants.PROFILE_KEY])
+    return render_template('delete_event.html', events = events_data, userinfo=session[constants.PROFILE_KEY]),200
   
 
   @app.route('/event-delete/<date>', methods=['DELETE'])
@@ -352,12 +370,11 @@ def create_app(test_config=None):
   def delete_event(token, date):
     clean_date = html.unescape(date)
     events = Event.query.filter(Event.event_date == clean_date).all()
-    if (len(events) == 0):
+    if events is None:
             abort(404)
     
     [event.delete() for event in events]
-    
-    
+       
     return jsonify({
       'success': True,
       'deleted': date,
@@ -384,40 +401,35 @@ def create_app(test_config=None):
   def fighter_edit_form(token, fighter_id):
     
     fighter = Fighter.query.get(fighter_id)
-    #fighter_details = Fighter.format(fighter)
+    if fighter is None:
+        abort(404)
     fighter_details = fighter.format()
     
     #Here we populate the form from the database
-    form = FighterForm(obj = fighter) #was fighter_detail
+    form = FighterForm(obj = fighter) 
 
-    return render_template('forms/edit_fighter.html', form=form, fighter = fighter_details, userinfo=session[constants.PROFILE_KEY])
+    return render_template('forms/edit_fighter.html', form=form, fighter = fighter_details, userinfo=session[constants.PROFILE_KEY]),200
   
   @app.route('/fighter-edit/<int:fighter_id>', methods=['POST'])
   @requires_auth('get:fighter-edit')
   def edit_fighters(token, fighter_id):
       fighter_division = 0
       try:
-        fighter = Fighter.query.filter(Fighter.id == fighter_id).one_or_none()
-        #fighter_details = Fighter.format(fighter)
-        print(f'This is fighter -- {fighter.division}')
+        fighter = Fighter.query.filter(Fighter.id == fighter_id).one_or_none()    
         fighter_division = fighter.division
-
-        if fighter is None:
-          abort(404)
         form = FighterForm(obj = fighter)
    
         form.populate_obj(fighter)
         db.session.commit()
-      
-        #flash('Event ' + request.form['first_name'] + ' was successfully listed!')
+        flash('Event was successfully listed!')
       except:
         db.session.rollback()
         #flash failure
-        #flash('An error occurred. Event ' + request.form['first_name'] + ' could not be listed.')
+        flash('An error occurred. Event could not be listed.')
+        abort(422)
       finally:
-        db.session.close()
-      #return render_template('index.html', userinfo=session[constants.PROFILE_KEY])
-      return redirect(url_for('get_division_fighters', division_id = fighter_division))
+        db.session.close()   
+      return redirect(url_for('get_division_fighters', division_id = fighter_division)),200
 
   @app.errorhandler(405)
   def method_not_allowed(error):
