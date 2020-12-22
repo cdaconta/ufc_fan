@@ -47,6 +47,13 @@ class UfcFanTestCase(unittest.TestCase):
                 token
             )}
 
+    def test_get_knockouts(self):
+        """Tests Get All Fighters"""
+        res = self.client().get('/knockouts')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+    
     def test_get_all_fighters(self):
         """Tests Get All Fighters"""
         res = self.client().get('/index')
@@ -72,23 +79,23 @@ class UfcFanTestCase(unittest.TestCase):
     }
 
     # creates test fighter
-    def create_test_fighter(self, user_id):
+    def create_test_fighter(self):
 
         # create and insert new plant
         fighter = Fighter(
         first_name = self.test_fighter['first_name'],
-        last_name = test_fighter['last_name'],
-        age = test_fighter['age'],
-        height = test_fighter['height'],
-        weight = test_fighter['weight'],
-        arm_reach = test_fighter['arm_reach'],
-        leg_reach = test_fighter['leg_reach'],
-        sex = test_fighter['sex'],
-        win = test_fighter['win'],
-        loss = test_fighter['loss'],
-        draw = test_fighter['draw'],
-        division = test_fighter['division'],
-        rank = test_fighter['rank']
+        last_name = self.test_fighter['last_name'],
+        age = self.test_fighter['age'],
+        height = self.test_fighter['height'],
+        weight = self.test_fighter['weight'],
+        arm_reach = self.test_fighter['arm_reach'],
+        leg_reach = self.test_fighter['leg_reach'],
+        sex = self.test_fighter['sex'],
+        win = self.test_fighter['win'],
+        loss = self.test_fighter['loss'],
+        draw = self.test_fighter['draw'],
+        division = self.test_fighter['division'],
+        rank = self.test_fighter['rank']
         )
         fighter.insert()
 
