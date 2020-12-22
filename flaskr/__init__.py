@@ -127,7 +127,7 @@ def create_app(test_config=None):
 
   @app.route('/api-key')
   def get_api_key():
-    return render_template('api_key.html')
+    return render_template('api_key.html'),200
 
   @app.route('/index')
   def get_all_fighters():

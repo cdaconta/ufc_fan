@@ -47,18 +47,52 @@ class UfcFanTestCase(unittest.TestCase):
                 token
             )}
 
-    # creates test plant
-    def create_test_plant(self, user_id):
+    def test_get_all_fighters(self):
+        """Tests Get All Fighters"""
+        res = self.client().get('/index')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+       
+
+    test_fighter = {
+        'first_name':'Test',
+        'last_name':'Case',
+        'age':100,
+        'height':10.00,
+        'weight':10.00,        
+        'arm_reach':10.00,
+        'leg_reach':10.00,
+        'sex':'M',
+        'win':1,
+        'loss':1,
+        'draw':1,
+        'division':1,
+        'rank':10,
+    }
+
+    # creates test fighter
+    def create_test_fighter(self, user_id):
 
         # create and insert new plant
-        plant = Plant(user_id=user_id,
-                      name=self.test_plant['name'],
-                      latin_name=self.test_plant['latinName'],
-                      description=self.test_plant['description'],
-                      image_link=self.test_plant['imageLink'])
-        plant.insert()
+        fighter = Fighter(
+        first_name = self.test_fighter['first_name'],
+        last_name = test_fighter['last_name'],
+        age = test_fighter['age'],
+        height = test_fighter['height'],
+        weight = test_fighter['weight'],
+        arm_reach = test_fighter['arm_reach'],
+        leg_reach = test_fighter['leg_reach'],
+        sex = test_fighter['sex'],
+        win = test_fighter['win'],
+        loss = test_fighter['loss'],
+        draw = test_fighter['draw'],
+        division = test_fighter['division'],
+        rank = test_fighter['rank']
+        )
+        fighter.insert()
 
-        return plant.id
+        return fighter.id
 
     # creates new test observation
     def create_test_observation(self, plant_id, user_id):
