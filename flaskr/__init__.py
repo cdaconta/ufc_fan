@@ -402,7 +402,7 @@ def create_app(test_config=None):
     
     fighter = Fighter.query.get(fighter_id)
     if fighter is None:
-        abort(404)
+        abort(400)
     fighter_details = fighter.format()
     
     #Here we populate the form from the database
@@ -447,13 +447,13 @@ def create_app(test_config=None):
             "message": "resource not found"
         }), 404
 
-  @app.errorhandler(401)
-  def unauthorized(error):
-        return jsonify({
-            "success": False,
-            "error": 401,
-            "message": "You are NOT Authorized!"
-        }), 401
+  @app.errorhandler(AuthError)
+  def authentification_failed(AuthError):
+    return jsonify({
+        "success": False,
+        "error": AuthError.status_code,
+        "message": AuthError.error
+                    }), 401
 
   @app.errorhandler(400)
   def bad_request(error):
