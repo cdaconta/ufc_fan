@@ -609,6 +609,17 @@ def create_app(test_config=None):
       }),200
 
 
+  @app.route('/api/event-delete/<date>', methods=['GET']) 
+  @requires_auth('get:event-delete')
+  def edit_event_form_api(token, date):
+      clean_date = html.unescape(date)
+      events = Event.query.filter(Event.event_date == clean_date).all()
+      events_data = [event.format() for event in events]
+      return jsonify({
+        'success':True,
+        'event_data':events_data,
+      })
+
   @app.route('/api/event-create', methods=['GET']) 
   @requires_auth('get:event-create')
   def create_event_form_api(token):
@@ -617,6 +628,49 @@ def create_app(test_config=None):
           'success':True,
           'form':form
       })
+
+  @app.route('/api/fighter-edit/<int:fighter_id>', methods=['GET']) 
+  @requires_auth('get:fighter-edit')
+  def fighter_edit_form_api(token, fighter_id):
+    
+      fighter = Fighter.query.get(fighter_id)
+      if fighter is None:
+          abort(400)
+      fighter_details = fighter.format()
+      
+      #Here we populate the form from the database
+      form = FighterForm(obj = fighter) 
+
+      return jsonify({
+        'success':True,
+        'form':form,
+        'fighter_details':fighter_details,
+      })
+  
+  @app.route('/api/fighter-edit/<int:fighter_id>', methods=['POST'])
+  @requires_auth('get:fighter-edit')
+  def edit_fighters_api(token, fighter_id):
+      fighter_division = 0
+      try:
+        fighter = Fighter.query.filter(Fighter.id == fighter_id).one_or_none()    
+        fighter_division = fighter.division
+        form = FighterForm(obj = fighter)
+
+        form.populate_obj(fighter)
+        db.session.commit()
+        flash('Event was successfully listed!')
+      except:
+        db.session.rollback()
+        #flash failure
+        flash('An error occurred. Event could not be listed.')
+        abort(422)
+      finally:
+        db.session.close()  
+      return jsonify({
+        'success':True,
+        'division_id':fighter_division,
+      }) 
+
   @app.errorhandler(405)
   def method_not_allowed(error):
         return jsonify({

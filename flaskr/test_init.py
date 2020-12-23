@@ -22,7 +22,7 @@ class UfcFanTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_app()
         self.client = self.app.test_client
-        self.database_name = "ufc_fan_test"
+        self.database_name = "ufcfan_test"
         self.database_path = "postgres://{}/{}".format(f'{user}:{password}@localhost:5432', self.database_name)
         setup_db(self.app, self.database_path)
 
