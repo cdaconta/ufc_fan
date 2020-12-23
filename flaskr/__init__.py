@@ -506,6 +506,40 @@ def create_app(test_config=None):
           ' div_12':div_12_data
       }),200
 
+  @app.route('/api/division_fighters/<int:division_id>')
+  def get_division_fighters_api(division_id):
+      #Here I join Fighters and Divisions Tables
+      division_fighters = db.session.query(Fighter,Division).join(Division).filter(Fighter.division == division_id).all()
+      if division_fighters is None:
+          abort(404)
+      data = []
+
+      for fighter, division in division_fighters:
+        data.append({
+                    'id':fighter.id,
+                    'first_name':fighter.first_name,
+                    'last_name':fighter.last_name,
+                    'age':fighter.age,
+                    'height':fighter.height,
+                    'weight':fighter.weight,
+                    'arm_reach':fighter.arm_reach,
+                    'leg_reach':fighter.leg_reach,
+                    'sex':fighter.sex,
+                    'win':fighter.win,
+                    'loss':fighter.loss,
+                    'draw':fighter.draw,
+                    'division':fighter.division,
+                    'rank':fighter.rank,
+                    'div_id':division.id,
+                    'div_name':division.name,
+                    }
+                  )
+      return jsonify({
+        'success':True,
+        'data':data,
+      }
+      ),200
+      
   @app.errorhandler(405)
   def method_not_allowed(error):
         return jsonify({

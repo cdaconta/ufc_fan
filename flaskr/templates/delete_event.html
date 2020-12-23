@@ -9,7 +9,7 @@
       <h3 class="text-center">{{events[0].event_date}}</h3>
       
         {% for item in events %}
-          <div id="one_event" class="text-center">ID: {{  item.id }} - {{ item.fighter_1 }} vs. {{item.fighter_2}} <span id="delete_one" data-event="{{ item.id }}" class="btn-primary btn-sm" onclick="deleteOne(this.id)">Delete</span></div>
+          <div id="one_event" class="text-center mb-3">ID: {{  item.id }} - {{ item.fighter_1 }} vs. {{item.fighter_2}} <span id="delete_one" data-event="{{ item.id }}" class="btn-primary btn-sm" onclick="deleteOne(this.id)">Delete</span></div>
         {% endfor %}
     </div>
 </div>
