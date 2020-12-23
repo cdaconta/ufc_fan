@@ -51,10 +51,9 @@ class UfcFanTestCase(unittest.TestCase):
         """Tests Get knockouts"""
         res = self.client().get('/knockouts')
         data = json.loads(res.data)
-
         self.assertEqual(res.status_code, 200)
     
-    def test_get_all_fighters(self):
+    def test_get_all_fighters_api(self):
         """Tests Get All Fighters"""
         res = self.client().get('api/index')
         data = json.loads(res.data)
@@ -73,6 +72,18 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertTrue(data['div_10']))
         self.assertTrue(data['div_11']))
         self.assertTrue(data['div_12']))
+
+    def test_get_all_fighters_api_fail(self):
+        """Tests Get All Fighters"""
+        fighters = Fighter.query.all()
+        for item in fighters:
+            item.delete()
+
+        res = self.client().get('api/index')
+        data = json.loads(res.data)
+         self.assertEqual(data['success'], False)
+        self.assertEqual(res.status_code, 404)
+        
 
     def test_get_division_fighters(self):
         """Tests Get Division Fighters"""
