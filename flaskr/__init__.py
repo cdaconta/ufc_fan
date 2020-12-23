@@ -434,7 +434,7 @@ def create_app(test_config=None):
   # API 
   #------------------------------------------------------------------------------------------------------------#
 
-  @app.route('api/index')
+  @app.route('/api/index')
   def get_all_fighters_api():
       try:
           #Here I get all the fighter by division
