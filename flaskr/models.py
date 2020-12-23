@@ -46,7 +46,7 @@ class Fighter(db.Model):
     draw = db.Column(db.Integer)
     division = db.Column(db.Integer, db.ForeignKey('divisions.id'))
     rank = db.Column(db.Integer)
-    #events = db.relationship('Event', primaryjoin='or_(Fighter.id==Event.fighter_1, Fighter.id==Event.fighter_2)',  backref='figher_event', lazy='select', cascade='all, delete-orphan')
+    
 
     def __repr__(self):
         return f"<Fighter id='{self.id}' first_name='{self.first_name}' last_name='{self.last_name}' age='{self.age}'\
@@ -114,24 +114,12 @@ class Division(db.Model):
     events = db.relationship('Event', backref = 'division_e', lazy='select', cascade='all, delete-orphan')
     
     def __repr__(self):
-        return f"<Division id='{self.id}' men_flyweight='{self.men_flyweight}' men_bantamweight='{self.men_bantamweight}' men_featherweight='{self.men_featherweight}'\
-            men_lightweight='{self.men_lightweight}' men_welterweight='{self.men_welterweight}' men_middleweight='{self.men_middleweight}' men_lightheavyweight='{self.men_lightheavyweight}' men_heavyweight='{self.men_heavyweight}' \
-                women_strawweight='{self.women_strawweight}' women_flyweight='{self.women_flyweight}' women_bantamweight='{self.women_bantamweight}'  women_featherweight='{self.women_featherweight}' >"
+        return f"<Division id='{self.id}' name='{self.name}' weight='{self.weight}' >"
 
-    def __init__(self, men_flyweight, men_bantamweight, men_featherweight, men_lightweight, men_welterweight, 
-men_middleweight, men_lightheavyweight, men_heavyweight, women_strawweight, women_flyweight, women_bantamweight, women_featherweight):
-        self.men_flyweight = men_flyweight
-        self.men_bantamweight = men_bantamweight
-        self.men_featherweight = men_featherweight
-        self.men_lightweight = men_lightweight
-        self.men_welterweight = men_welterweight
-        self.men_middleweight = men_middleweight
-        self.men_lightheavyweight = men_lightheavyweight
-        self.men_heavyweight = men_heavyweight
-        self.women_strawweight = women_strawweight
-        self.women_flyweight = women_flyweight
-        self.women_bantamweight = women_bantamweight
-        self.women_featherweight = women_featherweight
+    def __init__(self, name, weight):
+        self.name = name
+        self.weight = weight
+        
 
     def insert(self):
         db.session.add(self)
@@ -153,18 +141,8 @@ men_middleweight, men_lightheavyweight, men_heavyweight, women_strawweight, wome
     def format(self):
         return{
             'id':self.id,
-            'men_flyweight':self.men_flyweight,
-            'men_bantamweight':self.men_bantamweight,
-            'men_featherweight':self.men_featherweight,
-            'men_lightweight':self.men_lightweight,
-            'men_welterweight':self.men_welterweight,
-            'men_middleweight':self.men_middleweight,
-            'men_lightheavyweight':self.men_lightheavyweight,
-            'men_heavyweight':self.men_heavyweight,
-            'women_strawweight':self.women_strawweight,
-            'women_flyweight':self.women_flyweight,
-            'women_bantamweight':self.women_bantamweight,
-            'women_featherweight':self.women_featherweight,
+            "name":self.name,
+            "weight":self.weight,
         }
 
 class Event(db.Model):

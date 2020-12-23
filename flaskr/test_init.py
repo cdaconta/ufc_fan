@@ -47,52 +47,6 @@ class UfcFanTestCase(unittest.TestCase):
                 token
             )}
 
-    def test_get_knockouts(self):
-        """Tests Get knockouts"""
-        res = self.client().get('/knockouts')
-        data = json.loads(res.data)
-        self.assertEqual(res.status_code, 200)
-    
-    def test_get_all_fighters_api(self):
-        """Tests Get All Fighters"""
-        res = self.client().get('api/index')
-        data = json.loads(res.data)
-         self.assertEqual(data['success'], True)
-        self.assertEqual(res.status_code, 200)
-        self.assertTrue(data['events']))
-        self.assertTrue(data['div_1']))
-        self.assertTrue(data['div_2']))
-        self.assertTrue(data['div_3']))
-        self.assertTrue(data['div_4']))
-        self.assertTrue(data['div_5']))
-        self.assertTrue(data['div_6']))
-        self.assertTrue(data['div_7']))
-        self.assertTrue(data['div_8']))
-        self.assertTrue(data['div_9']))
-        self.assertTrue(data['div_10']))
-        self.assertTrue(data['div_11']))
-        self.assertTrue(data['div_12']))
-
-    def test_get_all_fighters_api_fail(self):
-        """Tests Get All Fighters"""
-        fighters = Fighter.query.all()
-        for item in fighters:
-            item.delete()
-
-        res = self.client().get('api/index')
-        data = json.loads(res.data)
-         self.assertEqual(data['success'], False)
-        self.assertEqual(res.status_code, 404)
-        
-
-    def test_get_division_fighters(self):
-        """Tests Get Division Fighters"""
-        res = self.client().get('/division_fighters/1')
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 200)
-        
-
     test_fighter = {
         'first_name':'Test',
         'last_name':'Case',
@@ -131,6 +85,99 @@ class UfcFanTestCase(unittest.TestCase):
         fighter.insert()
 
         return fighter.id
+
+    test_event = {
+    'event_name':'UFC',
+    'event_date':'2020-12-12T12:00:00.000Z', 
+    'location':'Somewhere',
+    'division':1,
+    'fighter_1':'Doorman'
+    'fighter_2':'Hammer'
+    'fighter_1_votes':0,
+    'fighter_2_votes':0,
+    'fighter_1_odds':0,
+    'fighter_2_odds':0,
+    'fight_order':0,
+    }
+
+    def create_test_event(self):
+        event = Event(
+            'event_name':self.test_event['event_name'], 
+            'event_date':self.test_event['event_date'], 
+            'division':self.test_event['division'],
+            'fighter_1':self.test_event['fighter_1'],
+            'fighter_2':self.test_event['fighter_2'],
+            'fighter_1_votes':self.test_event['fighter_1_votes'],
+            'fighter_2_votes':self.test_event['fighter_2_votes'],
+            'fighter_1_odds':self.test_event['fighter_1_odds'],
+            'fighter_2_odds':self.test_event['fighter_2_odds'],
+            'fight_order':self.test_event['fight_order'],
+        )
+        event.insert()
+        return event.id    
+
+    division_test = {
+        'name':"Men's Flyweight",
+        'weight':125
+    }
+
+    def create_division_test(self):
+        division = Division(
+            'name':self.division_test['name'],
+            'weight':self.division_test['weight']
+        )
+
+    def test_get_knockouts(self):
+        """Tests Get knockouts"""
+        res = self.client().get('/knockouts')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+    
+    def test_get_all_fighters_api(self):
+        """Tests Get All Fighters"""
+        res = self.client().get('api/index')
+        data = json.loads(res.data)
+         self.assertEqual(data['success'], True)
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['events']))
+        self.assertTrue(data['div_1']))
+        self.assertTrue(data['div_2']))
+        self.assertTrue(data['div_3']))
+        self.assertTrue(data['div_4']))
+        self.assertTrue(data['div_5']))
+        self.assertTrue(data['div_6']))
+        self.assertTrue(data['div_7']))
+        self.assertTrue(data['div_8']))
+        self.assertTrue(data['div_9']))
+        self.assertTrue(data['div_10']))
+        self.assertTrue(data['div_11']))
+        self.assertTrue(data['div_12']))
+
+    def test_get_all_fighters_api_fail(self):
+        """Tests Get All Fighters"""
+        fighters = Fighter.query.all()
+        for item in fighters:
+            item.delete()
+
+        res = self.client().get('api/index')
+        data = json.loads(res.data)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['message'], 'resource not found')
+
+    def test_get_division_fighters(self):
+        """Tests Get Division Fighters"""
+        fighters = Fighter.query.filter(Fighter.division == 1).all()
+        for item in fighters:
+            item.delete()
+        
+        res = self.client().get('/division_fighters/1')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        
+
+    
 
     # creates new test observation
     def create_test_observation(self, plant_id, user_id):
