@@ -4,13 +4,18 @@ import datetime
 import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
-
+import psycopg2
 from .__init__ import create_app
 from .models import setup_db, Fighter, Event, Division
 
 user = os.environ.get('USER')
 password = os.environ.get('PASSWORD')
-
+#----------------------------------------------------------maybe not worth it
+conn = psycopg2.connect(
+    host="localhost",
+    database="suppliers",
+    user="postgres",
+    password="Abcd1234")
 
 class UfcFanTestCase(unittest.TestCase):
     """This class represents the plant survey test case"""
@@ -146,7 +151,7 @@ class UfcFanTestCase(unittest.TestCase):
         """Tests Get All Fighters"""
         res = self.client().get('api/index')
         data = json.loads(res.data)
-         self.assertEqual(data['success'], True)
+        self.assertEqual(data['success'], True)
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['events']))
         self.assertTrue(data['div_1']))
