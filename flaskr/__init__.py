@@ -429,7 +429,7 @@ def create_app(test_config=None):
           abort(422)
         finally:
           db.session.close()   
-        return redirect(url_for('get_division_fighters', division_id = fighter_division)),200
+        return redirect(url_for('get_division_fighters', division_id = fighter_division))
     #------------------------------------------------------------------------------------------------------------#
     # API 
     #------------------------------------------------------------------------------------------------------------#
