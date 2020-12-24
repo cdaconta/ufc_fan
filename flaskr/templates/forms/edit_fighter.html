@@ -1,7 +1,8 @@
 {% extends 'form.html' %}
 {% block title %}Edit Fighter{% endblock %}
 {% block content %}
-  <div class="form-wrapper">
+<div class="container">
+  <div class="form-wrapper m-5">
     <form method="POST" action="/fighter-edit/{{ fighter.id }}">
       <h3 class="form-heading">Edit Fighter for Rank {{fighter.rank}}</h3>
       
@@ -78,6 +79,6 @@
       <input type="submit" value="Edit Fighter" class="btn btn-primary btn-lg btn-block">
     </form>
   </div>
-
+</div>
 
 {% endblock %}
