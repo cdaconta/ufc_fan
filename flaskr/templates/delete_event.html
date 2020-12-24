@@ -2,6 +2,11 @@
 {% block content %} 
 
 <div class="container">
+    <p>
+      <a href="/event-create" class="btn btn-primary my-2">Add New Event</a>
+      Add all fighters in the main card.
+    </p>
+    
     <button class="mt-2 btn btn-primary" id="delete_all" data-event="{{ events[0].event_date }}" onclick="deleteEvent(this.id)">Delete All</button>  
     <div class="h4 text-danger text-center" id="event_deleted"></div>
     <div id="event_container">

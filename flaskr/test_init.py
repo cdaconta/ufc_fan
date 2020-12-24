@@ -1,3 +1,4 @@
+from flaskr import constants
 import os
 import datetime
 import unittest
@@ -15,8 +16,9 @@ class UfcFanTestCase(unittest.TestCase):
     """This class represents the plant survey test case"""
 
     # auth tokens needed for successful testing
-    APP_ADMIN_TOKEN = os.environ.get('APP_ADMIN')
-    EVENT_EDITOR_TOKEN = os.environ.get('EVENT_EDITOR')
+    """ APP_ADMIN_TOKEN = os.environ.get('APP_ADMIN')
+    EVENT_EDITOR_TOKEN = os.environ.get('EVENT_EDITOR') """
+    token = constants.JWT
 
     def setUp(self):
         """Define test variables and initialize app."""
@@ -64,7 +66,7 @@ class UfcFanTestCase(unittest.TestCase):
     }
 
     # creates test fighter
-    def create_test_fighter(self):
+    def create_fighter(self):
 
         # create and insert new plant
         fighter = Fighter(
@@ -91,8 +93,8 @@ class UfcFanTestCase(unittest.TestCase):
     'event_date':'2020-12-12T12:00:00.000Z', 
     'location':'Somewhere',
     'division':1,
-    'fighter_1':'Doorman'
-    'fighter_2':'Hammer'
+    'fighter_1':'Doorman',
+    'fighter_2':'Hammer',
     'fighter_1_votes':0,
     'fighter_2_votes':0,
     'fighter_1_odds':0,
@@ -100,18 +102,18 @@ class UfcFanTestCase(unittest.TestCase):
     'fight_order':0,
     }
 
-    def create_test_event(self):
+    def create_event(self):
         event = Event(
-            'event_name':self.test_event['event_name'], 
-            'event_date':self.test_event['event_date'], 
-            'division':self.test_event['division'],
-            'fighter_1':self.test_event['fighter_1'],
-            'fighter_2':self.test_event['fighter_2'],
-            'fighter_1_votes':self.test_event['fighter_1_votes'],
-            'fighter_2_votes':self.test_event['fighter_2_votes'],
-            'fighter_1_odds':self.test_event['fighter_1_odds'],
-            'fighter_2_odds':self.test_event['fighter_2_odds'],
-            'fight_order':self.test_event['fight_order'],
+            event_name = self.test_event['event_name'], 
+            event_date = self.test_event['event_date'], 
+            division = self.test_event['division'],
+            fighter_1 = self.test_event['fighter_1'],
+            fighter_2 = self.test_event['fighter_2'],
+            fighter_1_votes = self.test_event['fighter_1_votes'],
+            fighter_2_votes = self.test_event['fighter_2_votes'],
+            fighter_1_odds = self.test_event['fighter_1_odds'],
+            fighter_2_odds = self.test_event['fighter_2_odds'],
+            fight_order = self.test_event['fight_order'],
         )
         event.insert()
         return event.id    
@@ -121,11 +123,18 @@ class UfcFanTestCase(unittest.TestCase):
         'weight':125
     }
 
-    def create_division_test(self):
+    def create_division(self):
         division = Division(
-            'name':self.division_test['name'],
-            'weight':self.division_test['weight']
+            name= self.division_test['name'],
+            weight = self.division_test['weight']
+        
         )
+        division.insert()
+        return division.id
+
+    create_division()
+    create_fighter()
+    create_event()
 
     def test_get_knockouts(self):
         """Tests Get knockouts"""

@@ -200,7 +200,7 @@ def create_app(test_config=None):
     @app.route('/division_fighters/<int:division_id>')
     def get_division_fighters(division_id):
         #Here I join Fighters and Divisions Tables
-        division_fighters = db.session.query(Fighter,Division).join(Division).filter(Fighter.division == division_id).all()
+        division_fighters = db.session.query(Fighter,Division).join(Division).filter(Fighter.division == division_id).order_by(Fighter.rank).all()
         if division_fighters is None:
             abort(404)
         data = []
@@ -234,7 +234,7 @@ def create_app(test_config=None):
         clean_date = html.unescape(date)
         event_info = []
         #Here we join Events table and Division table 
-        event_data = db.session.query(Event,Division).join(Division).filter(Event.event_date == clean_date).order_by(Event.fight_order)
+        event_data = db.session.query(Event,Division).join(Division).filter(Event.event_date == clean_date).order_by(Event.fight_order).all()
         if event_data is None:
             abort(404)
 
@@ -299,7 +299,7 @@ def create_app(test_config=None):
         finally:
           db.session.close()
         
-        return redirect(url_for('create_event_form')),200
+        return redirect(url_for('create_event_form'))
 
     @app.route('/event/plus/<name>/<number>', methods=['PATCH'])
     def get_event_fighter_votes(name, number):

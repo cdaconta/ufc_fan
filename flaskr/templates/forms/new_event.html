@@ -1,9 +1,10 @@
 {% extends 'form.html' %}
 {% block title %}New Event/Fighter{% endblock %}
 {% block content %}
+<div class="container">
   <div class="form-wrapper">
-    <form method="post" class="form" >
-      <h3 class="form-heading">List a new event/fighter</h3>
+    <form method="post">
+      <h3 class="form-heading">List a new event/fighter (Add all fighters in Main Card)</h3>
       <div class="form-group">
           
           
@@ -25,18 +26,18 @@
       <div class="form-group">
           <label for="division">Division</label>
           <ol>
-            <li>men_flyweight</li>
-            <li>men_bantamweight</li>
-            <li>men_featherweight</li>
-            <li>men_lightweight</li>
-            <li>men_welterweight</li>
-            <li>men_middleweight</li>
-            <li>men_lightheavyweight</li>
-            <li>men_heavyweight</li>
-            <li>women_strawweight</li>
-            <li>women_flyweight</li>
-            <li>women_bantamweight</li>
-            <li>women_featherweight</li>
+            <li>men's flyweight</li>
+            <li>men's bantamweight</li>
+            <li>men's featherweight</li>
+            <li>men's lightweight</li>
+            <li>men's welterweight</li>
+            <li>men's middleweight</li>
+            <li>men's light heavyweight</li>
+            <li>men's heavyweight</li>
+            <li>women's strawweight</li>
+            <li>women's flyweight</li>
+            <li>women's bantamweight</li>
+            <li>women's featherweight</li>
           </ol>
           {{ form.division(class_ = 'form-control', placeholder='1 - 12', autofocus = true) }}
       </div>
@@ -64,4 +65,5 @@
       <input type="submit" value="Create Event/Fighter" class="btn btn-primary btn-lg btn-block">
     </form>
   </div>
+</div>
 {% endblock %}
