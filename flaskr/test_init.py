@@ -1,21 +1,22 @@
-from flaskr import constants
 import os
 import datetime
 import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
-from .__init__ import create_app
-from .models import setup_db, Fighter, Event, Division
-
+from flaskr.__init__ import create_app
+#from flaskr.__init__ import create_app
+from flaskr.models import setup_db, Fighter, Event, Division
+import re
+from . import constants
 user = os.environ.get('USER')
 password = os.environ.get('PASSWORD')
 #----------------------------------------------------------maybe not worth it
 conn = psycopg2.connect(
-    host="localhost",
-    database="suppliers",
+    host="localhost:5432",
+    database="ufcfan_test",
     user="postgres",
-    password="Abcd1234")
+    password="Opensaysme69")
 
 class UfcFanTestCase(unittest.TestCase):
     """This class represents the plant survey test case"""
@@ -46,6 +47,29 @@ class UfcFanTestCase(unittest.TestCase):
 
     # UTILITY METHODS
 
+    cur = conn.cursor()
+    sql_file_divisions = 'divisions.sql'
+    sql_file_events = 'events.sql'
+    sql_file_fighters = 'fighters.sql'
+
+    def exec_sql_file(cursor, sql_file):
+        statement = ""
+        for line in open(sql_file):
+            if re.match(r'--', line):  # ignore sql comment lines
+                continue
+            if not re.search(r';$', line):  # keep appending lines that don't end in ';'
+                statement = statement + line
+            else:  # when you get a line ending in ';' then exec statement and reset for next statement
+                statement = statement + line
+                try:
+                    cursor.execute(statement)
+                except BaseException as e:
+                    print('Error: ' + e)
+                statement = ""
+    exec_sql_file(cur, sql_file_divisions)
+    exec_sql_file(cur, sql_file_events)
+    exec_sql_file(cur, sql_file_fighters)
+
     # creates auth header with bearer token
     def create_auth_headers(self, token):
         # return auth headers using token
@@ -54,21 +78,7 @@ class UfcFanTestCase(unittest.TestCase):
                 token
             )}
 
-    test_fighter = {
-        'first_name':'Test',
-        'last_name':'Case',
-        'age':100,
-        'height':10.00,
-        'weight':10.00,        
-        'arm_reach':10.00,
-        'leg_reach':10.00,
-        'sex':'M',
-        'win':1,
-        'loss':1,
-        'draw':1,
-        'division':1,
-        'rank':10,
-    }
+    test_fighter = {'first_name':'Test','last_name':'Case','age':100,'height':10.00,'weight':10.00,'arm_reach':10.00,'leg_reach':10.00,'sex':'M','win':1,'loss':1,'draw':1,'division':1,'rank':10,}
 
     # creates test fighter
     def create_fighter(self):
@@ -137,9 +147,9 @@ class UfcFanTestCase(unittest.TestCase):
         division.insert()
         return division.id
 
-    create_division()
-    create_fighter()
-    create_event()
+        """ create_division()
+        create_fighter()
+        create_event() """
 
     def test_get_knockouts(self):
         """Tests Get knockouts"""
@@ -153,19 +163,19 @@ class UfcFanTestCase(unittest.TestCase):
         data = json.loads(res.data)
         self.assertEqual(data['success'], True)
         self.assertEqual(res.status_code, 200)
-        self.assertTrue(data['events']))
-        self.assertTrue(data['div_1']))
-        self.assertTrue(data['div_2']))
-        self.assertTrue(data['div_3']))
-        self.assertTrue(data['div_4']))
-        self.assertTrue(data['div_5']))
-        self.assertTrue(data['div_6']))
-        self.assertTrue(data['div_7']))
-        self.assertTrue(data['div_8']))
-        self.assertTrue(data['div_9']))
-        self.assertTrue(data['div_10']))
-        self.assertTrue(data['div_11']))
-        self.assertTrue(data['div_12']))
+        self.assertTrue(data['events'])
+        self.assertTrue(data['div_1'])
+        self.assertTrue(data['div_2'])
+        self.assertTrue(data['div_3'])
+        self.assertTrue(data['div_4'])
+        self.assertTrue(data['div_5'])
+        self.assertTrue(data['div_6'])
+        self.assertTrue(data['div_7'])
+        self.assertTrue(data['div_8'])
+        self.assertTrue(data['div_9'])
+        self.assertTrue(data['div_10'])
+        self.assertTrue(data['div_11'])
+        self.assertTrue(data['div_12'])
 
     def test_get_all_fighters_api_fail(self):
         """Tests Get All Fighters"""
@@ -193,7 +203,7 @@ class UfcFanTestCase(unittest.TestCase):
 
     
 
-    # creates new test observation
+    """ # creates new test observation
     def create_test_observation(self, plant_id, user_id):
         # create and insert new observation
         observation = Observation(user_id=user_id,
@@ -253,7 +263,7 @@ class UfcFanTestCase(unittest.TestCase):
     # PLANT tests
 
     def test_get_plant_failure(self):
-        """Tests GET plants failure"""
+        Tests GET plants failure
 
         # ensure database is empty
         self.clear_database()
@@ -268,7 +278,7 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'resource not found')
 
     def test_get_plants(self):
-        """Tests GET plants success"""
+        Tests GET plants success
 
         # create a new plant to ensure database isn't empty
         self.create_test_plant(self.ADMIN_ID)
@@ -285,7 +295,7 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertTrue(data['plants'])
 
     def test_post_plant_success(self):
-        """Tests POST new plant success"""
+        Tests POST new plant success
 
         # get headers using ADMIN token
         headers = self.create_auth_headers(token=self.ADMIN_ROLE_TOKEN)
@@ -303,7 +313,7 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
 
     def test_post_plant_failure(self):
-        """Tests POST new plant failure"""
+        Tests POST new plant failure
 
         # get headers using ADMIN token
         headers = self.create_auth_headers(token=self.ADMIN_ROLE_TOKEN)
@@ -319,7 +329,7 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'unprocessable')
 
     def test_patch_plant_success(self):
-        """Tests PATCH plant success"""
+    Tests PATCH plant success
 
         # create a new plant to be updated and store plant id
         plant_id = self.create_test_plant(self.ADMIN_ID)
@@ -347,7 +357,7 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertEqual(data['plant']['name'], 'PATCH TEST')
 
     def test_patch_plant_failure(self):
-        """Tests PATCH plant failure"""
+        Tests PATCH plant failure
 
         # create a new plant to be updated and store plant id
         plant_id = self.create_test_plant(self.ADMIN_ID)
@@ -375,7 +385,7 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'unprocessable')
 
     def test_patch_or_delete_plant_not_found(self):
-        """Tests 404 error for PATCH or DELETE plant"""
+        Tests 404 error for PATCH or DELETE plant
 
         # get headers using ADMIN token
         headers = self.create_auth_headers(token=self.ADMIN_ROLE_TOKEN)
@@ -403,7 +413,7 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'resource not found')
 
     def test_delete_plant_success(self):
-        """Tests DELETE plant success"""
+        Tests DELETE plant success
 
         # create a new plant to be deleted and store plant id
         plant_id = self.create_test_plant(self.ADMIN_ID)
@@ -427,7 +437,7 @@ class UfcFanTestCase(unittest.TestCase):
     # OBSERVATION tests
 
     def test_get_observations_failure(self):
-        """Tests GET observations failure"""
+        Tests GET observations failure
 
         # ensure database is empty
         self.clear_database()
@@ -442,7 +452,7 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'resource not found')
 
     def test_get_observations_success(self):
-        """Tests GET observations success"""
+        Tests GET observations success
 
         # ensure database is not empty by adding a plant and observation
 
@@ -464,7 +474,7 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertTrue(data['observations'])
 
     def test_post_observation_success(self):
-        """Tests POST observation success"""
+        Tests POST observation success
 
         # get headers using PUBLIC token
         headers = self.create_auth_headers(token=self.PUBLIC_ROLE_TOKEN)
@@ -491,7 +501,7 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
 
     def test_post_observation_failure(self):
-        """Tests POST observation failure"""
+        Tests POST observation failure
 
         # get headers using PUBLIC token
         headers = self.create_auth_headers(token=self.PUBLIC_ROLE_TOKEN)
@@ -510,7 +520,7 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'unprocessable')
 
     def test_patch_observation_success(self):
-        """Tests PATCH observation success"""
+        Tests PATCH observation success
 
         # create a new plant and store plant id
         plant_id = self.create_test_plant(self.ADMIN_ID)
@@ -541,7 +551,7 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertEqual(data['observation']['notes'], 'PATCH TEST')
 
     def test_patch_observation_failure(self):
-        """Tests PATCH observation failure"""
+        Tests PATCH observation failure
 
         # create a new plant and store plant id
         plant_id = self.create_test_plant(self.ADMIN_ID)
@@ -572,7 +582,7 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'unprocessable')
 
     def test_delete_observation_success(self):
-        """Tests DELETE observation success"""
+        
 
         # create a new plant and store plant id
         plant_id = self.create_test_plant(self.ADMIN_ID)
@@ -598,7 +608,7 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertEqual(data['observation_id'], observation_id)
 
     def test_patch_or_delete_observation_not_found(self):
-        """Tests 404 not found error for PATCH or DELETE observation"""
+        
 
         # get headers using PUBLIC token
         headers = self.create_auth_headers(token=self.PUBLIC_ROLE_TOKEN)
@@ -608,7 +618,7 @@ class UfcFanTestCase(unittest.TestCase):
                                         headers=headers)
 
         # check status code
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 404) """
 
 
 # Make the tests conveniently executable
