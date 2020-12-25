@@ -1,12 +1,11 @@
 import os
-import datetime
 import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
-#from . import setup_db
-from app import create_app
-from models import setup_db, Fighter, Event, Division
+
+from .__init__ import create_app
+from .models import setup_db, Fighter, Event, Division
 import re
 from . import constants
 user = os.environ.get('USER')
