@@ -190,16 +190,23 @@ class UfcFanTestCase(unittest.TestCase):
 
     def test_get_division_fighters(self):
         """Tests Get Division Fighters"""
+        
+        res = self.client().get('/division_fighters/1')
+        data = json.loads(res.data)
+        self.assertTrue(data['data'])
+        self.assertEqual(res.status_code, 200)
+        
+    def test_get_division_fighters_fail(self):
+        """Tests Fail Division Fighters"""
         fighters = Fighter.query.filter(Fighter.division == 1).all()
         for item in fighters:
             item.delete()
         
         res = self.client().get('/division_fighters/1')
         data = json.loads(res.data)
-
+        self.assertTrue(data['data'])
         self.assertEqual(res.status_code, 200)
         
-
     
 
     

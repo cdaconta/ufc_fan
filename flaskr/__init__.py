@@ -503,7 +503,7 @@ def create_app(test_config=None):
             'div_9':div_9_data, 
             'div_10':div_10_data, 
             'div_11':div_11_data,
-            ' div_12':div_12_data
+            'div_12':div_12_data
         }),200
 
     @app.route('/api/division_fighters/<int:division_id>')
