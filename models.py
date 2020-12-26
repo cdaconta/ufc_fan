@@ -1,4 +1,4 @@
-from .myENV import *
+from myENV import *
 import os
 from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy

@@ -4,10 +4,10 @@ import json
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
 
-from .__init__ import create_app
-from .models import setup_db, Fighter, Event, Division
+from api import create_app
+from models import setup_db, Fighter, Event, Division
 import re
-from . import constants
+import constants
 user = os.environ.get('USER')
 password = os.environ.get('PASSWORD')
 #----------------------------------------------------------maybe not worth it

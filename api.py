@@ -15,6 +15,7 @@ from dotenv import load_dotenv, find_dotenv
 from authlib.integrations.flask_client import OAuth
 from six.moves.urllib.parse import urlencode
 from auth import AuthError, requires_auth
+#from auth import AuthError, requires_auth
 
 import constants
 from forms import EventForm, FighterForm

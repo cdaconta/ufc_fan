@@ -3,7 +3,7 @@ from flask import request, session, abort
 from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
-from . import constants
+import constants
 import os
 
 AUTH0_DOMAIN = 'secure4u.us.auth0.com'
