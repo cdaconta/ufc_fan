@@ -11,11 +11,11 @@ import constants
 user = os.environ.get('USER')
 password = os.environ.get('PASSWORD')
 #----------------------------------------------------------maybe not worth it
-conn = psycopg2.connect(
-    host="localhost:5432",
+""" conn = psycopg2.connect(
+    #host="localhost:5432",
     database="ufcfan_test",
     user="postgres",
-    password="Opensaysme69")
+    password="Opensaysme69") """
 
 class UfcFanTestCase(unittest.TestCase):
     """This class represents the plant survey test case"""
@@ -46,7 +46,7 @@ class UfcFanTestCase(unittest.TestCase):
 
     # UTILITY METHODS
 
-    cur = conn.cursor()
+    """ cur = conn.cursor()
     sql_file_divisions = 'divisions.sql'
     sql_file_events = 'events.sql'
     sql_file_fighters = 'fighters.sql'
@@ -67,7 +67,7 @@ class UfcFanTestCase(unittest.TestCase):
                 statement = ""
     exec_sql_file(cur, sql_file_divisions)
     exec_sql_file(cur, sql_file_events)
-    exec_sql_file(cur, sql_file_fighters)
+    exec_sql_file(cur, sql_file_fighters) """
 
     # creates auth header with bearer token
     def create_auth_headers(self, token):
@@ -77,30 +77,44 @@ class UfcFanTestCase(unittest.TestCase):
                 token
             )}
 
-    test_fighter = {'first_name':'Test','last_name':'Case','age':100,'height':10.00,'weight':10.00,'arm_reach':10.00,'leg_reach':10.00,'sex':'M','win':1,'loss':1,'draw':1,'division':1,'rank':10,}
-
+    test_fighter = [
+        {'first_name':'Test','last_name':'Case','age':100,'height':10.00,'weight':10.00,'arm_reach':10.00,'leg_reach':10.00,'sex':'M','win':1,'loss':1,'draw':1,'division':1,'rank':10,},
+        {'first_name':'Test','last_name':'Case','age':100,'height':10.00,'weight':10.00,'arm_reach':10.00,'leg_reach':10.00,'sex':'M','win':1,'loss':1,'draw':1,'division':2,'rank':10,},
+        {'first_name':'Test','last_name':'Case','age':100,'height':10.00,'weight':10.00,'arm_reach':10.00,'leg_reach':10.00,'sex':'M','win':1,'loss':1,'draw':1,'division':3,'rank':10,},
+        {'first_name':'Test','last_name':'Case','age':100,'height':10.00,'weight':10.00,'arm_reach':10.00,'leg_reach':10.00,'sex':'M','win':1,'loss':1,'draw':1,'division':4,'rank':10,},
+        {'first_name':'Test','last_name':'Case','age':100,'height':10.00,'weight':10.00,'arm_reach':10.00,'leg_reach':10.00,'sex':'M','win':1,'loss':1,'draw':1,'division':5,'rank':10,},
+        {'first_name':'Test','last_name':'Case','age':100,'height':10.00,'weight':10.00,'arm_reach':10.00,'leg_reach':10.00,'sex':'M','win':1,'loss':1,'draw':1,'division':6,'rank':10,},
+        {'first_name':'Test','last_name':'Case','age':100,'height':10.00,'weight':10.00,'arm_reach':10.00,'leg_reach':10.00,'sex':'M','win':1,'loss':1,'draw':1,'division':7,'rank':10,},
+        {'first_name':'Test','last_name':'Case','age':100,'height':10.00,'weight':10.00,'arm_reach':10.00,'leg_reach':10.00,'sex':'M','win':1,'loss':1,'draw':1,'division':8,'rank':10,},
+        {'first_name':'Test','last_name':'Case','age':100,'height':10.00,'weight':10.00,'arm_reach':10.00,'leg_reach':10.00,'sex':'M','win':1,'loss':1,'draw':1,'division':9,'rank':10,},
+        {'first_name':'Test','last_name':'Case','age':100,'height':10.00,'weight':10.00,'arm_reach':10.00,'leg_reach':10.00,'sex':'M','win':1,'loss':1,'draw':1,'division':10,'rank':10,},
+        {'first_name':'Test','last_name':'Case','age':100,'height':10.00,'weight':10.00,'arm_reach':10.00,'leg_reach':10.00,'sex':'M','win':1,'loss':1,'draw':1,'division':11,'rank':10,},
+        {'first_name':'Test','last_name':'Case','age':100,'height':10.00,'weight':10.00,'arm_reach':10.00,'leg_reach':10.00,'sex':'M','win':1,'loss':1,'draw':1,'division':12,'rank':10,},
+        ]
     # creates test fighter
     def create_fighter(self):
 
         # create and insert new plant
-        fighter = Fighter(
-        first_name = self.test_fighter['first_name'],
-        last_name = self.test_fighter['last_name'],
-        age = self.test_fighter['age'],
-        height = self.test_fighter['height'],
-        weight = self.test_fighter['weight'],
-        arm_reach = self.test_fighter['arm_reach'],
-        leg_reach = self.test_fighter['leg_reach'],
-        sex = self.test_fighter['sex'],
-        win = self.test_fighter['win'],
-        loss = self.test_fighter['loss'],
-        draw = self.test_fighter['draw'],
-        division = self.test_fighter['division'],
-        rank = self.test_fighter['rank']
-        )
-        fighter.insert()
+        for item in self.test_fighter:
 
-        return fighter.id
+            fighter = Fighter(
+            first_name = self.item['first_name'],
+            last_name = self.item['last_name'],
+            age = self.item['age'],
+            height = self.item['height'],
+            weight = self.item['weight'],
+            arm_reach = self.item['arm_reach'],
+            leg_reach = self.item['leg_reach'],
+            sex = self.item['sex'],
+            win = self.item['win'],
+            loss = self.item['loss'],
+            draw = self.item['draw'],
+            division = self.item['division'],
+            rank = self.item['rank']
+            )
+            fighter.insert()
+
+        #return self.item.id
 
     test_event = {
     'event_name':'UFC',
