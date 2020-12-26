@@ -2,7 +2,7 @@ from flask import Flask, render_template, g, abort, request, jsonify, Response, 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text, or_
 from flask_cors import CORS
-from .models import setup_db, db, Fighter, Division, Event
+from models import setup_db, db, Fighter, Division, Event
 from functools import wraps
 import json
 import babel
@@ -14,10 +14,10 @@ from werkzeug.exceptions import HTTPException
 from dotenv import load_dotenv, find_dotenv
 from authlib.integrations.flask_client import OAuth
 from six.moves.urllib.parse import urlencode
-from .auth import AuthError, requires_auth
+from auth import AuthError, requires_auth
 
-from . import constants
-from .forms import EventForm, FighterForm
+import constants
+from forms import EventForm, FighterForm
 import html
 
 #Authentication data variables
@@ -94,7 +94,7 @@ def create_app(test_config=None):
     # Controllers API
     @app.route('/')
     def home():
-        return render_template('home.html')
+        return render_template('/home.html')
 
 
     @app.route('/callback')
