@@ -511,6 +511,7 @@ def create_app(test_config=None):
     def get_division_fighters_api(division_id):
         #Here I join Fighters and Divisions Tables
         division_fighters = db.session.query(Fighter,Division).join(Division).filter(Fighter.division == division_id).all()
+        print(f'this is division fighters -- {division_fighters}')
         if division_fighters is None:
             abort(404)
         data = []

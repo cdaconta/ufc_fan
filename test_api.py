@@ -77,6 +77,20 @@ class UfcFanTestCase(unittest.TestCase):
                 token
             )}
 
+    division_test = {
+        'name':"Men's Flyweight",
+        'weight':125
+    }
+
+    def create_division(self):
+        division = Division(
+            name= self.division_test['name'],
+            weight = self.division_test['weight']
+        
+        )
+        division.insert()
+        #return division.id
+
     test_fighter = [
         {'first_name':'Test','last_name':'Case','age':100,'height':10.00,'weight':10.00,'arm_reach':10.00,'leg_reach':10.00,'sex':'M','win':1,'loss':1,'draw':1,'division':1,'rank':10,},
         {'first_name':'Test','last_name':'Case','age':100,'height':10.00,'weight':10.00,'arm_reach':10.00,'leg_reach':10.00,'sex':'M','win':1,'loss':1,'draw':1,'division':2,'rank':10,},
@@ -98,19 +112,19 @@ class UfcFanTestCase(unittest.TestCase):
         for item in self.test_fighter:
 
             fighter = Fighter(
-            first_name = self.item['first_name'],
-            last_name = self.item['last_name'],
-            age = self.item['age'],
-            height = self.item['height'],
-            weight = self.item['weight'],
-            arm_reach = self.item['arm_reach'],
-            leg_reach = self.item['leg_reach'],
-            sex = self.item['sex'],
-            win = self.item['win'],
-            loss = self.item['loss'],
-            draw = self.item['draw'],
-            division = self.item['division'],
-            rank = self.item['rank']
+            first_name = item['first_name'],
+            last_name = item['last_name'],
+            age = item['age'],
+            height = item['height'],
+            weight = item['weight'],
+            arm_reach = item['arm_reach'],
+            leg_reach = item['leg_reach'],
+            sex = item['sex'],
+            win = item['win'],
+            loss = item['loss'],
+            draw = item['draw'],
+            division = item['division'],
+            rank = item['rank']
             )
             fighter.insert()
 
@@ -144,35 +158,60 @@ class UfcFanTestCase(unittest.TestCase):
             fight_order = self.test_event['fight_order'],
         )
         event.insert()
-        return event.id    
+        #return event.id    
 
-    division_test = {
-        'name':"Men's Flyweight",
-        'weight':125
-    }
+    def delete_fighters(self):
+        fighters = Fighter.query.all()
+        for item in fighters:
+            item.delete();
 
-    def create_division(self):
-        division = Division(
-            name= self.division_test['name'],
-            weight = self.division_test['weight']
+    def delete_divisions(self):
+        divisions = Division.query.all()
+        for item in divisions:
+            item.delete();
+
+    def delete_events(self):
+        events = Event.query.all()
+        for item in events:
+            item.delete();
+    
+    """ 
+    create_division(self)
+    create_fighter(self)
+    create_event(self)  """
+
+    """ def test_get_knockouts(self):
         
-        )
-        division.insert()
-        return division.id
+        res = self.client().get('/knockouts')-----------------------------------------starts here-------------#
+        self.assertEqual(res.status_code, 200) """
 
-        """ create_division()
-        create_fighter()
-        create_event() """
-
-    def test_get_knockouts(self):
-        """Tests Get knockouts"""
-        res = self.client().get('/knockouts')
+    def test_get_division_fighters(self):
+        """Tests Get Division Fighters"""
+        self.create_division()
+        self.create_fighter()
+        res = self.client().get('/api/division_fighters/1')
         data = json.loads(res.data)
+        self.assertTrue(data['data'])
         self.assertEqual(res.status_code, 200)
+        
+    def test_get_division_fighters_fail(self):
+        """Tests Fail Division Fighters"""
+        
+        """ fighters = Fighter.query.filter(Fighter.division == 1).all()
+        for item in fighters:
+            item.delete() """
+        self.delete_fighters()
+        
+        res = self.client().get('/api/division_fighters/1')
+        data = json.loads(res.data)
+        print(f'This is reponse data -- {data}')
+        self.assertTrue(data['data'])
+        self.assertEqual(res.status_code, 404)
     
     def test_get_all_fighters_api(self):
         """Tests Get All Fighters"""
-        res = self.client().get('api/index')
+        self.create_fighter()
+        res = self.client().get('/api/index')
         data = json.loads(res.data)
         self.assertEqual(data['success'], True)
         self.assertEqual(res.status_code, 200)
@@ -192,34 +231,15 @@ class UfcFanTestCase(unittest.TestCase):
 
     def test_get_all_fighters_api_fail(self):
         """Tests Get All Fighters"""
-        fighters = Fighter.query.all()
-        for item in fighters:
-            item.delete()
+        self.delete_fighters()
 
-        res = self.client().get('api/index')
+        res = self.client().get('/api/index')
         data = json.loads(res.data)
         self.assertEqual(data['success'], False)
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['message'], 'resource not found')
 
-    def test_get_division_fighters(self):
-        """Tests Get Division Fighters"""
-        
-        res = self.client().get('/division_fighters/1')
-        data = json.loads(res.data)
-        self.assertTrue(data['data'])
-        self.assertEqual(res.status_code, 200)
-        
-    def test_get_division_fighters_fail(self):
-        """Tests Fail Division Fighters"""
-        fighters = Fighter.query.filter(Fighter.division == 1).all()
-        for item in fighters:
-            item.delete()
-        
-        res = self.client().get('/division_fighters/1')
-        data = json.loads(res.data)
-        self.assertTrue(data['data'])
-        self.assertEqual(res.status_code, 200)
+    
         
     
 
