@@ -310,8 +310,8 @@ def create_app(test_config=None):
 
         if(fighter_number == '1'):
             #event_data for latest event
-            event_data = Event.query.filter(Event.fighter_1 == clean_name).order_by(Event.event_date.desc()).limit(1)
-            if event_data is None:
+            event_data = Event.query.filter(Event.fighter_1 == clean_name).order_by(Event.event_date.desc()).limit(1).all()
+            if len(event_data) == 0:
                 abort(404)
             vote_number = event_data[0].fighter_1_votes + 1
             event_data[0].fighter_1_votes = vote_number
@@ -332,8 +332,8 @@ def create_app(test_config=None):
               'fighter_votes':data,
               }), 200
         else:
-            event_data = Event.query.filter(Event.fighter_2 == clean_name).order_by(Event.event_date.desc()).limit(1)
-            if event_data is None:
+            event_data = Event.query.filter(Event.fighter_2 == clean_name).order_by(Event.event_date.desc()).limit(1).all()
+            if len(event_data) == 0:
                 abort(404)
 
             vote_number = event_data[0].fighter_2_votes + 1

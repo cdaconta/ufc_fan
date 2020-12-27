@@ -3,6 +3,7 @@ import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
+from flask import session
 
 from api import create_app
 from models import setup_db, Fighter, Event, Division
@@ -229,31 +230,38 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(res.status_code, 404)
         
-    def create_event_get_api(self):
-         headers = self.create_auth_header(token=self.token)
-         res = self.client().get('/api/event-create',
-                                        headers=headers)
-         data = json.loads(res.data)
-         self.assertEqual(data['success'], True)
-         self.assertTrue(data['form'])
-         self.assertEqual(res.status_code, 200)
+    def create_eventcreate_get_api(self):
+         if constants.PROFILE_KEY['name'] == session['Admin'] or constants.PROFILE_KEY['name'] == session['Event Editor']:
+            headers = self.create_auth_header(token=self.token)
+            res = self.client().get('/api/event-create',
+                                            headers=headers)
+            data = json.loads(res.data)
+            self.assertEqual(data['success'], True)
+            self.assertTrue(data['form'])
+            self.assertEqual(res.status_code, 200)
 
-    def create_event_api_get_fail(self):
-         token = 'this will fail'
-         headers = self.create_auth_header(token=token)
-         res = self.client().get('/api/event-create',
-                                        headers=headers)
-         data = json.loads(res.data)
-         self.assertEqual(res.status_code, 500)
+         else:
+            headers = self.create_auth_header(token=self.token)
+            res = self.client().get('/api/event-create',
+                                            headers=headers)
+            data = json.loads(res.data)
+            self.assertEqual(res.status_code, 500)
 
     def create_event_post_api(self):
-         headers = self.create_auth_header(token=self.token)
-         res = self.client().post('/api/event-create', json = self.test_event,
-                                        headers=headers)
-         data = json.loads(res.data)
-         self.assertEqual(data['success'], True)
-         self.assertEqual(res.status_code, 200)
-    
+         if constants.PROFILE_KEY['name'] == session['Admin'] or constants.PROFILE_KEY['name'] == session['Event Editor']:
+            headers = self.create_auth_header(token=self.token)
+            res = self.client().post('/api/event-create', json = self.test_event,
+                                            headers=headers)
+            data = json.loads(res.data)
+            self.assertEqual(data['success'], True)
+            self.assertEqual(res.status_code, 200)
+         else:
+            headers = self.create_auth_header(token=self.token)
+            res = self.client().post('/api/event-create', json = self.test_event,
+                                            headers=headers)
+            data = json.loads(res.data)
+            self.assertEqual(res.status_code, 500)
+            
     def create_event_post_api_fail_form(self):
          headers = self.create_auth_header(token=self.token)
          test_event = {'Test':'Fail'}
@@ -264,15 +272,31 @@ class UfcFanTestCase(unittest.TestCase):
          self.assertEqual(res.status_code, 422)
          self.assertEqual(data['message'], 'unprocessable')
 
-    def create_event_post_api_fail_form(self):
-         headers = self.create_auth_header(token=self.token)
-         test_event = {'Test':'Fail'}
-         res = self.client().post('/api/event-create', json = test_event,
-                                        headers=headers)
-         data = json.loads(res.data)
-         self.assertEqual(data['success'], False)
-         self.assertEqual(res.status_code, 422)
-         self.assertEqual(data['message'], 'unprocessable')
+    def get_event_fighters_votes_test(self):
+        self.delete_events()  #not working
+        self.create_event()
+
+        name = self.test_event['fighter_2']
+        number = 2
+        res = self.client().patch('/event/plus/' + name +'/' + number)
+        data = json.loads(res.data)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['fighter_votes'])
+
+    def get_event_fighters_votes_test_fail(self):
+        self.delete_events()  #not working
+        self.create_event()
+
+        name = 'Test Fail'
+        number = 2
+        res = self.client().patch('/event/plus/' + name +'/' + number)
+        data = json.loads(res.data)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(res.status_code, 404)
+        self.assertTrue(data['message'], 'resource not found')
+    
+         
         
     
 
