@@ -296,7 +296,7 @@ class UfcFanTestCase(unittest.TestCase):
         print(f"This is name -- {name}")
         number = 2
         #res = self.client().patch(f'/event/plus/{name}/{number}', data = json_data, content_type='application/json')
-        res = self.client().patch(f'/event/plus/{name}/{number}', json = json_data)
+        res = self.client().patch(f'/api/event/plus/{name}/{number}', json = json_data)
         data = json.loads(res.data)
         self.assertEqual(data['success'], True)
         self.assertEqual(res.status_code, 200)
@@ -310,7 +310,7 @@ class UfcFanTestCase(unittest.TestCase):
 
         name = 'Test Fail'
         number = 2
-        res = self.client().patch(f'/event/plus/{name}/{number}', json = json_data)
+        res = self.client().patch(f'/api/event/plus/{name}/{number}', json = json_data)
         data = json.loads(res.data)
         self.assertEqual(data['success'], False)
         self.assertEqual(res.status_code, 404)
@@ -344,7 +344,7 @@ class UfcFanTestCase(unittest.TestCase):
             self.assertEqual(res.status_code, 404)
             self.assertEqual(data['message'],'resource not found' )
 
-    def fighter_edit_form_api_test(self):
+    def fighter_edit_get_api_test(self):
         self.create_fighter()
 
         if constants.PROFILE_KEY['name'] == session['Admin']:
@@ -365,6 +365,27 @@ class UfcFanTestCase(unittest.TestCase):
             data = json.loads(res.data)
             self.assertEqual(res.status_code, 500)
 
+    def fighter_edit_post_api_test(self):
+        self.create_fighter()
+        headers = self.create_auth_header(token=self.token)
+        fighter_data = self.test_fighter
+
+        if constants.PROFILE_KEY['name'] == session['Admin']:
+            
+            res = self.client().post('/api/fighter-edit/1', json= fighter_data,headers=headers)
+            data = json.loads(res.data)
+            self.assertEqual(data['success'], True)
+            self.assertEqual(res.status_code, 200)
+            self.assertTrue(data['division_id'])
+        elif constants.PROFILE_KEY['name'] == session['Event Editor']:           
+            res = self.client().post('/api/fighter-edit/1', json= fighter_data, headers=headers)
+            data = json.loads(res.data)
+            self.assertEqual(res.status_code, 500)
+        else:
+            fighter_data = self.test_fighter
+            res = self.client().post('/api/fighter-edit/1', json= fighter_data, headers=headers)
+            data = json.loads(res.data)
+            self.assertEqual(res.status_code, 500)
 
     
 

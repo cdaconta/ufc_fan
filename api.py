@@ -432,7 +432,7 @@ def create_app(test_config=None):
           db.session.close()   
         return redirect(url_for('get_division_fighters', division_id = fighter_division))
     #------------------------------------------------------------------------------------------------------------#
-    # API 
+    # API IDENTICAL FUNCTIONS
     #------------------------------------------------------------------------------------------------------------#
 
     @app.route('/api/index')
@@ -636,6 +636,59 @@ def create_app(test_config=None):
           'event_data':events_data,
         }),200
 
+    @app.route('/api/event/plus/<name>/<number>', methods=['PATCH'])
+    def get_event_fighter_votes_api(name, number):
+        
+        clean_name = html.unescape(name)
+        fighter_number = number
+        print(f'This is name and number -- {clean_name} and {fighter_number}')
+        if(fighter_number == '1'):
+            #event_data for latest event
+            event_data = Event.query.filter(Event.fighter_1 == clean_name).order_by(Event.event_date.desc()).limit(1).all()
+            if len(event_data) == 0:
+                abort(404)
+            vote_number = event_data[0].fighter_1_votes + 1
+            event_data[0].fighter_1_votes = vote_number
+            try:
+              db.session.commit()
+            except BaseException as e:
+                print(e)
+                abort(422)
+
+            data = []
+            for event in event_data:
+              data.append( {
+                    'fighter_number':1,     
+                    'fighter_1_votes':event.fighter_1_votes,
+                })
+              return jsonify({
+              'success':True,
+              'fighter_votes':data,
+              }), 200
+        else:
+            event_data = Event.query.filter(Event.fighter_2 == clean_name).order_by(Event.event_date.desc()).limit(1).all()
+            if len(event_data) == 0:
+                abort(404)
+
+            vote_number = event_data[0].fighter_2_votes + 1
+            event_data[0].fighter_2_votes = vote_number
+            try:
+                db.session.commit()
+            except BaseException as e:
+                print(e)
+                abort(422)
+
+            data = []
+            for event in event_data:
+                  data.append( {  
+                    'fighter_number':2,   
+                    'fighter_2_votes':event.fighter_2_votes, 
+                    })
+              
+                  return jsonify({
+                    'success':True,
+                    'fighter_votes':data,
+                  }), 200
 
     @app.route('/api/fighter-edit/<int:fighter_id>', methods=['GET']) 
     @requires_auth('get:fighter-edit')
@@ -678,7 +731,7 @@ def create_app(test_config=None):
           'success':True,
           'division_id':fighter_division,
         }),200 
-
+    #--------------------------------------------------------------------------------#
     @app.errorhandler(405)
     def method_not_allowed(error):
           return jsonify({
