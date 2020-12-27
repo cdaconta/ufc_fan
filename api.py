@@ -307,7 +307,7 @@ def create_app(test_config=None):
         
         clean_name = html.unescape(name)
         fighter_number = number
-
+        print(f'This is name and number -- {clean_name} and {fighter_number}')
         if(fighter_number == '1'):
             #event_data for latest event
             event_data = Event.query.filter(Event.fighter_1 == clean_name).order_by(Event.event_date.desc()).limit(1).all()
@@ -512,7 +512,7 @@ def create_app(test_config=None):
     def get_division_fighters_api(division_id):
         #Here I join Fighters and Divisions Tables
         division_fighters = db.session.query(Fighter,Division).join(Division).filter(Fighter.division == division_id).all()
-        print(f'this is division fighters -- {division_fighters}')
+        
         if len(division_fighters) == 0:
             abort(404)
         data = []
@@ -628,6 +628,8 @@ def create_app(test_config=None):
     def edit_event_form_api(token, date):
         clean_date = html.unescape(date)
         events = Event.query.filter(Event.event_date == clean_date).all()
+        if len(events) == 0:
+          abort(404)
         events_data = [event.format() for event in events]
         return jsonify({
           'success':True,

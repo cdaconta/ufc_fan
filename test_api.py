@@ -290,28 +290,82 @@ class UfcFanTestCase(unittest.TestCase):
         #self.delete_events() 
         self.create_event()
 
+        json_data = {'message':'success'}
+        #---------------------------------------------needs work
         name = self.test_event['fighter_2']
+        print(f"This is name -- {name}")
         number = 2
-        res = self.client().patch('/event/plus/' + name +'/' + number)
+        #res = self.client().patch(f'/event/plus/{name}/{number}', data = json_data, content_type='application/json')
+        res = self.client().patch(f'/event/plus/{name}/{number}', json = json_data)
         data = json.loads(res.data)
         self.assertEqual(data['success'], True)
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['fighter_votes'])
+        print(f'This is the vote count -- {data["fighter_votes"]}')
 
     def get_event_fighters_votes_test_fail(self):
         #self.delete_events()  #not working
         #self.create_event()
+        json_data = json.dumps({'message':'success'})
 
         name = 'Test Fail'
         number = 2
-        res = self.client().patch('/event/plus/' + name +'/' + number)
+        res = self.client().patch(f'/event/plus/{name}/{number}', json = json_data)
         data = json.loads(res.data)
         self.assertEqual(data['success'], False)
         self.assertEqual(res.status_code, 404)
-        self.assertTrue(data['message'], 'resource not found')
+        self.assertEqual(data['message'], 'resource not found')
     
+    def delete_event_get_api(self):
+         self.create_event()
+
+         if constants.PROFILE_KEY['name'] == session['Admin'] or constants.PROFILE_KEY['name'] == session['Event Editor']:
+            headers = self.create_auth_header(token=self.token)
+            res = self.client().get('/api/event-delete/2020-12-12T12:00:00.000Z', headers=headers)
+            data = json.loads(res.data)
+            self.assertEqual(data['success'], True)
+            self.assertEqual(res.status_code, 200)
+            self.assertTrue(data['event_data'])
+         else:
+            headers = self.create_auth_header(token=self.token)
+            res = self.client().get('/api/event-delete/2020-12-12T12:00:00.000Z', headers=headers)
+            data = json.loads(res.data)
+            self.assertEqual(res.status_code, 500)
+            
          
-        
+    def delete_event_get_api_date_fail(self):
+         self.create_event()
+
+         if constants.PROFILE_KEY['name'] == session['Admin'] or constants.PROFILE_KEY['name'] == session['Event Editor']:
+            headers = self.create_auth_header(token=self.token)
+            res = self.client().get('/api/event-delete/2020-12-14', headers=headers)
+            data = json.loads(res.data)
+            self.assertEqual(data['success'], False)
+            self.assertEqual(res.status_code, 404)
+            self.assertEqual(data['message'],'resource not found' )
+
+    def fighter_edit_form_api_test(self):
+        self.create_fighter()
+
+        if constants.PROFILE_KEY['name'] == session['Admin']:
+            headers = self.create_auth_header(token=self.token)
+            res = self.client().get('/api/fighter-edit/1', headers=headers)
+            data = json.loads(res.data)
+            self.assertEqual(data['success'], True)
+            self.assertEqual(res.status_code, 200)
+            self.assertTrue(data['event_data'])
+        elif constants.PROFILE_KEY['name'] == session['Event Editor']:
+            headers = self.create_auth_header(token=self.token)
+            res = self.client().get('/api/fighter-edit/1', headers=headers)
+            data = json.loads(res.data)
+            self.assertEqual(res.status_code, 500)
+        else:
+            headers = self.create_auth_header(token=self.token)
+            res = self.client().get('/api/fighter-edit/1', headers=headers)
+            data = json.loads(res.data)
+            self.assertEqual(res.status_code, 500)
+
+
     
 
     
