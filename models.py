@@ -201,6 +201,7 @@ class Event(db.Model):
             'id':self.id,
             'event_name':self.event_name, 
             'event_date':self.event_date, 
+            'location':self.location,
             'division':self.division,
             'fighter_1':self.fighter_1,
             'fighter_2':self.fighter_2,

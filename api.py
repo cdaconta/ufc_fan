@@ -575,6 +575,17 @@ def create_app(test_config=None):
               'event_info':event_info
           }),200
 
+    @app.route('/api/event-create', methods=['GET']) 
+    @requires_auth('get:event-create')
+    def create_event_form_api(token):
+        form = EventForm()
+        return jsonify({
+          'success':True,
+          'form':form,
+        }),200
+        
+          
+
     @app.route('/api/event-create', methods=['POST'])
     @requires_auth('post:event-create')
     def create_event_api(token):
@@ -621,16 +632,8 @@ def create_app(test_config=None):
         return jsonify({
           'success':True,
           'event_data':events_data,
-        })
+        }),200
 
-    @app.route('/api/event-create', methods=['GET']) 
-    @requires_auth('get:event-create')
-    def create_event_form_api(token):
-        form = EventForm()
-        return jsonify({
-            'success':True,
-            'form':form
-        })
 
     @app.route('/api/fighter-edit/<int:fighter_id>', methods=['GET']) 
     @requires_auth('get:fighter-edit')
@@ -648,7 +651,7 @@ def create_app(test_config=None):
           'success':True,
           'form':form,
           'fighter_details':fighter_details,
-        })
+        }),200
     
     @app.route('/api/fighter-edit/<int:fighter_id>', methods=['POST'])
     @requires_auth('get:fighter-edit')
@@ -672,7 +675,7 @@ def create_app(test_config=None):
         return jsonify({
           'success':True,
           'division_id':fighter_division,
-        }) 
+        }),200 
 
     @app.errorhandler(405)
     def method_not_allowed(error):

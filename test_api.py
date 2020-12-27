@@ -10,12 +10,7 @@ import re
 import constants
 user = os.environ.get('USER')
 password = os.environ.get('PASSWORD')
-#----------------------------------------------------------maybe not worth it
-""" conn = psycopg2.connect(
-    #host="localhost:5432",
-    database="ufcfan_test",
-    user="postgres",
-    password="Opensaysme69") """
+
 
 class UfcFanTestCase(unittest.TestCase):
     """This class represents the plant survey test case"""
@@ -45,7 +40,7 @@ class UfcFanTestCase(unittest.TestCase):
         pass 
 
     # creates auth header with bearer token
-    def create_auth_headers(self, token):
+    def create_auth_header(self, token):
         # return auth headers using token
         return {
             "Authorization": "Bearer {}".format(
@@ -134,6 +129,7 @@ class UfcFanTestCase(unittest.TestCase):
         event = Event(
             event_name = self.test_event['event_name'], 
             event_date = self.test_event['event_date'], 
+            location = self.test_event['location'],
             division = self.test_event['division'],
             fighter_1 = self.test_event['fighter_1'],
             fighter_2 = self.test_event['fighter_2'],
@@ -217,11 +213,66 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'resource not found')
         self.assertEqual(data['success'], False)
        
+    def test_get_event_api(self):
+        self.create_event()
 
+        res = self.client().get('/api/event/2020-12-12T12:00:00.000Z')
+        data = json.loads(res.data)
+        self.assertTrue(data['event_info'])
+        self.assertEqual(data['success'], True)
+        self.assertEqual(res.status_code, 200)
     
-    
+    def test_get_event_api_fail(self):
+        res = self.client().get('/api/event/2020-12-13')
+        data = json.loads(res.data)
+        self.assertEqual(data['message'],'resource not found')
+        self.assertEqual(data['success'], False)
+        self.assertEqual(res.status_code, 404)
+        
+    def create_event_get_api(self):
+         headers = self.create_auth_header(token=self.token)
+         res = self.client().get('/api/event-create',
+                                        headers=headers)
+         data = json.loads(res.data)
+         self.assertEqual(data['success'], True)
+         self.assertTrue(data['form'])
+         self.assertEqual(res.status_code, 200)
 
+    def create_event_api_get_fail(self):
+         token = 'this will fail'
+         headers = self.create_auth_header(token=token)
+         res = self.client().get('/api/event-create',
+                                        headers=headers)
+         data = json.loads(res.data)
+         self.assertEqual(res.status_code, 500)
+
+    def create_event_post_api(self):
+         headers = self.create_auth_header(token=self.token)
+         res = self.client().post('/api/event-create', json = self.test_event,
+                                        headers=headers)
+         data = json.loads(res.data)
+         self.assertEqual(data['success'], True)
+         self.assertEqual(res.status_code, 200)
     
+    def create_event_post_api_fail_form(self):
+         headers = self.create_auth_header(token=self.token)
+         test_event = {'Test':'Fail'}
+         res = self.client().post('/api/event-create', json = test_event,
+                                        headers=headers)
+         data = json.loads(res.data)
+         self.assertEqual(data['success'], False)
+         self.assertEqual(res.status_code, 422)
+         self.assertEqual(data['message'], 'unprocessable')
+
+    def create_event_post_api_fail_form(self):
+         headers = self.create_auth_header(token=self.token)
+         test_event = {'Test':'Fail'}
+         res = self.client().post('/api/event-create', json = test_event,
+                                        headers=headers)
+         data = json.loads(res.data)
+         self.assertEqual(data['success'], False)
+         self.assertEqual(res.status_code, 422)
+         self.assertEqual(data['message'], 'unprocessable')
         
     
 
