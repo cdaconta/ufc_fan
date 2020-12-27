@@ -4,7 +4,8 @@ import json
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
 from flask import session
-
+from sqlalchemy import text
+from models import db
 from api import create_app
 from models import setup_db, Fighter, Event, Division
 import re
@@ -16,9 +17,7 @@ password = os.environ.get('PASSWORD')
 class UfcFanTestCase(unittest.TestCase):
     """This class represents the plant survey test case"""
 
-    # auth tokens needed for successful testing
-    """ APP_ADMIN_TOKEN = os.environ.get('APP_ADMIN')
-    EVENT_EDITOR_TOKEN = os.environ.get('EVENT_EDITOR') """
+    # auth token
     token = constants.JWT
 
     def setUp(self):
@@ -64,6 +63,10 @@ class UfcFanTestCase(unittest.TestCase):
     ]
 
     def create_division(self):
+        #Here I delete the table and always start id at 1
+        self.delete_divisions()
+        sql = text('ALTER SEQUENCE divisions_id_seq RESTART WITH 1;')
+        db.engine.execute(sql)
         for item in self.division_test:
             division = Division(
                 name= item['name'],
@@ -71,7 +74,7 @@ class UfcFanTestCase(unittest.TestCase):
         
             )
             division.insert()
-        #return division.id
+            #return division.id
 
     test_fighter = [
         {'first_name':'Test','last_name':'Case','age':100,'height':10.00,'weight':10.00,'arm_reach':10.00,'leg_reach':10.00,'sex':'M','win':1,'loss':1,'draw':1,'division':1,'rank':10,},
@@ -89,7 +92,7 @@ class UfcFanTestCase(unittest.TestCase):
         ]
     # creates test fighter
     def create_fighter(self):
-
+        self.delete_fighters()
         # create and insert new plant
         for item in self.test_fighter:
 
@@ -108,6 +111,7 @@ class UfcFanTestCase(unittest.TestCase):
             division = item['division'],
             rank = item['rank']
             )
+           
             fighter.insert()
 
         #return self.item.id
@@ -127,6 +131,8 @@ class UfcFanTestCase(unittest.TestCase):
     }
 
     def create_event(self):
+        #Here I delete the table
+        self.delete_events()
         event = Event(
             event_name = self.test_event['event_name'], 
             event_date = self.test_event['event_date'], 
@@ -140,29 +146,37 @@ class UfcFanTestCase(unittest.TestCase):
             fighter_2_odds = self.test_event['fighter_2_odds'],
             fight_order = self.test_event['fight_order'],
         )
+        
         event.insert()
         #return event.id    
 
     def delete_fighters(self):
         fighters = Fighter.query.all()
+        if len(fighters) == 0:
+            return
         for item in fighters:
-            item.delete();
+            item.delete()
 
     def delete_divisions(self):
         divisions = Division.query.all()
+        if len(divisions) == 0:
+            return
         for item in divisions:
-            item.delete();
+            item.delete()
 
     def delete_events(self):
         events = Event.query.all()
+        if len(events) == 0:
+            return
         for item in events:
-            item.delete();
+            item.delete()
     
 
     def test_get_all_fighters_api(self):
         """Tests Get All Fighters"""
         self.create_division()
         self.create_fighter()
+        self.create_event()
 
         res = self.client().get('/api/index')
         data = json.loads(res.data)
@@ -215,7 +229,7 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
        
     def test_get_event_api(self):
-        self.create_event()
+        #self.create_event()
 
         res = self.client().get('/api/event/2020-12-12T12:00:00.000Z')
         data = json.loads(res.data)
@@ -273,7 +287,7 @@ class UfcFanTestCase(unittest.TestCase):
          self.assertEqual(data['message'], 'unprocessable')
 
     def get_event_fighters_votes_test(self):
-        self.delete_events()  #not working
+        #self.delete_events() 
         self.create_event()
 
         name = self.test_event['fighter_2']
@@ -285,8 +299,8 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertTrue(data['fighter_votes'])
 
     def get_event_fighters_votes_test_fail(self):
-        self.delete_events()  #not working
-        self.create_event()
+        #self.delete_events()  #not working
+        #self.create_event()
 
         name = 'Test Fail'
         number = 2
