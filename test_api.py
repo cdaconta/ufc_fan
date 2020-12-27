@@ -245,8 +245,8 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 404)
         
     def create_eventcreate_get_api(self):
+         headers = self.create_auth_header(token=self.token)
          if constants.PROFILE_KEY['name'] == session['Admin'] or constants.PROFILE_KEY['name'] == session['Event Editor']:
-            headers = self.create_auth_header(token=self.token)
             res = self.client().get('/api/event-create',
                                             headers=headers)
             data = json.loads(res.data)
@@ -255,32 +255,27 @@ class UfcFanTestCase(unittest.TestCase):
             self.assertEqual(res.status_code, 200)
 
          else:
-            headers = self.create_auth_header(token=self.token)
             res = self.client().get('/api/event-create',
                                             headers=headers)
             data = json.loads(res.data)
             self.assertEqual(res.status_code, 500)
 
     def create_event_post_api(self):
+         headers = self.create_auth_header(token=self.token)
          if constants.PROFILE_KEY['name'] == session['Admin'] or constants.PROFILE_KEY['name'] == session['Event Editor']:
-            headers = self.create_auth_header(token=self.token)
-            res = self.client().post('/api/event-create', json = self.test_event,
-                                            headers=headers)
+            res = self.client().post('/api/event-create', json = self.test_event, headers=headers)
             data = json.loads(res.data)
             self.assertEqual(data['success'], True)
             self.assertEqual(res.status_code, 200)
          else:
-            headers = self.create_auth_header(token=self.token)
-            res = self.client().post('/api/event-create', json = self.test_event,
-                                            headers=headers)
+            res = self.client().post('/api/event-create', json = self.test_event, headers=headers)
             data = json.loads(res.data)
             self.assertEqual(res.status_code, 500)
             
     def create_event_post_api_fail_form(self):
          headers = self.create_auth_header(token=self.token)
          test_event = {'Test':'Fail'}
-         res = self.client().post('/api/event-create', json = test_event,
-                                        headers=headers)
+         res = self.client().post('/api/event-create', json = test_event, headers=headers)
          data = json.loads(res.data)
          self.assertEqual(data['success'], False)
          self.assertEqual(res.status_code, 422)
@@ -318,19 +313,18 @@ class UfcFanTestCase(unittest.TestCase):
     
     def delete_event_get_api(self):
          self.create_event()
-
+         headers = self.create_auth_header(token=self.token)
          if constants.PROFILE_KEY['name'] == session['Admin'] or constants.PROFILE_KEY['name'] == session['Event Editor']:
-            headers = self.create_auth_header(token=self.token)
             res = self.client().get('/api/event-delete/2020-12-12T12:00:00.000Z', headers=headers)
             data = json.loads(res.data)
             self.assertEqual(data['success'], True)
             self.assertEqual(res.status_code, 200)
             self.assertTrue(data['event_data'])
          else:
-            headers = self.create_auth_header(token=self.token)
             res = self.client().get('/api/event-delete/2020-12-12T12:00:00.000Z', headers=headers)
             data = json.loads(res.data)
-            self.assertEqual(res.status_code, 500)
+            self.assertEqual(res.status_code, 401)
+            self.assertEqual(data['success'], False)
             
          
     def delete_event_get_api_date_fail(self):
@@ -346,24 +340,23 @@ class UfcFanTestCase(unittest.TestCase):
 
     def fighter_edit_get_api_test(self):
         self.create_fighter()
-
+        headers = self.create_auth_header(token=self.token)
         if constants.PROFILE_KEY['name'] == session['Admin']:
-            headers = self.create_auth_header(token=self.token)
             res = self.client().get('/api/fighter-edit/1', headers=headers)
             data = json.loads(res.data)
             self.assertEqual(data['success'], True)
             self.assertEqual(res.status_code, 200)
             self.assertTrue(data['event_data'])
         elif constants.PROFILE_KEY['name'] == session['Event Editor']:
-            headers = self.create_auth_header(token=self.token)
             res = self.client().get('/api/fighter-edit/1', headers=headers)
             data = json.loads(res.data)
-            self.assertEqual(res.status_code, 500)
+            self.assertEqual(res.status_code, 401)
+            self.assertEqual(data['success'], False)
         else:
-            headers = self.create_auth_header(token=self.token)
             res = self.client().get('/api/fighter-edit/1', headers=headers)
             data = json.loads(res.data)
-            self.assertEqual(res.status_code, 500)
+            self.assertEqual(res.status_code, 401)
+            self.assertEqual(data['success'], False)
 
     def fighter_edit_post_api_test(self):
         self.create_fighter()
@@ -380,13 +373,15 @@ class UfcFanTestCase(unittest.TestCase):
         elif constants.PROFILE_KEY['name'] == session['Event Editor']:           
             res = self.client().post('/api/fighter-edit/1', json= fighter_data, headers=headers)
             data = json.loads(res.data)
-            self.assertEqual(res.status_code, 500)
+            self.assertEqual(res.status_code, 401)
+            self.assertEqual(data['success'], False)
         else:
             fighter_data = self.test_fighter
             res = self.client().post('/api/fighter-edit/1', json= fighter_data, headers=headers)
             data = json.loads(res.data)
-            self.assertEqual(res.status_code, 500)
-
+            self.assertEqual(res.status_code, 401)
+            self.assertEqual(data['success'], False)
+            print(f'This is edit data == {data}')
     
 
     
