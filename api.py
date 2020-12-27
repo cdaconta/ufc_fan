@@ -432,7 +432,7 @@ def create_app(test_config=None):
           db.session.close()   
         return redirect(url_for('get_division_fighters', division_id = fighter_division))
     #------------------------------------------------------------------------------------------------------------#
-    # API IDENTICAL FUNCTIONS
+    # API - Identical functions except now with json responses.
     #------------------------------------------------------------------------------------------------------------#
 
     @app.route('/api/index')
