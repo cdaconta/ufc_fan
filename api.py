@@ -95,7 +95,7 @@ def create_app(test_config=None):
     # Controllers API
     @app.route('/')
     def home():
-        return render_template('/home.html')
+        return render_template('home.html')
 
 
     @app.route('/callback')
@@ -611,7 +611,7 @@ def create_app(test_config=None):
           event_data.insert()
           #Success
           flash('Event insert was successfully listed!')
-          
+
           return jsonify({
           'success':True,
           'id':event_data.id
