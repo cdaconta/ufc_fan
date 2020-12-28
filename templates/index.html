@@ -5,7 +5,7 @@
 
   
       <div class="h4 mt-3 text-center"  >
-        <a style="text-decoration: none; color: inherit;" href="/event/{{events[0].event_date}}"><span class="black-outline" style="font-family: ninjaFont; color:red;">Upcoming Event:</span> {{ events[0].event_name }} - {{ events[0].event_date|datetime('full') }}</a>{% if userinfo['name'] == session['Admin'] or userinfo['name'] == session['Event Editor'] %}<a href="/event-delete/{{ events[0].event_date }}" class="ml-2 btn-sm btn-warning">Add/Delete</a>{% endif %} 
+        <a style="text-decoration: none; color: inherit;" href="/event/{{events[0].event_date}}"><span class="black-outline" style="font-family: ninjaFont; color:red;">Upcoming Event:</span> {{ events[0].event_name }} - {{ events[0].event_date|datetime('full') }}</a>{% if userinfo['name'] == session['Admin'] or userinfo['name'] == session['Event Editor'] %}<a style="text-decoration: none;" href="/event-delete/{{ events[0].event_date }}" class="ml-2 btn-sm btn-warning">Add/Delete</a>{% endif %} 
       </div>  
     
     <div class="card-deck p-3">
