@@ -135,50 +135,50 @@ def create_app(test_config=None):
 
         session['Admin'] = env.get('APP_ADMIN')
         session['Event Editor'] = env.get('EVENT_EDITOR')
-        try:
-            #Here I get all the fighter by division
-            div_1 = Fighter.query.filter(Fighter.division == 1).order_by(Fighter.rank).all()
-            div_1_data = [event.format() for event in div_1]
+        
+        #Here I get all the fighter by division
+        div_1 = Fighter.query.filter(Fighter.division == 1).order_by(Fighter.rank).all()
+        div_1_data = [event.format() for event in div_1]
 
-            div_2 = Fighter.query.filter(Fighter.division == 2).order_by(Fighter.rank).all()
-            div_2_data = [event.format() for event in div_2]
+        div_2 = Fighter.query.filter(Fighter.division == 2).order_by(Fighter.rank).all()
+        div_2_data = [event.format() for event in div_2]
 
-            div_3 = Fighter.query.filter(Fighter.division == 3).order_by(Fighter.rank).all()
-            div_3_data = [event.format() for event in div_3]
+        div_3 = Fighter.query.filter(Fighter.division == 3).order_by(Fighter.rank).all()
+        div_3_data = [event.format() for event in div_3]
 
-            div_4 = Fighter.query.filter(Fighter.division == 4).order_by(Fighter.rank).all()
-            div_4_data = [event.format() for event in div_4]
+        div_4 = Fighter.query.filter(Fighter.division == 4).order_by(Fighter.rank).all()
+        div_4_data = [event.format() for event in div_4]
 
-            div_5 = Fighter.query.filter(Fighter.division == 5).order_by(Fighter.rank).all()
-            div_5_data = [event.format() for event in div_5]
+        div_5 = Fighter.query.filter(Fighter.division == 5).order_by(Fighter.rank).all()
+        div_5_data = [event.format() for event in div_5]
 
-            div_6 = Fighter.query.filter(Fighter.division == 6).order_by(Fighter.rank).all()
-            div_6_data = [event.format() for event in div_6]
+        div_6 = Fighter.query.filter(Fighter.division == 6).order_by(Fighter.rank).all()
+        div_6_data = [event.format() for event in div_6]
 
-            div_7 = Fighter.query.filter(Fighter.division == 7).order_by(Fighter.rank).all()
-            div_7_data = [event.format() for event in div_7]
+        div_7 = Fighter.query.filter(Fighter.division == 7).order_by(Fighter.rank).all()
+        div_7_data = [event.format() for event in div_7]
 
-            div_8 = Fighter.query.filter(Fighter.division == 8).order_by(Fighter.rank).all()
-            div_8_data = [event.format() for event in div_8]
+        div_8 = Fighter.query.filter(Fighter.division == 8).order_by(Fighter.rank).all()
+        div_8_data = [event.format() for event in div_8]
 
-            div_9 = Fighter.query.filter(Fighter.division == 9).order_by(Fighter.rank).all()
-            div_9_data = [event.format() for event in div_9]
+        div_9 = Fighter.query.filter(Fighter.division == 9).order_by(Fighter.rank).all()
+        div_9_data = [event.format() for event in div_9]
 
-            div_10 = Fighter.query.filter(Fighter.division == 10).order_by(Fighter.rank).all()
-            div_10_data = [event.format() for event in div_10]
+        div_10 = Fighter.query.filter(Fighter.division == 10).order_by(Fighter.rank).all()
+        div_10_data = [event.format() for event in div_10]
 
-            div_11 = Fighter.query.filter(Fighter.division == 11).order_by(Fighter.rank).all()
-            div_11_data = [event.format() for event in div_11]
+        div_11 = Fighter.query.filter(Fighter.division == 11).order_by(Fighter.rank).all()
+        div_11_data = [event.format() for event in div_11]
 
-            div_12 = Fighter.query.filter(Fighter.division == 12).order_by(Fighter.rank).all()
-            div_12_data = [event.format() for event in div_12]
-        except BaseException as e:
-            print(e)
+        div_12 = Fighter.query.filter(Fighter.division == 12).order_by(Fighter.rank).all()
+        div_12_data = [event.format() for event in div_12]
+        
+        if len(div_1) == 0 or len(div_2) == 0 or len(div_3) == 0 or len(div_4) == 0 or len(div_5) == 0 or len(div_6) == 0 or len(div_7) == 0 or len(div_8) == 0 or len(div_9) == 0 or len(div_10) == 0 or len(div_11) == 0 or len(div_12) == 0: 
             abort(404)
 
         event_info = []
-        event_data = Event.query.order_by(Event.event_date.desc()).limit(1)
-        if event_data is None:
+        event_data = Event.query.order_by(Event.event_date.desc()).limit(1).all()
+        if len(event_data) == 0:
             abort(404)
 
         event_info.append(
@@ -202,7 +202,7 @@ def create_app(test_config=None):
     def get_division_fighters(division_id):
         #Here I join Fighters and Divisions Tables
         division_fighters = db.session.query(Fighter,Division).join(Division).filter(Fighter.division == division_id).order_by(Fighter.rank).all()
-        if division_fighters is None:
+        if len(division_fighters) == 0:
             abort(404)
         data = []
 
@@ -236,7 +236,7 @@ def create_app(test_config=None):
         event_info = []
         #Here we join Events table and Division table 
         event_data = db.session.query(Event,Division).join(Division).filter(Event.event_date == clean_date).order_by(Event.fight_order).all()
-        if event_data is None:
+        if len(event_data) == 0:
             abort(404)
 
         for event, division in event_data:
@@ -361,6 +361,8 @@ def create_app(test_config=None):
     def edit_event_form(token, date):
         clean_date = html.unescape(date)
         events = Event.query.filter(Event.event_date == clean_date).all()
+        if len(events) == 0:
+            abort(404)
         events_data = [event.format() for event in events]
         
         return render_template('delete_event.html', events = events_data, userinfo=session[constants.PROFILE_KEY]),200
@@ -371,7 +373,7 @@ def create_app(test_config=None):
     def delete_event(token, date):
         clean_date = html.unescape(date)
         events = Event.query.filter(Event.event_date == clean_date).all()
-        if events is None:
+        if len(events) == 0:
                 abort(404)
         
         [event.delete() for event in events]
@@ -401,8 +403,8 @@ def create_app(test_config=None):
     @requires_auth('get:fighter-edit')
     def fighter_edit_form(token, fighter_id):
       
-        fighter = Fighter.query.get(fighter_id)
-        if fighter is None:
+        fighter = Fighter.query.get(fighter_id).all()
+        if len(fighter) == 0:
             abort(400)
         fighter_details = fighter.format()
         
@@ -584,8 +586,7 @@ def create_app(test_config=None):
           'success':True,
         }),200
         
-          
-
+        
     @app.route('/api/event-create', methods=['POST'])
     @requires_auth('post:event-create')
     def create_event_api(token):
@@ -610,6 +611,11 @@ def create_app(test_config=None):
           event_data.insert()
           #Success
           flash('Event insert was successfully listed!')
+          
+          return jsonify({
+          'success':True,
+          'id':event_data.id
+          }),200
         except:
           db.session.rollback()
           #flash failure
@@ -618,9 +624,7 @@ def create_app(test_config=None):
         finally:
           db.session.close()
         
-        return jsonify({
-          'success':True,
-        }),200
+        
 
 
     @app.route('/api/event-delete/<date>', methods=['GET']) 

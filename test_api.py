@@ -254,7 +254,7 @@ class UfcFanTestCase(unittest.TestCase):
             res = self.client().get('/api/event-create',
                                             headers=headers)
             data = json.loads(res.data)
-            self.assertEqual(data['success'], True)
+            self.assertEqual(data['success'], True)           
             self.assertEqual(res.status_code, 200)
 
          else:
@@ -272,6 +272,7 @@ class UfcFanTestCase(unittest.TestCase):
             data = json.loads(res.data)
             self.assertEqual(data['success'], True)
             self.assertEqual(res.status_code, 200)
+            self.assertTrue(data['id'])
          else:
             """Fail""" 
             res = self.client().post('/api/event-create', json = self.test_event, headers=headers)
