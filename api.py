@@ -579,9 +579,9 @@ def create_app(test_config=None):
     @requires_auth('get:event-create')
     def create_event_form_api(token):
         form = EventForm()
+
         return jsonify({
           'success':True,
-          'form':form,
         }),200
         
           

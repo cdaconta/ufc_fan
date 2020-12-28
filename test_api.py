@@ -255,7 +255,6 @@ class UfcFanTestCase(unittest.TestCase):
                                             headers=headers)
             data = json.loads(res.data)
             self.assertEqual(data['success'], True)
-            self.assertTrue(data['form'])
             self.assertEqual(res.status_code, 200)
 
          else:
