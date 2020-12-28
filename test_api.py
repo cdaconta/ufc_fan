@@ -6,7 +6,7 @@ import psycopg2
 from flask import session
 from sqlalchemy import text
 from models import db
-from api import create_app
+from app import create_app
 from models import setup_db, Fighter, Event, Division
 import re
 import constants
