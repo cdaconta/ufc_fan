@@ -403,8 +403,8 @@ def create_app(test_config=None):
     @requires_auth('get:fighter-edit')
     def fighter_edit_form(token, fighter_id):
       
-        fighter = Fighter.query.get(fighter_id).all()
-        if len(fighter) == 0:
+        fighter = Fighter.query.get(fighter_id)
+        if fighter is None:
             abort(400)
         fighter_details = fighter.format()
         
