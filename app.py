@@ -308,7 +308,7 @@ def create_app(test_config=None):
         
         clean_name = html.unescape(name)
         fighter_number = number
-        print(f'This is name and number -- {clean_name} and {fighter_number}')
+        
         if(fighter_number == '1'):
             #event_data for latest event
             event_data = Event.query.filter(Event.fighter_1 == clean_name).order_by(Event.event_date.desc()).limit(1).all()
@@ -631,7 +631,7 @@ def create_app(test_config=None):
         
         clean_name = html.unescape(name)
         fighter_number = number
-        print(f'This is name and number -- {clean_name} and {fighter_number}')
+        
         if(fighter_number == '1'):
             #event_data for latest event
             event_data = Event.query.filter(Event.fighter_1 == clean_name).order_by(Event.event_date.desc()).limit(1).all()

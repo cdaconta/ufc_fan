@@ -64,7 +64,7 @@ class UfcFanTestCase(unittest.TestCase):
     ]
 
     def create_division(self):
-        #Here I delete the table and always start id at 1
+        #Here I delete the table and always start id at 1 before I create a new division
         self.delete_divisions()
         sql = text('ALTER SEQUENCE divisions_id_seq RESTART WITH 1;')
         db.engine.execute(sql)
@@ -75,7 +75,7 @@ class UfcFanTestCase(unittest.TestCase):
         
             )
             division.insert()
-            #return division.id
+            
 
     test_fighter = [
         {'first_name':'Test','last_name':'Case','age':100,'height':10.00,'weight':10.00,'arm_reach':10.00,'leg_reach':10.00,'sex':'M','win':1,'loss':1,'draw':1,'division':1,'rank':10,},
@@ -94,7 +94,7 @@ class UfcFanTestCase(unittest.TestCase):
     # creates test fighter
     def create_fighter(self):
         self.delete_fighters()
-        # create and insert new plant
+        # create and insert fighter
         for item in self.test_fighter:
 
             fighter = Fighter(
@@ -115,7 +115,7 @@ class UfcFanTestCase(unittest.TestCase):
            
             fighter.insert()
 
-        #return self.item.id
+        
 
     test_event = {
     'event_name':'UFC',
@@ -132,7 +132,7 @@ class UfcFanTestCase(unittest.TestCase):
     }
 
     def create_event(self):
-        #Here I delete the table
+        #Here I delete the table then create an event
         self.delete_events()
         event = Event(
             event_name = self.test_event['event_name'], 
@@ -149,7 +149,7 @@ class UfcFanTestCase(unittest.TestCase):
         )
         
         event.insert()
-        #return event.id    
+        
 
     def delete_fighters(self):
         fighters = Fighter.query.all()
@@ -292,8 +292,8 @@ class UfcFanTestCase(unittest.TestCase):
             self.assertEqual(res.status_code, 422)
             self.assertEqual(data['message'], 'unprocessable')
     
-    def test_get_event_fighters_votes_test(self):
-        """Tests Event Fighter Votes Get"""
+    def test_patch_event_fighters_votes_test(self):
+        """Tests Event Fighter Votes Patch"""
 
         self.create_event()
         json_data = {'message':'success'}
@@ -306,8 +306,8 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['fighter_votes'])      
 
-    def test_get_event_fighters_votes_test_fail(self):
-        """Tests Event Fighter Votes Get Fail"""
+    def test_patch_event_fighters_votes_test_fail(self):
+        """Tests Event Fighter Votes Patch Fail"""
         
         json_data = {'message':'success'}
         name = 'Test Fail'
