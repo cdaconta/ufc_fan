@@ -176,8 +176,6 @@ def create_app(test_config=None):
 
         event_info = []
         event_data = Event.query.order_by(Event.event_date.desc()).limit(1).all()
-        print(f'This is event_data -- {event_data}')
-        print(f'This is event_data 0-- {event_data[0]}')
         if len(event_data) == 0:
             abort(404)
 
@@ -233,7 +231,7 @@ def create_app(test_config=None):
     @app.route('/event/<date>')
     def get_event(date):
         clean_date = html.unescape(date)
-        print(f'This is clean_date: {clean_date}')
+        
         event_info = []
         #Here we join Events table and Division table 
         event_data = db.session.query(Event,Division).join(Division).filter(Event.event_date == clean_date).order_by(Event.fight_order).all()
