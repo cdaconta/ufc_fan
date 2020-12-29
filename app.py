@@ -176,6 +176,8 @@ def create_app(test_config=None):
 
         event_info = []
         event_data = Event.query.order_by(Event.event_date.desc()).limit(1).all()
+        print(f'This is event_data -- {event_data}')
+        print(f'This is event_data 0-- {event_data[0]}')
         if len(event_data) == 0:
             abort(404)
 
