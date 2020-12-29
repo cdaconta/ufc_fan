@@ -6,7 +6,7 @@ from urllib.request import urlopen
 import constants
 import os
 
-AUTH0_DOMAIN = os.environ.get('AUTHO_DOMAIN')
+AUTH0_DOMAIN = os.environ.get('AUTH0_DOMAIN')
 ALGORITHMS = ['RS256']
 AUTH0_AUDIENCE = os.environ.get('AUTH0_AUDIENCE')
 
