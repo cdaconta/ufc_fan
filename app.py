@@ -233,6 +233,7 @@ def create_app(test_config=None):
     @app.route('/event/<date>')
     def get_event(date):
         clean_date = html.unescape(date)
+        print(f'This is clean_date: {clean_date}')
         event_info = []
         #Here we join Events table and Division table 
         event_data = db.session.query(Event,Division).join(Division).filter(Event.event_date == clean_date).order_by(Event.fight_order).all()
@@ -276,7 +277,7 @@ def create_app(test_config=None):
           form = EventForm()
           form_event = Event(
           event_name = form.event_name.data, 
-          event_date = form.event_date.data,
+          event_date = format_datetime(str(form.event_date.data)),
           location = form.location.data,
           division = form.division.data,
           fighter_1 = form.fighter_1.data, 
@@ -596,7 +597,7 @@ def create_app(test_config=None):
         try:       
           event_data = Event(
           event_name = data.get('event_name'), 
-          event_date = data.get('event_date'),
+          event_date = format_datetime(str(data.get('event_date'))),
           location = data.get('location'),
           division = data.get('division'),
           fighter_1 = data.get('fighter_1'), 
