@@ -10,13 +10,10 @@ from babel.dates import format_date, format_datetime, format_time
 import dateutil.parser
 from os import environ as env
 from werkzeug.exceptions import HTTPException
-
 from dotenv import load_dotenv, find_dotenv
 from authlib.integrations.flask_client import OAuth
 from six.moves.urllib.parse import urlencode
 from auth import AuthError, requires_auth
-#from auth import AuthError, requires_auth
-
 import constants
 from forms import EventForm, FighterForm
 import html
@@ -74,7 +71,7 @@ def create_app(test_config=None):
         address += 'client_id=' + AUTH0_CLIENT_ID + '&'
         address += 'redirect_uri=' + AUTH0_CALLBACK_URL
         return address
-    # add login_address function to jinja context
+    # adds login_address function to jinja context
     app.jinja_env.globals.update(login_address=login_address)
 
     oauth = OAuth(app)
@@ -92,7 +89,7 @@ def create_app(test_config=None):
     )
 
 
-    # Controllers API
+    # Endpoints
     @app.route('/')
     def home():
         return render_template('/home.html')
@@ -103,7 +100,7 @@ def create_app(test_config=None):
         token = auth0.authorize_access_token()
         resp = auth0.get('userinfo')
         userinfo = resp.json()
-          
+        # Here we set session variables associated with logged in user  
         session[constants.JWT_PAYLOAD] = userinfo
         session[constants.PROFILE_KEY] = {
               'user_id': userinfo['sub'],
@@ -333,6 +330,7 @@ def create_app(test_config=None):
               'fighter_votes':data,
               }), 200
         else:
+            # if fighter number is 2 then get latest event for that fighter
             event_data = Event.query.filter(Event.fighter_2 == clean_name).order_by(Event.event_date.desc()).limit(1).all()
             if len(event_data) == 0:
                 abort(404)
@@ -387,7 +385,7 @@ def create_app(test_config=None):
     @app.route('/event-delete/<int:id>', methods=['DELETE'])
     @requires_auth('delete:event-delete')
     def delete_event_id(token, id):
-      
+        # Get the event by id
         event = Event.query.filter(Event.id == id).one_or_none()
         if event is None:
           abort(404)
@@ -403,7 +401,7 @@ def create_app(test_config=None):
     @app.route('/fighter-edit/<int:fighter_id>', methods=['GET']) 
     @requires_auth('get:fighter-edit')
     def fighter_edit_form(token, fighter_id):
-      
+        # Get the fighter by id
         fighter = Fighter.query.get(fighter_id)
         if fighter is None:
             abort(400)
@@ -656,6 +654,7 @@ def create_app(test_config=None):
               'fighter_votes':data,
               }), 200
         else:
+            # If fighter number 2 then get that latest even
             event_data = Event.query.filter(Event.fighter_2 == clean_name).order_by(Event.event_date.desc()).limit(1).all()
             if len(event_data) == 0:
                 abort(404)
@@ -711,7 +710,7 @@ def create_app(test_config=None):
     @app.route('/api/event-delete/<int:id>', methods=['DELETE'])
     @requires_auth('delete:event-delete')
     def delete_event_id_api(token, id):
-      
+        # Get event by id
         event = Event.query.filter(Event.id == id).one_or_none()
         if event is None:
           abort(404)
@@ -727,7 +726,7 @@ def create_app(test_config=None):
     @app.route('/api/fighter-edit/<int:fighter_id>', methods=['GET']) 
     @requires_auth('get:fighter-edit')
     def fighter_edit_form_api(token, fighter_id):
-      
+        # Get fighter by id
         fighter = Fighter.query.get(fighter_id).all()
         if len(fighter) == 0:
             abort(400)
@@ -766,6 +765,7 @@ def create_app(test_config=None):
           'division_id':fighter_division,
         }),200 
     #--------------------------------------------------------------------------------#
+    #---ERROR HANDLERS---------------------------------------------------------------#
     @app.errorhandler(405)
     def method_not_allowed(error):
           return jsonify({
