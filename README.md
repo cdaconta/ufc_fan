@@ -1665,11 +1665,11 @@ Endpoints (**All example curl commands will be difference in Powershell)
     'draw':0,
     'division':12,
     'rank':2}' -H "Authorization: Bearer $ROLE_TOKEN" -X POST https://ufc-fan.herokuapp.com/api/fighter-edit/138
-    ```
+```
 {
   "division_id": 12, 
   "success": true
 }
-    ```
+```
 ### Authors
 Christian Daconta created the UFC Fan application.  The project was designed to fullful the requirement set for by the Full Stack Web Developer Nanodegree at Udacity.com.
