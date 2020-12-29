@@ -1,6 +1,6 @@
 # UFC FAN   
 
-This application is a fan site for the Ultimate Fighting Championship (UFC).  Anyone can create a public account and learn about the UFC divisions and an upcoming Event.  The landing page shows all twelve divisions and an upcoming event for the UFC.  The user can take a deeper look at the divisions and also vote on the main card fighters in that upcoming event.  Admin and the Event Editor have special priveleges to edit fighters or edit event information.
+This application is a fan site for the Ultimate Fighting Championship (UFC).  The site is hosted on Heroku at https://ufc-fan.herokuapp.com. Anyone can create a public account and learn about the UFC divisions and an upcoming Event.  The landing page shows all twelve divisions and an upcoming event for the UFC.  The user can take a deeper look at the divisions and also vote on the main card fighters in that upcoming event.  Admin and the Event Editor have special priveleges to edit fighters or edit event information.
 
 This project is the capstone project for the Udacity Full Stack Web Developer Nanodegree Program.  Some of the objectives for the project are:
 *Architect relational database models in Python
@@ -81,6 +81,7 @@ Endpoints (**All example curl commands will be difference in Powershell)
 ###GET /api/index
 * General: Returns a list of fighters and an event.
 * Example: curl https://ufc-fan.herokuapp.com/api/index
+* Does not require authorization.
 ```
 {
     "div_1": [
@@ -1272,6 +1273,7 @@ Endpoints (**All example curl commands will be difference in Powershell)
 ### GET /api/division_fighters/<int:division_id>
 * General: Gets fighters by division.
 * Example: curl https://ufc-fan.herokuapp.com/api/division_fighters/1
+* Does not require authorization.
 ```
 {
     "data": [
@@ -1389,6 +1391,7 @@ Endpoints (**All example curl commands will be difference in Powershell)
 ```
 ### GET /api/event/<date>
 * General: Gets an event by date.
+* Does not require authorization.
 * Example: curl https://ufc-fan.herokuapp.com/api/event/2020-12-19%2016:00:00
 ```
 {
@@ -1473,7 +1476,155 @@ Endpoints (**All example curl commands will be difference in Powershell)
 }
 ```
 ### GET /api/event-create
-
+* General: Gets form to create an event.
+* The endpoint does require authorization token.
+    * Login with Admin or Event Editor credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
+    * In terminal, export ROLE_TOKEN=<jwt> with active Admin or Event Editor JWT before request.
+* Example: curl -H "Authorization: Bearer $ROLE_TOKEN" -X GET https://ufc-fan.herokuapp.com/api/event-create
+```
+{
+    "success": true
+}
+```
 ### POST /api/event-create
+* General: Post form to create an event.
+* The endpoint does require authorization token.
+    * Login with Admin or Event Editor credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
+    * In terminal, export ROLE_TOKEN=<jwt> with active Admin or Event Editor JWT before request.
+* Example: curl -d '{
+    'event_name':'UFC',
+    'event_date':'2020-12-12T12:00:00.000Z', 
+    'location':'Somewhere',
+    'division':1,
+    'fighter_1':'Doorman',
+    'fighter_2':'Hammer',
+    'fighter_1_votes':0,
+    'fighter_2_votes':0,
+    'fighter_1_odds':0,
+    'fighter_2_odds':0,
+    'fight_order':0,
+    }' -H "Content-Type: application/json" -H "Authorization: Bearer $ROLE_TOKEN" -X POST https://ufc-fan.herokuapp.com/api/event-create
 
-### 
+```
+{
+    "id": 36,
+    "success": true
+}
+```
+### PATCH /api/event/plus/<name>/number
+* General: Add a vote for a fighter.
+* The endpoint does not require authorization token.
+* Example: curl -X PATCH https://ufc-fan.herokuapp.com/api/event/plus/Hammer/2
+```
+{
+    "fighter_votes": [
+        {
+            "fighter_2_votes": 1,
+            "fighter_number": 2
+        }
+    ],
+    "success": true
+}
+```
+### GET /api/event-delete/<date>
+* General: Gets event to delete. Please use event-create first.
+* The endpoint does require authorization token.
+    * Login with Admin or Event Editor credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
+    * In terminal, export ROLE_TOKEN=<jwt> with active Admin or Event Editor JWT before request.
+* Example: curl -H "Authorization: Bearer $ROLE_TOKEN" -X GET https://ufc-fan.herokuapp.com/api/event-delete/2020-12-12T12:00:00.000Z
+```
+{
+    "event_data": [
+        {
+            "division": 1,
+            "event_date": "Sat, 12 Dec 2020 12:00:00 GMT",
+            "event_name": "UFC",
+            "fight_order": 0,
+            "fighter_1": "Doorman",
+            "fighter_1_odds": 0,
+            "fighter_1_votes": 0,
+            "fighter_2": "Hammer",
+            "fighter_2_odds": 0,
+            "fighter_2_votes": 0,
+            "id": 33,
+            "location": "Somewhere"
+        },
+        {
+            "division": 1,
+            "event_date": "Sat, 12 Dec 2020 12:00:00 GMT",
+            "event_name": "UFC",
+            "fight_order": 0,
+            "fighter_1": "Doorman",
+            "fighter_1_odds": 0,
+            "fighter_1_votes": 0,
+            "fighter_2": "Hammer",
+            "fighter_2_odds": 0,
+            "fighter_2_votes": 0,
+            "id": 34,
+            "location": "Somewhere"
+        },
+        {
+            "division": 1,
+            "event_date": "Sat, 12 Dec 2020 12:00:00 GMT",
+            "event_name": "UFC",
+            "fight_order": 0,
+            "fighter_1": "Doorman",
+            "fighter_1_odds": 0,
+            "fighter_1_votes": 0,
+            "fighter_2": "Hammer",
+            "fighter_2_odds": 0,
+            "fighter_2_votes": 0,
+            "id": 36,
+            "location": "Somewhere"
+        },
+        {
+            "division": 1,
+            "event_date": "Sat, 12 Dec 2020 12:00:00 GMT",
+            "event_name": "UFC",
+            "fight_order": 0,
+            "fighter_1": "Doorman",
+            "fighter_1_odds": 0,
+            "fighter_1_votes": 0,
+            "fighter_2": "Hammer",
+            "fighter_2_odds": 0,
+            "fighter_2_votes": 1,
+            "id": 32,
+            "location": "Somewhere"
+        }
+    ],
+    "success": true
+}
+```
+### DELETE /api/event-delete/<date>
+* General: Delete event by date. Please use event-create first.
+* The endpoint does require authorization token.
+    * Login with Admin or Event Editor credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
+    * In terminal, export ROLE_TOKEN=<jwt> with active Admin or Event Editor JWT before request.
+* Example: curl -H "Authorization: Bearer $ROLE_TOKEN" -X DELETE https://ufc-fan.herokuapp.com/api/event-delete/2020-12-12T12:00:00.000Z
+```
+{
+    "deleted": "2020-12-12T12:00:00.000Z",
+    "success": true
+}
+```
+### DELETE /api/event-delete/<int:id>
+* General: Delete event by id. Please use event-create first and look in your database for the id to test delete id endpoint.
+* The endpoint does require authorization token.
+    * Login with Admin or Event Editor credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
+    * In terminal, export ROLE_TOKEN=<jwt> with active Admin or Event Editor JWT before request.
+* Example: curl -H "Authorization: Bearer $ROLE_TOKEN" -X DELETE https://ufc-fan.herokuapp.com/api/event-delete/35
+```
+{
+    "deleted": 35,
+    "success": true
+}
+```
+### GET /api/fighter-edit/<int:fighter_id>
+* General: Get fighter to edit by id. 
+* The endpoint does require authorization token.
+    * Login with Admin or Event Editor credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
+    * In terminal, export ROLE_TOKEN=<jwt> with active Admin or Event Editor JWT before request.
+* Example: curl -H "Authorization: Bearer $ROLE_TOKEN" -X GET https://ufc-fan.herokuapp.com/api/fighter-edit/1
+```
+
+```
