@@ -80,8 +80,8 @@ Endpoints (**All example curl commands will be difference in Powershell)
 
 ###GET /api/index
 * General: Returns a list of fighters and an event.
-* Example: curl https://ufc-fan.herokuapp.com/api/index
 * Does not require authorization.
+* Example: curl https://ufc-fan.herokuapp.com/api/index
 ```
 {
     "div_1": [
@@ -1272,8 +1272,8 @@ Endpoints (**All example curl commands will be difference in Powershell)
 ```
 ### GET /api/division_fighters/<int:division_id>
 * General: Gets fighters by division.
-* Example: curl https://ufc-fan.herokuapp.com/api/division_fighters/1
 * Does not require authorization.
+* Example: curl https://ufc-fan.herokuapp.com/api/division_fighters/1
 ```
 {
     "data": [
@@ -1671,3 +1671,5 @@ Endpoints (**All example curl commands will be difference in Powershell)
   "success": true
 }
     ```
+### Authors
+Christian Daconta created the UFC Fan application.  The project was designed to fullful the requirement set for by the Full Stack Web Developer Nanodegree at Udacity.com.
