@@ -737,7 +737,6 @@ def create_app(test_config=None):
 
         return jsonify({
           'success':True,
-          'form':form,
           'fighter_details':fighter_details,
         }),200
     
