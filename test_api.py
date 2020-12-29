@@ -10,8 +10,8 @@ from app import create_app
 from models import setup_db, Fighter, Event, Division
 import re
 import constants
-user = os.environ.get('USER')
-password = os.environ.get('PASSWORD')
+user = os.environ.get('USER_TEST')
+password = os.environ.get('PASSWORD_TEST')
 
 
 class UfcFanTestCase(unittest.TestCase):

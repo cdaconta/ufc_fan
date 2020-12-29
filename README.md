@@ -44,4 +44,31 @@ Open a terminal to run the project.
     $env:FLASK_DEBUG=1
     Flask run	
 ```
+## Testing
 
+To run the tests, in psql run
+```
+create database ufcfan_test;
+```
+Use provided sql to create database or tables as needed with pgAdmin.
+You database information will need to be added to .env file.
+
+In the terminal run:
+`python test_api.py`
+
+## Error Handling
+
+Errors are returned as JSON in the following format:
+```
+{
+    "success": False,
+    "error": 404,
+    "message": "resource not found"
+}
+```
+The API will return five types of errors:
+*	400 – bad request
+*	404 – resource not found
+*	422 – unprocessable
+
+Endpoints (**All example curl commands will be difference in Powershell)
