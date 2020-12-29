@@ -1620,11 +1620,54 @@ Endpoints (**All example curl commands will be difference in Powershell)
 }
 ```
 ### GET /api/fighter-edit/<int:fighter_id>
-* General: Get fighter to edit by id. 
+* General: Get fighter to edit by id. Confirm id of fighter in your database for test
 * The endpoint does require authorization token.
-    * Login with Admin or Event Editor credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
+    * Login with Admin credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
     * In terminal, export ROLE_TOKEN=<jwt> with active Admin or Event Editor JWT before request.
-* Example: curl -H "Authorization: Bearer $ROLE_TOKEN" -X GET https://ufc-fan.herokuapp.com/api/fighter-edit/1
+* Example: curl -H "Authorization: Bearer $ROLE_TOKEN" -X GET https://ufc-fan.herokuapp.com/api/fighter-edit/71
 ```
-
+{
+    "fighter_details": {
+        "age": 35,
+        "arm_reach": 65.0,
+        "division": 1,
+        "draw": 0,
+        "first_name": "Joseph",
+        "height": 64.0,
+        "id": 71,
+        "last_name": "Benavidez",
+        "leg_reach": 36.0,
+        "loss": 7,
+        "rank": 1,
+        "sex": "M",
+        "weight": 126.0,
+        "win": 28
+    },
+    "success": true
+}
 ```
+### POST /api/fighter-edit/<int:fighter_id>
+* General: Edit fighter to for division rank by id. Confirm id of fighter in your database for test
+* The endpoint does require authorization token.
+    * Login with Admin credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
+    * In terminal, export ROLE_TOKEN=<jwt> with active Admin or Event Editor JWT before request.
+* Example: curl -d '{
+    'first_name':'Megan',
+    'last_name':'Anderson',
+    'age':31,
+    'height':72,
+    'weight':145,
+    'arm_reach':68,
+    'leg_reach':40,
+    'sex':'F',
+    'win':8,
+    'loss':2,
+    'draw':0,
+    'division':12,
+    'rank':2}' -H "Authorization: Bearer $ROLE_TOKEN" -X POST https://ufc-fan.herokuapp.com/api/fighter-edit/138
+    ```
+{
+  "division_id": 12, 
+  "success": true
+}
+    ```
