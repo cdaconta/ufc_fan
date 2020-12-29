@@ -46,7 +46,7 @@ def create_app(test_config=None):
     # Filter
     #----------------------------------------------------------------------------#
     # use a string for the value arg when calling this function
-    def format_datetime(value, format='medium'):
+    def format_datetime(value, format='full'):
         date = dateutil.parser.parse(value)
         if format == 'full':
           format="EEEE MMMM, d, y 'at' h:mma"
