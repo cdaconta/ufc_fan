@@ -93,8 +93,6 @@ def verify_decode_jwt(token):
     Validates and decodes Auth0 JWTs
     '''
 
-    # print('TOKEN: ', token)
-
     # get public key from Auth0
     jsonurl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
     jwks = json.loads(jsonurl.read())
