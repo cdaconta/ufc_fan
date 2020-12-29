@@ -1472,3 +1472,8 @@ Endpoints (**All example curl commands will be difference in Powershell)
     "success": true
 }
 ```
+### GET /api/event-create
+
+### POST /api/event-create
+
+### 

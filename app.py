@@ -624,21 +624,6 @@ def create_app(test_config=None):
         finally:
           db.session.close()
         
-        
-
-
-    @app.route('/api/event-delete/<date>', methods=['GET']) 
-    @requires_auth('get:event-delete')
-    def edit_event_form_api(token, date):
-        clean_date = html.unescape(date)
-        events = Event.query.filter(Event.event_date == clean_date).all()
-        if len(events) == 0:
-          abort(404)
-        events_data = [event.format() for event in events]
-        return jsonify({
-          'success':True,
-          'event_data':events_data,
-        }),200
 
     @app.route('/api/event/plus/<name>/<number>', methods=['PATCH'])
     def get_event_fighter_votes_api(name, number):
@@ -693,6 +678,50 @@ def create_app(test_config=None):
                     'success':True,
                     'fighter_votes':data,
                   }), 200
+
+    @app.route('/api/event-delete/<date>', methods=['GET']) 
+    @requires_auth('get:event-delete')
+    def edit_event_form_api(token, date):
+        clean_date = html.unescape(date)
+        events = Event.query.filter(Event.event_date == clean_date).all()
+        if len(events) == 0:
+          abort(404)
+        events_data = [event.format() for event in events]
+        return jsonify({
+          'success':True,
+          'event_data':events_data,
+        }),200
+
+    @app.route('/api/event-delete/<date>', methods=['DELETE'])
+    @requires_auth('delete:event-delete')
+    def delete_event_api(token, date):
+        clean_date = html.unescape(date)
+        events = Event.query.filter(Event.event_date == clean_date).all()
+        if len(events) == 0:
+                abort(404)
+        
+        [event.delete() for event in events]
+          
+        return jsonify({
+          'success': True,
+          'deleted': date,
+        }), 200 
+    
+    @app.route('/api/event-delete/<int:id>', methods=['DELETE'])
+    @requires_auth('delete:event-delete')
+    def delete_event_id_api(token, id):
+      
+        event = Event.query.filter(Event.id == id).one_or_none()
+        if event is None:
+          abort(404)
+        
+        event.delete()
+        
+        
+        return jsonify({
+          'success': True,
+          'deleted': id,
+        }), 200 
 
     @app.route('/api/fighter-edit/<int:fighter_id>', methods=['GET']) 
     @requires_auth('get:fighter-edit')
