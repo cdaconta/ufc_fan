@@ -68,7 +68,10 @@ Errors are returned as JSON in the following format:
 ```
 The API will return five types of errors:
 *	400 – bad request
+*   401 - not authorized
 *	404 – resource not found
+*   405 - method not allowed
 *	422 – unprocessable
+*   
 
 Endpoints (**All example curl commands will be difference in Powershell)
