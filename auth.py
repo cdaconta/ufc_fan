@@ -8,7 +8,7 @@ import os
 
 AUTH0_DOMAIN = os.getenv('AUTHO_DOMAIN')
 ALGORITHMS = ['RS256']
-API_AUDIENCE = os.getenv('API_AUDIENCE')
+API_AUDIENCE = os.getenv('AUTH0_AUDIENCE')
 AUTH0_AUDIENCE = os.getenv('AUTH0_AUDIENCE')
 
 ## AuthError Exception
