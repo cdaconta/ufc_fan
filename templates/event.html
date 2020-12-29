@@ -12,7 +12,7 @@
     {% for item in events %}
           
             <div class="h4 text-center">Match {{item.fight_order}}: <span class="h4 text-danger">{{ item.div_name }}</span></div>
-         
+            
             <p class="font-weight-bold text-center"><mark>{{ item.fighter_1}}</mark> - Odds (<span class="text-primary">{% if item.fighter_1_odds > 0 %}+{% endif %}{{ item.fighter_1_odds }}</span>) VS. <mark>{{item.fighter_2}}</mark> - Odds (<span class="text-primary">{% if item.fighter_2_odds > 0 %}+{% endif %}{{ item.fighter_2_odds }}</span>)</p>
             <div class="card-deck">
                 <div class="card text-white bg-success mb-3" style="min-width: 16rem;">
@@ -65,7 +65,6 @@
     const fighter_number = document.querySelector('#' + name);
     let number_fighter = fighter_number.dataset.fighter;
     
-      //alert(number);
     fetch('/event/plus/' + name +'/' + number_fighter,{
         method:"PATCH",
         body: JSON.stringify({ "message":"success" }),
@@ -86,14 +85,14 @@
        if (fighter_num == 1){
         let total_votes = data.fighter_votes[0].fighter_1_votes;
         let poll_div = document.querySelector('#' + name + '_poll');
-        //console.log("This is poll_div " + poll_div);
+        
         poll_div.innerHTML = total_votes;
        } else {
         let total_votes = data.fighter_votes[0].fighter_2_votes; 
         let poll_div = document.querySelector('#' + name + '_poll');  
         poll_div.innerHTML = total_votes;
        }
-   //console.log("This is data obj " + data.fighter_votes[0].fighter_number);
+   
 
       });
     }
