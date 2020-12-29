@@ -9,6 +9,7 @@ PROFILE_KEY = 'profile'
 SECRET_KEY = 'ThisIsTheSecretKey'
 JWT_PAYLOAD = 'jwt_payload'
 JWT = 'JWT'
+SESSION_NAME = 'somebody'
 
 
 

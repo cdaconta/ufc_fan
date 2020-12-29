@@ -110,6 +110,7 @@ def create_app(test_config=None):
               'name': userinfo['name'],
               'picture': userinfo['picture']
           }
+        session[constants.SESSION_NAME] = userinfo['name']
         session[constants.JWT] = token['access_token']
           
         return redirect('/index')
