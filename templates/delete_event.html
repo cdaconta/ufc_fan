@@ -60,7 +60,6 @@
       event_div = document.querySelector('#'+ one_id);
       event_id = event_div.dataset.event; 
       
-        //alert(number);
       fetch('/event-delete/' + event_id,{
           method:"DELETE",
           body: JSON.stringify({ "message":"success" }),
