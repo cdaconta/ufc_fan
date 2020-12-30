@@ -285,9 +285,10 @@ class UfcFanTestCase(unittest.TestCase):
         """Tests Create Event Get"""
 
         headers = self.create_auth_header(token=self.token)
-        if constants.SESSION_NAME == os.environ.get('APP_ADMIN') or constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
+        if constants.SESSION_NAME == os.environ.get('APP_ADMIN') or \
+            constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
             res = self.client().get('/api/event-create',
-                                    headers=headers)
+                  headers=headers)
             data = json.loads(res.data)
             self.assertEqual(data['success'], True)
             self.assertEqual(res.status_code, 200)
@@ -302,25 +303,30 @@ class UfcFanTestCase(unittest.TestCase):
         """Tests Create Event Post"""
 
         headers = self.create_auth_header(token=self.token)
-        if constants.SESSION_NAME == os.environ.get('APP_ADMIN') or constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
-            res = self.client().post('/api/event-create', json=self.test_event, headers=headers)
+        if constants.SESSION_NAME == os.environ.get('APP_ADMIN') or \
+                constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
+            res = self.client().post('/api/event-create',
+                  json=self.test_event, headers=headers)
             data = json.loads(res.data)
             self.assertEqual(data['success'], True)
             self.assertEqual(res.status_code, 200)
             self.assertTrue(data['id'])
         else:
             """Fail"""
-            res = self.client().post('/api/event-create', json=self.test_event, headers=headers)
+            res = self.client().post('/api/event-create',
+            json=self.test_event, headers=headers)
             data = json.loads(res.data)
             self.assertEqual(res.status_code, 500)
 
     def test_create_event_post_api_fail_form(self):
         """Tests Create Event Form Fail"""
         headers = self.create_auth_header(token=self.token)
-        if constants.SESSION_NAME == os.environ.get('APP_ADMIN') or constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
+        if constants.SESSION_NAME == os.environ.get('APP_ADMIN') or \
+            constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
 
             test_event = {'Test': 'Fail'}
-            res = self.client().post('/api/event-create', json=test_event, headers=headers)
+            res = self.client().post('/api/event-create', json=test_event,
+                  headers=headers)
             data = json.loads(res.data)
             self.assertEqual(data['success'], False)
             self.assertEqual(res.status_code, 422)
@@ -335,7 +341,7 @@ class UfcFanTestCase(unittest.TestCase):
         number = 2
 
         res = self.client().patch(
-            f'/api/event/plus/{name}/{number}', json=json_data)
+              f'/api/event/plus/{name}/{number}', json=json_data)
         data = json.loads(res.data)
         self.assertEqual(data['success'], True)
         self.assertEqual(res.status_code, 200)
@@ -348,7 +354,7 @@ class UfcFanTestCase(unittest.TestCase):
         name = 'Test Fail'
         number = 2
         res = self.client().patch(
-            f'/api/event/plus/{name}/{number}', json=json_data)
+              f'/api/event/plus/{name}/{number}', json=json_data)
         data = json.loads(res.data)
         self.assertEqual(data['success'], False)
         self.assertEqual(res.status_code, 404)
@@ -360,15 +366,19 @@ class UfcFanTestCase(unittest.TestCase):
         self.create_event()
         headers = self.create_auth_header(token=self.token)
 
-        if constants.SESSION_NAME == os.environ.get('APP_ADMIN') or constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
-            res = self.client().get('/api/event-delete/2020-12-12T12:00:00.000Z', headers=headers)
+        if constants.SESSION_NAME == os.environ.get('APP_ADMIN') or \
+            constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
+            res = self.client().get\
+                  ('/api/event-delete/2020-12-12T12:00:00.000Z', headers=headers)
             data = json.loads(res.data)
             self.assertEqual(data['success'], True)
             self.assertEqual(res.status_code, 200)
             self.assertTrue(data['event_data'])
         else:
             """Fail"""
-            res = self.client().get('/api/event-delete/2020-12-12T12:00:00.000Z', headers=headers)
+            res = self.client().get\
+                  ('/api/event-delete/2020-12-12T12:00:00.000Z',
+                  headers=headers)
             data = json.loads(res.data)
             self.assertEqual(res.status_code, 500)
 
@@ -376,16 +386,19 @@ class UfcFanTestCase(unittest.TestCase):
         """Tests Delete Event Date Fail"""
         headers = self.create_auth_header(token=self.token)
         self.create_event()
-        if constants.SESSION_NAME == os.environ.get('APP_ADMIN') or constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
+        if constants.SESSION_NAME == os.environ.get('APP_ADMIN') or \
+            constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
 
-            res = self.client().get('/api/event-delete/2020-12-14', headers=headers)
+            res = self.client().get('/api/event-delete/2020-12-14',
+                  headers=headers)
             data = json.loads(res.data)
             self.assertEqual(data['success'], False)
             self.assertEqual(res.status_code, 404)
             self.assertEqual(data['message'], 'resource not found')
         else:
             """Fail"""
-            res = self.client().get('/api/event-delete/2020-12-14', headers=headers)
+            res = self.client().get('/api/event-delete/2020-12-14',
+                  headers=headers)
             data = json.loads(res.data)
             self.assertEqual(res.status_code, 500)
 
@@ -394,10 +407,12 @@ class UfcFanTestCase(unittest.TestCase):
 
         self.create_event()
         headers = self.create_auth_header(token=self.token)
-        if constants.SESSION_NAME == os.environ.get('APP_ADMIN') or constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
+        if constants.SESSION_NAME == os.environ.get('APP_ADMIN') or \
+            constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
 
             res = self.client().delete(
-                '/api/event-delete/2020-12-12T12:00:00.000Z', headers=headers)
+                  '/api/event-delete/2020-12-12T12:00:00.000Z',
+                  headers=headers)
             data = json.loads(res.data)
             self.assertEqual(data['success'], True)
             self.assertEqual(res.status_code, 200)
@@ -405,7 +420,8 @@ class UfcFanTestCase(unittest.TestCase):
         else:
             """Fail"""
             res = self.client().delete(
-                '/api/event-delete/2020-12-12T12:00:00.000Z', headers=headers)
+                  '/api/event-delete/2020-12-12T12:00:00.000Z',
+                  headers=headers)
             data = json.loads(res.data)
             self.assertEqual(res.status_code, 500)
 
@@ -414,15 +430,18 @@ class UfcFanTestCase(unittest.TestCase):
 
         self.create_event()
         headers = self.create_auth_header(token=self.token)
-        if constants.SESSION_NAME == os.environ.get('APP_ADMIN') or constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
+        if constants.SESSION_NAME == os.environ.get('APP_ADMIN') or \
+            constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
 
-            res = self.client().delete('/api/event-delete/2020-12-1', headers=headers)
+            res = self.client().delete('/api/event-delete/2020-12-1',
+                  headers=headers)
             data = json.loads(res.data)
             self.assertEqual(data['success'], False)
             self.assertEqual(res.status_code, 404)
         else:
             """Fail"""
-            res = self.client().delete('/api/event-delete/2020-12-1', headers=headers)
+            res = self.client().delete('/api/event-delete/2020-12-1',
+                  headers=headers)
             data = json.loads(res.data)
             self.assertEqual(res.status_code, 500)
 
@@ -432,15 +451,18 @@ class UfcFanTestCase(unittest.TestCase):
         self.create_event()
         headers = self.create_auth_header(token=self.token)
 
-        if constants.SESSION_NAME == os.environ.get('APP_ADMIN') or constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
-            res = self.client().delete('/api/event-delete/1', headers=headers)
+        if constants.SESSION_NAME == os.environ.get('APP_ADMIN') or \
+            constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
+            res = self.client().delete('/api/event-delete/1',
+                  headers=headers)
             data = json.loads(res.data)
             self.assertEqual(data['success'], True)
             self.assertEqual(res.status_code, 200)
             self.assertTrue(data['deleted'])
         else:
             """Fail"""
-            res = self.client().delete('/api/event-delete/1', headers=headers)
+            res = self.client().delete('/api/event-delete/1',
+                  headers=headers)
             data = json.loads(res.data)
             self.assertEqual(res.status_code, 500)
 
@@ -450,8 +472,10 @@ class UfcFanTestCase(unittest.TestCase):
         self.create_event()
         headers = self.create_auth_header(token=self.token)
 
-        if constants.SESSION_NAME == os.environ.get('APP_ADMIN') or constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
-            res = self.client().delete('/api/event-delete/100', headers=headers)
+        if constants.SESSION_NAME == os.environ.get('APP_ADMIN') or \
+            constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
+            res = self.client().delete('/api/event-delete/100',
+                  headers=headers)
             data = json.loads(res.data)
             self.assertEqual(data['success'], False)
             self.assertEqual(res.status_code, 404)
@@ -514,21 +538,24 @@ class UfcFanTestCase(unittest.TestCase):
         fighter_data = self.test_fighter
 
         if constants.SESSION_NAME == os.environ.get('APP_ADMIN'):
-            res = self.client().post('/api/fighter-edit/1', json=fighter_data, headers=headers)
+            res = self.client().post('/api/fighter-edit/1', json=fighter_data,
+                  headers=headers)
             data = json.loads(res.data)
             self.assertEqual(data['success'], True)
             self.assertEqual(res.status_code, 200)
             self.assertTrue(data['division_id'])
         elif constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
             """Fail"""
-            res = self.client().post('/api/fighter-edit/1', json=fighter_data, headers=headers)
+            res = self.client().post('/api/fighter-edit/1', json=fighter_data,
+                  headers=headers)
             data = json.loads(res.data)
             self.assertEqual(res.status_code, 500)
 
         else:
             """Fail"""
             fighter_data = self.test_fighter
-            res = self.client().post('/api/fighter-edit/1', json=fighter_data, headers=headers)
+            res = self.client().post('/api/fighter-edit/1', json=fighter_data,
+                  headers=headers)
             data = json.loads(res.data)
             self.assertEqual(res.status_code, 500)
 
@@ -540,20 +567,23 @@ class UfcFanTestCase(unittest.TestCase):
         fighter_data = self.test_fighter
 
         if constants.SESSION_NAME == os.environ.get('APP_ADMIN'):
-            res = self.client().post('/api/fighter-edit/100', json=fighter_data, headers=headers)
+            res = self.client().post('/api/fighter-edit/100', json=fighter_data,
+                  headers=headers)
             data = json.loads(res.data)
             self.assertEqual(data['success'], False)
             self.assertEqual(res.status_code, 422)
         elif constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
             """Fail"""
-            res = self.client().post('/api/fighter-edit/1', json=fighter_data, headers=headers)
+            res = self.client().post('/api/fighter-edit/1', json=fighter_data,
+                  headers=headers)
             data = json.loads(res.data)
             self.assertEqual(res.status_code, 500)
 
         else:
             """Fail"""
             fighter_data = self.test_fighter
-            res = self.client().post('/api/fighter-edit/1', json=fighter_data, headers=headers)
+            res = self.client().post('/api/fighter-edit/1', json=fighter_data,
+                  headers=headers)
             data = json.loads(res.data)
             self.assertEqual(res.status_code, 500)
 

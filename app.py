@@ -215,7 +215,7 @@ def create_app(test_config=None):
         return render_template('index.html',
                                userinfo=session[constants.PROFILE_KEY],
                                userinfo_pretty=json.dumps(
-                               session[constants.JWT_PAYLOAD],indent=4),
+                               session[constants.JWT_PAYLOAD], indent=4),
                                events=event_info, div_1=div_1_data,
                                div_2=div_2_data, div_3=div_3_data,
                                div_4=div_4_data, div_5=div_5_data,
@@ -261,7 +261,9 @@ def create_app(test_config=None):
                         )
         return render_template('division_fighters.html',
                                userinfo=session[constants.PROFILE_KEY],
-                               userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters=data), 200
+                               userinfo_pretty=json.dumps(
+                               session[constants.JWT_PAYLOAD], indent=4),
+                               fighters=data), 200
 
     @app.route('/event/<date>')
     def get_event(date):
@@ -297,8 +299,8 @@ def create_app(test_config=None):
         return render_template('event.html',
                                userinfo=session[constants.PROFILE_KEY],
                                userinfo_pretty=json.dumps(
-                               session[constants.JWT_PAYLOAD],
-                               indent=4), events=event_info), 200
+                               session[constants.JWT_PAYLOAD], indent=4),
+                               events=event_info), 200
 
     @app.route('/event-create', methods=['GET'])
     @requires_auth('get:event-create')
@@ -331,7 +333,8 @@ def create_app(test_config=None):
             form_event.insert()
             # Success
             flash('Event insert was successfully listed!')
-        except:
+        except BaseException as e:
+            print(e)
             db.session.rollback()
             # flash failure
             flash('An error occurred. Event could not be listed.')
@@ -453,7 +456,8 @@ def create_app(test_config=None):
         form = FighterForm(obj=fighter)
 
         return render_template('forms/edit_fighter.html', form=form,
-                               fighter=fighter_details, userinfo=session[constants.PROFILE_KEY]), 200
+                               fighter=fighter_details,
+                               userinfo=session[constants.PROFILE_KEY]), 200
 
     @app.route('/fighter-edit/<int:fighter_id>', methods=['POST'])
     @requires_auth('get:fighter-edit')
@@ -468,7 +472,8 @@ def create_app(test_config=None):
             form.populate_obj(fighter)
             db.session.commit()
             flash('Event was successfully listed!')
-        except:
+        except BaseException as e:
+            print(e)
             db.session.rollback()
             # flash failure
             flash('An error occurred. Event could not be listed.')
@@ -477,9 +482,9 @@ def create_app(test_config=None):
             db.session.close()
         return redirect(url_for('get_division_fighters',
                                 division_id=fighter_division))
-    #------------------------------------------------------------------------------------------------------------#
+    # -------------------------------------------------------------#
     # API - Identical functions except now with json responses.
-    #------------------------------------------------------------------------------------------------------------#
+    # -------------------------------------------------------------#
 
     @app.route('/api/index')
     def get_all_fighters_api():
@@ -575,7 +580,9 @@ def create_app(test_config=None):
     def get_division_fighters_api(division_id):
         # Here I join Fighters and Divisions Tables
         division_fighters = db.session.query(Fighter, Division).join(
-                                             Division).filter(Fighter.division == division_id).all()
+                                             Division).filter(
+                                             Fighter.division == division_id)\
+                                             .all()
 
         if len(division_fighters) == 0:
             abort(404)
@@ -678,7 +685,8 @@ def create_app(test_config=None):
                 'success': True,
                 'id': event_data.id
             }), 200
-        except:
+        except BaseException as e:
+            print(e)
             db.session.rollback()
             # flash failure
             flash('An error occurred. Event could not be listed.')
@@ -694,8 +702,8 @@ def create_app(test_config=None):
 
         if(fighter_number == '1'):
             # event_data for latest event
-            event_data = Event.query.filter(Event.fighter_1 == clean_name).order_by(
-                Event.event_date.desc()).limit(1).all()
+            event_data = Event.query.filter(Event.fighter_1 == clean_name)\
+                .order_by(Event.event_date.desc()).limit(1).all()
             if len(event_data) == 0:
                 abort(404)
             vote_number = event_data[0].fighter_1_votes + 1
@@ -718,8 +726,8 @@ def create_app(test_config=None):
                 }), 200
         else:
             # If fighter number 2 then get that latest even
-            event_data = Event.query.filter(Event.fighter_2 == clean_name).order_by(
-                Event.event_date.desc()).limit(1).all()
+            event_data = Event.query.filter(Event.fighter_2 == clean_name)\
+                .order_by(Event.event_date.desc()).limit(1).all()
             if len(event_data) == 0:
                 abort(404)
 
@@ -816,7 +824,8 @@ def create_app(test_config=None):
             form.populate_obj(fighter)
             db.session.commit()
             flash('Event was successfully listed!')
-        except:
+        except BaseException as e:
+            print(e)
             db.session.rollback()
             # flash failure
             flash('An error occurred. Event could not be listed.')
@@ -827,8 +836,8 @@ def create_app(test_config=None):
             'success': True,
             'division_id': fighter_division,
         }), 200
-    #--------------------------------------------------------------------------------#
-    #---ERROR HANDLERS---------------------------------------------------------------#
+    # -------------------------------------------------------------#
+    # ---ERROR HANDLERS--------------------------------------------#
 
     @app.errorhandler(405)
     def method_not_allowed(error):
