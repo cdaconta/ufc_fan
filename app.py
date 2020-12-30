@@ -120,7 +120,7 @@ def create_app(test_config=None):
     @app.route('/login')
     def login():
         return auth0.authorize_redirect(redirect_uri=AUTH0_CALLBACK_URL,
-                    audience=AUTH0_AUDIENCE)
+                                        audience=AUTH0_AUDIENCE)
 
     @app.route('/logout')
     def logout():
@@ -213,23 +213,25 @@ def create_app(test_config=None):
         session['Upcoming Event'] = '/event/' + \
             format_datetime(str(event_data[0].event_date))
         return render_template('index.html',
-                    userinfo=session[constants.PROFILE_KEY],
-                    userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD],
-                    indent=4), events=event_info, div_1=div_1_data, div_2=div_2_data,
-                    div_3=div_3_data, div_4=div_4_data, div_5=div_5_data,
-                    div_6=div_6_data, div_7=div_7_data, div_8=div_8_data,
-                    div_9=div_9_data, div_10=div_10_data, div_11=div_11_data,
-                    div_12=div_12_data), 200
+                               userinfo=session[constants.PROFILE_KEY],
+                               userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD],
+                                                          indent=4), events=event_info, div_1=div_1_data,
+                               div_2=div_2_data, div_3=div_3_data,
+                               div_4=div_4_data, div_5=div_5_data,
+                               div_6=div_6_data, div_7=div_7_data, div_8=div_8_data,
+                               div_9=div_9_data, div_10=div_10_data, div_11=div_11_data,
+                               div_12=div_12_data), 200
 
     @app.route('/knockouts')
     def get_knockout_page():
         return render_template('knockouts.html',
-                    userinfo=session[constants.PROFILE_KEY]), 200
+                               userinfo=session[constants.PROFILE_KEY]), 200
 
     @app.route('/division_fighters/<int:division_id>')
     def get_division_fighters(division_id):
         # Here I join Fighters and Divisions Tables
-        division_fighters = db.session.query(Fighter, Division).join(Division).filter(
+        division_fighters = db.session.query(
+            Fighter, Division).join(Division).filter(
             Fighter.division == division_id).order_by(Fighter.rank).all()
         if len(division_fighters) == 0:
             abort(404)
@@ -255,7 +257,8 @@ def create_app(test_config=None):
                         'div_name': division.name,
                         }
                         )
-        return render_template('division_fighters.html', userinfo=session[constants.PROFILE_KEY],
+        return render_template('division_fighters.html',
+                               userinfo=session[constants.PROFILE_KEY],
                                userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters=data), 200
 
     @app.route('/event/<date>')
@@ -264,8 +267,9 @@ def create_app(test_config=None):
 
         event_info = []
         # Here we join Events table and Division table
-        event_data = db.session.query(Event, Division).join(Division)\
-            .filter(Event.event_date == clean_date).order_by(Event.fight_order).all()
+        event_data = db.session.query(Event, Division)\
+            .join(Division).filter(Event.event_date == clean_date)\
+            .order_by(Event.fight_order).all()
         if len(event_data) == 0:
             abort(404)
 
@@ -289,15 +293,16 @@ def create_app(test_config=None):
             )
 
         return render_template('event.html',
-                    userinfo=session[constants.PROFILE_KEY],
-                    userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD],
-                    indent=4), events=event_info), 200
+                               userinfo=session[constants.PROFILE_KEY],
+                               userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD],
+                                                          indent=4), events=event_info), 200
 
     @app.route('/event-create', methods=['GET'])
     @requires_auth('get:event-create')
     def create_event_form(token):
         form = EventForm()
-        return render_template('forms/new_event.html', form=form, userinfo=session[constants.PROFILE_KEY]), 200
+        return render_template('forms/new_event.html', form=form,
+                               userinfo=session[constants.PROFILE_KEY]), 200
 
     @app.route('/event-create', methods=['POST'])
     @requires_auth('post:event-create')
@@ -365,8 +370,8 @@ def create_app(test_config=None):
                 }), 200
         else:
             # if fighter number is 2 then get latest event for that fighter
-            event_data = Event.query.filter(Event.fighter_2 == clean_name).order_by(
-                Event.event_date.desc()).limit(1).all()
+            event_data = Event.query.filter(Event.fighter_2 == clean_name)\
+                .order_by(Event.event_date.desc()).limit(1).all()
             if len(event_data) == 0:
                 abort(404)
 
@@ -399,7 +404,8 @@ def create_app(test_config=None):
             abort(404)
         events_data = [event.format() for event in events]
 
-        return render_template('delete_event.html', events=events_data, userinfo=session[constants.PROFILE_KEY]), 200
+        return render_template('delete_event.html', events=events_data,
+                               userinfo=session[constants.PROFILE_KEY]), 200
 
     @app.route('/event-delete/<date>', methods=['DELETE'])
     @requires_auth('delete:event-delete')
@@ -443,7 +449,8 @@ def create_app(test_config=None):
         # Here we populate the form from the database
         form = FighterForm(obj=fighter)
 
-        return render_template('forms/edit_fighter.html', form=form, fighter=fighter_details, userinfo=session[constants.PROFILE_KEY]), 200
+        return render_template('forms/edit_fighter.html', form=form,
+                               fighter=fighter_details, userinfo=session[constants.PROFILE_KEY]), 200
 
     @app.route('/fighter-edit/<int:fighter_id>', methods=['POST'])
     @requires_auth('get:fighter-edit')
@@ -465,7 +472,8 @@ def create_app(test_config=None):
             abort(422)
         finally:
             db.session.close()
-        return redirect(url_for('get_division_fighters', division_id=fighter_division))
+        return redirect(url_for('get_division_fighters',
+                                division_id=fighter_division))
     #------------------------------------------------------------------------------------------------------------#
     # API - Identical functions except now with json responses.
     #------------------------------------------------------------------------------------------------------------#
@@ -522,7 +530,11 @@ def create_app(test_config=None):
             Fighter.division == 12).order_by(Fighter.rank).all()
         div_12_data = [event.format() for event in div_12]
 
-        if len(div_1) == 0 or len(div_2) == 0 or len(div_3) == 0 or len(div_4) == 0 or len(div_5) == 0 or len(div_6) == 0 or len(div_7) == 0 or len(div_8) == 0 or len(div_9) == 0 or len(div_10) == 0 or len(div_11) == 0 or len(div_12) == 0:
+        if len(div_1) == 0 or len(div_2) == 0 or \
+            len(div_3) == 0 or len(div_4) == 0 or len(div_5) == 0 or\
+            len(div_6) == 0 or len(div_7) == 0 or len(div_8) == 0 or\
+            len(div_9) == 0 or len(div_10) == 0 or len(div_11) == 0 or\
+                len(div_12) == 0:
             abort(404)
 
         event_info = []
@@ -560,7 +572,7 @@ def create_app(test_config=None):
     def get_division_fighters_api(division_id):
         # Here I join Fighters and Divisions Tables
         division_fighters = db.session.query(Fighter, Division).join(
-            Division).filter(Fighter.division == division_id).all()
+                                             Division).filter(Fighter.division == division_id).all()
 
         if len(division_fighters) == 0:
             abort(404)
