@@ -7,7 +7,7 @@ import constants
 import os
 
 AUTH0_DOMAIN = os.environ.get('AUTH0_DOMAIN')
-ALGORITHMS = ['RS256']
+ALGORITHMS = [os.environ.get('ALGORITHMS')]
 AUTH0_AUDIENCE = os.environ.get('AUTH0_AUDIENCE')
 
 ## AuthError Exception

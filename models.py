@@ -4,14 +4,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
 
-
-user = os.environ.get('USER')
-password = os.environ.get('PASSWORD')
-
 database_name = "ufcfan"
 
 #Here we connect to Heroku database
-database_path = "postgres://phdkzqcnnjzhye:fde2d60fcc7d3839812291a9e3bf01f9054e4341e8ffbf1125395f2684ef8741@ec2-54-157-66-140.compute-1.amazonaws.com:5432/d6dilounml8n1"
+database_path = os.environ.get('DATABASE_URL')
 
 db = SQLAlchemy()
 migrate = Migrate()

@@ -14,19 +14,19 @@ This project is the capstone project for the Udacity Full Stack Web Developer Na
   * Admin role - The admin role has complete permissions to all endpoints in the project.
     * Permissions:
       * get:event-delete - Read the event page and items available to be deleted.
-      * delete:event-delete	- Delete the part of an event or the whole event.
+      * delete:event-delete	- Delete a part of an event or the whole event.
       * get:event-create - Get event form prefilled with event information.     
-      * post:event-create - Change event in EventForm and Post Changes.
-      * get:fighter-edit -	Read the fighter you want to edit.
-      * post:fighter-edit	- Edit the fighter position profided in FighterForm.
+      * post:event-create - Change event in event form and Post the changes.
+      * get:fighter-edit -	Read the fighter you want to edit in fighter form.
+      * post:fighter-edit	- Edit the fighter position provided in fighter form.
   * Edit Event Role - The Event Editor has permissions for all endpoints in the project involving Event information.
     * Permissions:
       * delete:event-delete	- Delete the part of an event or the whole event.
       * get:event-create - Get event form prefilled with event information.
       * get:event-delete - Read the event page and items available to be deleted.
-      * post:event-create - Change event in EventForm and Post Changes.
+      * post:event-create - Change event in event form and Post changes.
 * All other users who sign up fall into a default permission category which only allows access to these endpoints:
-  * GET /api-key - Shows JWK.
+  * GET /api-key - Shows JWK web token.
   * GET /index - Gets all fighters by division and shows upcoming Event.
   * GET /knockouts - Gets knockout videos.
   * GET /division_fighters/<int:division_id> - Shows fighters by division id.
@@ -1499,6 +1499,7 @@ Endpoints (**All example curl commands will be difference in Powershell)
 }
 ```
 ### GET /api/event-create
+## Permissions needed (get:event-create)
 * General: Gets form to create an event.
 * The endpoint does require authorization token with permission - get:event-create.
     * Login with Admin or Event Editor credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
@@ -1510,6 +1511,7 @@ Endpoints (**All example curl commands will be difference in Powershell)
 }
 ```
 ### POST /api/event-create
+## Permissions needed (post:event-create)
 * General: Post form to create an event.
 * The endpoint does require authorization token with permission - post:event-create
     * Login with Admin or Event Editor credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
@@ -1550,6 +1552,7 @@ Endpoints (**All example curl commands will be difference in Powershell)
 }
 ```
 ### GET /api/event-delete/<date>
+## Permissions needed (get:event-delete)
 * General: Gets event to delete. Please use event-create first.
 * The endpoint does require authorization token with permission - get:event-delete.
     * Login with Admin or Event Editor credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
@@ -1619,6 +1622,7 @@ Endpoints (**All example curl commands will be difference in Powershell)
 }
 ```
 ### DELETE /api/event-delete/<date>
+## Permissions needed (delete:event-delete)
 * General: Delete event by date. Please use event-create first.
 * The endpoint does require authorization token with permission - delete:event-delete.
     * Login with Admin or Event Editor credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
@@ -1631,6 +1635,7 @@ Endpoints (**All example curl commands will be difference in Powershell)
 }
 ```
 ### DELETE /api/event-delete/<int:id>
+## Permissions needed (delete:event-delete)
 * General: Delete event by id. Please use event-create first and look in your database for the id to test delete id endpoint.
 * The endpoint does require authorization token with permission - delete:event-delete.
     * Login with Admin or Event Editor credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
@@ -1643,6 +1648,7 @@ Endpoints (**All example curl commands will be difference in Powershell)
 }
 ```
 ### GET /api/fighter-edit/<int:fighter_id>
+## Permissions needed (get:figher-edit)
 * General: Get fighter to edit by id. Confirm id of fighter in your database for test
 * The endpoint does require authorization token with permission - get:figher-edit.
     * Login with Admin credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
@@ -1670,6 +1676,7 @@ Endpoints (**All example curl commands will be difference in Powershell)
 }
 ```
 ### POST /api/fighter-edit/<int:fighter_id>
+## Permissions needed (post:figher-edit)
 * General: Edit fighter to for division rank by id. Confirm id of fighter in your database for test
 * The endpoint does require authorization token with permission - post:figher-edit.
     * Login with Admin credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
