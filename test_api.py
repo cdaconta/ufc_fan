@@ -65,7 +65,8 @@ class UfcFanTestCase(unittest.TestCase):
     ]
 
     def create_division(self):
-        # Here I delete the table and always start id at 1 before I create a new division
+        # Here I delete the table and always start
+        # id at 1 before I create a new division
         self.delete_divisions()
         sql = text('ALTER SEQUENCE divisions_id_seq RESTART WITH 1;')
         db.engine.execute(sql)
@@ -78,30 +79,54 @@ class UfcFanTestCase(unittest.TestCase):
             division.insert()
 
     test_fighter = [
-        {'first_name': 'Test', 'last_name': 'Case', 'age': 100, 'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
-            'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1, 'draw': 1, 'division': 1, 'rank': 10, },
-        {'first_name': 'Test', 'last_name': 'Case', 'age': 100, 'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
-            'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1, 'draw': 1, 'division': 2, 'rank': 10, },
-        {'first_name': 'Test', 'last_name': 'Case', 'age': 100, 'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
-            'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1, 'draw': 1, 'division': 3, 'rank': 10, },
-        {'first_name': 'Test', 'last_name': 'Case', 'age': 100, 'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
-            'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1, 'draw': 1, 'division': 4, 'rank': 10, },
-        {'first_name': 'Test', 'last_name': 'Case', 'age': 100, 'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
-            'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1, 'draw': 1, 'division': 5, 'rank': 10, },
-        {'first_name': 'Test', 'last_name': 'Case', 'age': 100, 'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
-            'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1, 'draw': 1, 'division': 6, 'rank': 10, },
-        {'first_name': 'Test', 'last_name': 'Case', 'age': 100, 'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
-            'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1, 'draw': 1, 'division': 7, 'rank': 10, },
-        {'first_name': 'Test', 'last_name': 'Case', 'age': 100, 'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
-            'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1, 'draw': 1, 'division': 8, 'rank': 10, },
-        {'first_name': 'Test', 'last_name': 'Case', 'age': 100, 'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
-            'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1, 'draw': 1, 'division': 9, 'rank': 10, },
-        {'first_name': 'Test', 'last_name': 'Case', 'age': 100, 'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
-            'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1, 'draw': 1, 'division': 10, 'rank': 10, },
-        {'first_name': 'Test', 'last_name': 'Case', 'age': 100, 'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
-            'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1, 'draw': 1, 'division': 11, 'rank': 10, },
-        {'first_name': 'Test', 'last_name': 'Case', 'age': 100, 'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
-            'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1, 'draw': 1, 'division': 12, 'rank': 10, },
+        {'first_name': 'Test', 'last_name': 'Case',
+         'age': 100, 'height': 10.00, 'weight': 10.00,
+         'arm_reach': 10.00, 'leg_reach': 10.00, 'sex': 'M',
+         'win': 1, 'loss': 1, 'draw': 1, 'division': 1, 'rank': 10, },
+        {'first_name': 'Test', 'last_name': 'Case', 'age': 100,
+         'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
+         'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1, 'draw': 1,
+         'division': 2, 'rank': 10, },
+        {'first_name': 'Test', 'last_name': 'Case', 'age': 100,
+         'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
+         'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1, 'draw': 1,
+         'division': 3, 'rank': 10, },
+        {'first_name': 'Test', 'last_name': 'Case', 'age': 100,
+         'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
+         'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1,
+         'draw': 1, 'division': 4, 'rank': 10, },
+        {'first_name': 'Test', 'last_name': 'Case', 'age': 100,
+         'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
+         'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1,
+         'draw': 1, 'division': 5, 'rank': 10, },
+        {'first_name': 'Test', 'last_name': 'Case', 'age': 100,
+         'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
+         'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1,
+         'draw': 1, 'division': 6, 'rank': 10, },
+        {'first_name': 'Test', 'last_name': 'Case', 'age': 100,
+         'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
+         'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1,
+         'draw': 1, 'division': 7, 'rank': 10, },
+        {'first_name': 'Test', 'last_name': 'Case', 'age': 100,
+         'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
+         'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1,
+         'draw': 1, 'division': 8, 'rank': 10, },
+        {'first_name': 'Test', 'last_name': 'Case', 'age': 100,
+         'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
+         'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1,
+         'draw': 1, 'division': 9, 'rank': 10, },
+        {'first_name': 'Test', 'last_name': 'Case', 'age': 100,
+         'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
+         'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1,
+         'draw': 1, 'division': 10, 'rank': 10, },
+        {'first_name': 'Test', 'last_name': 'Case', 'age': 100,
+         'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
+         'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1,
+         'draw': 1, 'division': 11, 'rank': 10, },
+        {'first_name': 'Test', 'last_name': 'Case', 'age': 100,
+         'height': 10.00, 'weight': 10.00, 'arm_reach': 10.00,
+         'leg_reach': 10.00, 'sex': 'M', 'win': 1, 'loss': 1,
+         'draw': 1, 'division': 12, 'rank': 10, },
     ]
     # creates test fighter
 

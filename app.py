@@ -214,12 +214,14 @@ def create_app(test_config=None):
             format_datetime(str(event_data[0].event_date))
         return render_template('index.html',
                                userinfo=session[constants.PROFILE_KEY],
-                               userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD],
-                                                          indent=4), events=event_info, div_1=div_1_data,
+                               userinfo_pretty=json.dumps(
+                               session[constants.JWT_PAYLOAD],indent=4),
+                               events=event_info, div_1=div_1_data,
                                div_2=div_2_data, div_3=div_3_data,
                                div_4=div_4_data, div_5=div_5_data,
-                               div_6=div_6_data, div_7=div_7_data, div_8=div_8_data,
-                               div_9=div_9_data, div_10=div_10_data, div_11=div_11_data,
+                               div_6=div_6_data, div_7=div_7_data,
+                               div_8=div_8_data, div_9=div_9_data,
+                               div_10=div_10_data, div_11=div_11_data,
                                div_12=div_12_data), 200
 
     @app.route('/knockouts')
@@ -294,8 +296,9 @@ def create_app(test_config=None):
 
         return render_template('event.html',
                                userinfo=session[constants.PROFILE_KEY],
-                               userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD],
-                                                          indent=4), events=event_info), 200
+                               userinfo_pretty=json.dumps(
+                               session[constants.JWT_PAYLOAD],
+                               indent=4), events=event_info), 200
 
     @app.route('/event-create', methods=['GET'])
     @requires_auth('get:event-create')
