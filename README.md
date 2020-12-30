@@ -13,17 +13,17 @@ This project is the capstone project for the Udacity Full Stack Web Developer Na
 * This project has two primary roles configured in Auth0.com:
   * Admin role - The admin role has complete permissions to all endpoints in the project.
     * Permissions:
-      * get:event-delete - Read the event page and items available to be deleted.
+      * get:event-delete - Read the event delete page and see items available to be deleted.
       * delete:event-delete	- Delete a part of an event or the whole event.
       * get:event-create - Get event form prefilled with event information.     
       * post:event-create - Change event in event form and Post the changes.
       * get:fighter-edit -	Read the fighter you want to edit in fighter form.
-      * post:fighter-edit	- Edit the fighter position provided in fighter form.
+      * post:fighter-edit	- Edit the fighter base on rank provided in fighter form.
   * Edit Event Role - The Event Editor has permissions for all endpoints in the project involving Event information.
     * Permissions:
-      * delete:event-delete	- Delete the part of an event or the whole event.
       * get:event-create - Get event form prefilled with event information.
-      * get:event-delete - Read the event page and items available to be deleted.
+      * delete:event-delete	- Delete a part of an event or the whole event.    
+      * get:event-delete - Read the event page and see items available to be deleted.
       * post:event-create - Change event in event form and Post changes.
 * All other users who sign up fall into a default permission category which only allows access to these endpoints:
   * GET /api-key - Shows JWK web token.
