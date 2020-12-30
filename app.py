@@ -1,4 +1,7 @@
-from flask import Flask, render_template, g, abort, request, jsonify, Response, flash, redirect, url_for, session, jsonify
+from flask import (
+    Flask, render_template, g, abort,
+    request, jsonify, Response, flash,
+    redirect, url_for, session, jsonify)
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text, or_
 from flask_cors import CORS
@@ -42,9 +45,9 @@ def create_app(test_config=None):
     app.secret_key = constants.SECRET_KEY
     app.debug = True
 
-    #----------------------------------------------------------------------------#
+    # --------------------------------------------------------#
     # Filter
-    #----------------------------------------------------------------------------#
+    # --------------------------------------------------------#
     # use a string for the value arg when calling this function
     def format_datetime(value, format='full'):
         date = dateutil.parser.parse(value)
@@ -55,7 +58,7 @@ def create_app(test_config=None):
         return babel.dates.format_datetime(date, format)
 
     app.jinja_env.filters['datetime'] = format_datetime
-    #----------------------------------------------------------------------------#
+    # -----------------------------------------------------------#
 
     @app.after_request
     def after_request(response):
@@ -116,7 +119,8 @@ def create_app(test_config=None):
 
     @app.route('/login')
     def login():
-        return auth0.authorize_redirect(redirect_uri=AUTH0_CALLBACK_URL, audience=AUTH0_AUDIENCE)
+        return auth0.authorize_redirect\
+            (redirect_uri=AUTH0_CALLBACK_URL, audience=AUTH0_AUDIENCE)
 
     @app.route('/logout')
     def logout():
@@ -184,7 +188,10 @@ def create_app(test_config=None):
             Fighter.division == 12).order_by(Fighter.rank).all()
         div_12_data = [event.format() for event in div_12]
 
-        if len(div_1) == 0 or len(div_2) == 0 or len(div_3) == 0 or len(div_4) == 0 or len(div_5) == 0 or len(div_6) == 0 or len(div_7) == 0 or len(div_8) == 0 or len(div_9) == 0 or len(div_10) == 0 or len(div_11) == 0 or len(div_12) == 0:
+        if len(div_1) == 0 or len(div_2) == 0 or\
+             len(div_3) == 0 or len(div_4) == 0 or len(div_5) == 0 or\
+                  len(div_6) == 0 or len(div_7) == 0 or len(div_8) == 0 or\
+                       len(div_9) == 0 or len(div_10) == 0 or len(div_11) == 0 or len(div_12) == 0:
             abort(404)
 
         event_info = []
