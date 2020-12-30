@@ -36,7 +36,7 @@ def create_app(test_config=None):
     setup_db(app)
 
 
-    #This sets up CORS to Allow '*' for origins. 
+    #This sets up CORS to Allow '*' for origins.
     CORS(app)
 
     app.secret_key = constants.SECRET_KEY
@@ -53,7 +53,7 @@ def create_app(test_config=None):
         elif format == 'medium':
           format="EE MM, dd, y h:mma"
         return babel.dates.format_datetime(date, format)
-    
+
     app.jinja_env.filters['datetime'] = format_datetime
     #----------------------------------------------------------------------------#
     @app.after_request
@@ -100,7 +100,7 @@ def create_app(test_config=None):
         token = auth0.authorize_access_token()
         resp = auth0.get('userinfo')
         userinfo = resp.json()
-        # Here we set session variables associated with logged in user  
+        # Here we set session variables associated with logged in user
         session[constants.JWT_PAYLOAD] = userinfo
         session[constants.PROFILE_KEY] = {
               'user_id': userinfo['sub'],
@@ -109,9 +109,9 @@ def create_app(test_config=None):
           }
         session[constants.SESSION_NAME] = userinfo['name']
         session[constants.JWT] = token['access_token']
-          
+
         return redirect('/index')
-        
+
 
     @app.route('/login')
     def login():
@@ -133,7 +133,7 @@ def create_app(test_config=None):
 
         session['Admin'] = env.get('APP_ADMIN')
         session['Event Editor'] = env.get('EVENT_EDITOR')
-        
+
         #Here I get all the fighter by division
         div_1 = Fighter.query.filter(Fighter.division == 1).order_by(Fighter.rank).all()
         div_1_data = [event.format() for event in div_1]
@@ -170,8 +170,8 @@ def create_app(test_config=None):
 
         div_12 = Fighter.query.filter(Fighter.division == 12).order_by(Fighter.rank).all()
         div_12_data = [event.format() for event in div_12]
-        
-        if len(div_1) == 0 or len(div_2) == 0 or len(div_3) == 0 or len(div_4) == 0 or len(div_5) == 0 or len(div_6) == 0 or len(div_7) == 0 or len(div_8) == 0 or len(div_9) == 0 or len(div_10) == 0 or len(div_11) == 0 or len(div_12) == 0: 
+
+        if len(div_1) == 0 or len(div_2) == 0 or len(div_3) == 0 or len(div_4) == 0 or len(div_5) == 0 or len(div_6) == 0 or len(div_7) == 0 or len(div_8) == 0 or len(div_9) == 0 or len(div_10) == 0 or len(div_11) == 0 or len(div_12) == 0:
             abort(404)
 
         event_info = []
@@ -181,9 +181,9 @@ def create_app(test_config=None):
 
         event_info.append(
             {
-                'event_name':event_data[0].event_name, 
-                'event_date':format_datetime(str(event_data[0].event_date)), 
-                'location':event_data[0].location,         
+                'event_name':event_data[0].event_name,
+                'event_date':format_datetime(str(event_data[0].event_date)),
+                'location':event_data[0].location,
             }
           )
         #Here I set a session variable so I can link to the event page from the main.html
@@ -206,110 +206,111 @@ def create_app(test_config=None):
 
         for fighter, division in division_fighters:
           data.append({
-                      'id':fighter.id,
-                      'first_name':fighter.first_name,
-                      'last_name':fighter.last_name,
-                      'age':fighter.age,
-                      'height':fighter.height,
-                      'weight':fighter.weight,
-                      'arm_reach':fighter.arm_reach,
-                      'leg_reach':fighter.leg_reach,
-                      'sex':fighter.sex,
-                      'win':fighter.win,
-                      'loss':fighter.loss,
-                      'draw':fighter.draw,
-                      'division':fighter.division,
-                      'rank':fighter.rank,
-                      'div_id':division.id,
-                      'div_name':division.name,
+                      'id': fighter.id,
+                      'first_name': fighter.first_name,
+                      'last_name': fighter.last_name,
+                      'age': fighter.age,
+                      'height': fighter.height,
+                      'weight': fighter.weight,
+                      'arm_reach': fighter.arm_reach,
+                      'leg_reach': fighter.leg_reach,
+                      'sex': fighter.sex,
+                      'win': fighter.win,
+                      'loss': fighter.loss,
+                      'draw': fighter.draw,
+                      'division': fighter.division,
+                      'rank': fighter.rank,
+                      'div_id': division.id,
+                      'div_name': division.name,
                       }
                     )
         return render_template('division_fighters.html',
                                   userinfo=session[constants.PROFILE_KEY],
-                                  userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data),200 
-      
+                                  userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), fighters = data),200
+
     @app.route('/event/<date>')
     def get_event(date):
         clean_date = html.unescape(date)
-        
+
         event_info = []
-        #Here we join Events table and Division table 
-        event_data = db.session.query(Event,Division).join(Division).filter(Event.event_date == clean_date).order_by(Event.fight_order).all()
+        #Here we join Events table and Division table
+        event_data = db.session.query(Event, Division).join(Division)\
+          .filter(Event.event_date == clean_date).order_by(Event.fight_order).all()
         if len(event_data) == 0:
             abort(404)
 
         for event, division in event_data:
             event_info.append(
               {
-                  'event_name':event.event_name, 
-                  'event_date':format_datetime(str(event.event_date)),
-                  'location':event.location, 
-                  'division':event.division,
-                  'fighter_1':event.fighter_1,
-                  'fighter_2':event.fighter_2,
-                  'fighter_1_votes':event.fighter_1_votes,
-                  'fighter_2_votes':event.fighter_2_votes,
-                  'fighter_1_odds':event.fighter_1_odds,
-                  'fighter_2_odds':event.fighter_2_odds,
-                  'fight_order':event.fight_order,
-                  'div_id':division.id,
-                  'div_name':division.name,
+                  'event_name': event.event_name,
+                  'event_date': format_datetime(str(event.event_date)),
+                  'location': event.location,
+                  'division': event.division,
+                  'fighter_1': event.fighter_1,
+                  'fighter_2': event.fighter_2,
+                  'fighter_1_votes': event.fighter_1_votes,
+                  'fighter_2_votes': event.fighter_2_votes,
+                  'fighter_1_odds': event.fighter_1_odds,
+                  'fighter_2_odds': event.fighter_2_odds,
+                  'fight_order': event.fight_order,
+                  'div_id': division.id,
+                  'div_name': division.name,
               }
             )
-    
-        return render_template('event.html',
-                                    userinfo=session[constants.PROFILE_KEY],
-                                    userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), events = event_info),200
-    
-    @app.route('/event-create', methods=['GET']) 
+
+        return render_template('event.html', userinfo=session[constants.PROFILE_KEY],\
+            userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), events=event_info), 200
+
+    @app.route('/event-create', methods=['GET'])
     @requires_auth('get:event-create')
     def create_event_form(token):
         form = EventForm()
         return render_template('forms/new_event.html', form=form, userinfo=session[constants.PROFILE_KEY]),200
-    
+
     @app.route('/event-create', methods=['POST'])
     @requires_auth('post:event-create')
     def create_event(token):
         try:
-          # get form and create new obj
-          form = EventForm()
-          form_event = Event(
-          event_name = form.event_name.data, 
-          event_date = format_datetime(str(form.event_date.data)),
-          location = form.location.data,
-          division = form.division.data,
-          fighter_1 = form.fighter_1.data, 
-          fighter_2 = form.fighter_2.data,  
-          fighter_1_votes = 0,
-          fighter_2_votes = 0,
-          fighter_1_odds = form.fighter_1_odds.data,
-          fighter_2_odds = form.fighter_2_odds.data,
-          fight_order = form.fight_order.data, 
-            )
-          
-          # commit session to database
-          form_event.insert()
-          #Success
-          flash('Event insert was successfully listed!')
+            # get form and create new obj
+            form=EventForm()
+            form_event=Event(
+            event_name=form.event_name.data,
+            event_date=format_datetime(str(form.event_date.data)),
+            location=form.location.data,
+            division=form.division.data,
+            fighter_1=form.fighter_1.data,
+            fighter_2=form.fighter_2.data,
+            fighter_1_votes=0,
+            fighter_2_votes=0,
+            fighter_1_odds=form.fighter_1_odds.data,
+            fighter_2_odds=form.fighter_2_odds.data,
+            fight_order=form.fight_order.data,
+              )
+
+            # commit session to database
+            form_event.insert()
+            #Success
+            flash('Event insert was successfully listed!')
         except:
-          db.session.rollback()
-          #flash failure
-          flash('An error occurred. Event could not be listed.')
-          abort(422)
+            db.session.rollback()
+            #flash failure
+            flash('An error occurred. Event could not be listed.')
+            abort(422)
         finally:
-          db.session.close()
-        
+            db.session.close()
+
         return redirect(url_for('create_event_form'))
 
     @app.route('/event/plus/<name>/<number>', methods=['PATCH'])
     def get_event_fighter_votes(name, number):
-        
+
         clean_name = html.unescape(name)
         fighter_number = number
-        
+
         if(fighter_number == '1'):
-            #event_data for latest event
-            event_data = Event.query.filter(Event.fighter_1 == clean_name).order_by(Event.event_date.desc()).limit(1).all()
+            # event_data for latest event
+            event_data = Event.query.filter(Event.fighter_1 == clean_name)\
+              .order_by(Event.event_date.desc()).limit(1).all()
             if len(event_data) == 0:
                 abort(404)
             vote_number = event_data[0].fighter_1_votes + 1
@@ -322,8 +323,8 @@ def create_app(test_config=None):
 
             data = []
             for event in event_data:
-              data.append( {
-                    'fighter_number':1,     
+              data.append({
+                    'fighter_number':1,
                     'fighter_1_votes':event.fighter_1_votes,
                 })
               return jsonify({
@@ -346,17 +347,17 @@ def create_app(test_config=None):
 
             data = []
             for event in event_data:
-                  data.append( {  
-                    'fighter_number':2,   
-                    'fighter_2_votes':event.fighter_2_votes, 
+                  data.append( {
+                    'fighter_number':2,
+                    'fighter_2_votes':event.fighter_2_votes,
                     })
-              
+
                   return jsonify({
                     'success':True,
                     'fighter_votes':data,
                   }), 200
 
-    @app.route('/event-delete/<date>', methods=['GET']) 
+    @app.route('/event-delete/<date>', methods=['GET'])
     @requires_auth('get:event-delete')
     def edit_event_form(token, date):
         clean_date = html.unescape(date)
@@ -364,9 +365,9 @@ def create_app(test_config=None):
         if len(events) == 0:
             abort(404)
         events_data = [event.format() for event in events]
-        
+
         return render_template('delete_event.html', events = events_data, userinfo=session[constants.PROFILE_KEY]),200
-      
+
 
     @app.route('/event-delete/<date>', methods=['DELETE'])
     @requires_auth('delete:event-delete')
@@ -375,14 +376,14 @@ def create_app(test_config=None):
         events = Event.query.filter(Event.event_date == clean_date).all()
         if len(events) == 0:
                 abort(404)
-        
+
         [event.delete() for event in events]
-          
+
         return jsonify({
           'success': True,
           'deleted': date,
-        }), 200 
-    
+        }), 200
+
     @app.route('/event-delete/<int:id>', methods=['DELETE'])
     @requires_auth('delete:event-delete')
     def delete_event_id(token, id):
@@ -390,16 +391,16 @@ def create_app(test_config=None):
         event = Event.query.filter(Event.id == id).one_or_none()
         if event is None:
           abort(404)
-        
+
         event.delete()
-        
-        
+
+
         return jsonify({
           'success': True,
           'deleted': id,
-        }), 200 
+        }), 200
 
-    @app.route('/fighter-edit/<int:fighter_id>', methods=['GET']) 
+    @app.route('/fighter-edit/<int:fighter_id>', methods=['GET'])
     @requires_auth('get:fighter-edit')
     def fighter_edit_form(token, fighter_id):
         # Get the fighter by id
@@ -407,18 +408,18 @@ def create_app(test_config=None):
         if fighter is None:
             abort(400)
         fighter_details = fighter.format()
-        
-        #Here we populate the form from the database
-        form = FighterForm(obj = fighter) 
+
+        # Here we populate the form from the database
+        form = FighterForm(obj = fighter)
 
         return render_template('forms/edit_fighter.html', form=form, fighter = fighter_details, userinfo=session[constants.PROFILE_KEY]),200
-    
+
     @app.route('/fighter-edit/<int:fighter_id>', methods=['POST'])
     @requires_auth('get:fighter-edit')
     def edit_fighters(token, fighter_id):
         fighter_division = 0
         try:
-          fighter = Fighter.query.filter(Fighter.id == fighter_id).one_or_none()    
+          fighter = Fighter.query.filter(Fighter.id == fighter_id).one_or_none()
           fighter_division = fighter.division
           form = FighterForm(obj = fighter)
 
@@ -431,7 +432,7 @@ def create_app(test_config=None):
           flash('An error occurred. Event could not be listed.')
           abort(422)
         finally:
-          db.session.close()   
+          db.session.close()
         return redirect(url_for('get_division_fighters', division_id = fighter_division))
     #------------------------------------------------------------------------------------------------------------#
     # API - Identical functions except now with json responses.
@@ -439,7 +440,7 @@ def create_app(test_config=None):
 
     @app.route('/api/index')
     def get_all_fighters_api():
-        
+
         #Here I get all the fighter by division
         div_1 = Fighter.query.filter(Fighter.division == 1).order_by(Fighter.rank).all()
         div_1_data = [event.format() for event in div_1]
@@ -476,8 +477,8 @@ def create_app(test_config=None):
 
         div_12 = Fighter.query.filter(Fighter.division == 12).order_by(Fighter.rank).all()
         div_12_data = [event.format() for event in div_12]
-    
-        if len(div_1) == 0 or len(div_2) == 0 or len(div_3) == 0 or len(div_4) == 0 or len(div_5) == 0 or len(div_6) == 0 or len(div_7) == 0 or len(div_8) == 0 or len(div_9) == 0 or len(div_10) == 0 or len(div_11) == 0 or len(div_12) == 0: 
+
+        if len(div_1) == 0 or len(div_2) == 0 or len(div_3) == 0 or len(div_4) == 0 or len(div_5) == 0 or len(div_6) == 0 or len(div_7) == 0 or len(div_8) == 0 or len(div_9) == 0 or len(div_10) == 0 or len(div_11) == 0 or len(div_12) == 0:
           abort(404)
 
         event_info = []
@@ -488,24 +489,24 @@ def create_app(test_config=None):
 
         event_info.append(
             {
-                'event_name':event_data[0].event_name, 
-                'event_date':format_datetime(str(event_data[0].event_date)), 
-                'location':event_data[0].location,         
+                'event_name':event_data[0].event_name,
+                'event_date':format_datetime(str(event_data[0].event_date)),
+                'location':event_data[0].location,
             }
           )
         return jsonify({
             'success':True,
             'events':event_info,
-            'div_1':div_1_data, 
-            'div_2':div_2_data, 
-            'div_3':div_3_data, 
+            'div_1':div_1_data,
+            'div_2':div_2_data,
+            'div_3':div_3_data,
             'div_4':div_4_data,
-            'div_5':div_5_data, 
-            'div_6':div_6_data, 
-            'div_7':div_7_data, 
-            'div_8':div_8_data, 
-            'div_9':div_9_data, 
-            'div_10':div_10_data, 
+            'div_5':div_5_data,
+            'div_6':div_6_data,
+            'div_7':div_7_data,
+            'div_8':div_8_data,
+            'div_9':div_9_data,
+            'div_10':div_10_data,
             'div_11':div_11_data,
             'div_12':div_12_data
         }),200
@@ -514,7 +515,7 @@ def create_app(test_config=None):
     def get_division_fighters_api(division_id):
         #Here I join Fighters and Divisions Tables
         division_fighters = db.session.query(Fighter,Division).join(Division).filter(Fighter.division == division_id).all()
-        
+
         if len(division_fighters) == 0:
             abort(404)
         data = []
@@ -549,7 +550,7 @@ def create_app(test_config=None):
     def get_event_api(date):
         clean_date = html.unescape(date)
         event_info = []
-        #Here we join Events table and Division table 
+        #Here we join Events table and Division table
         event_data = db.session.query(Event,Division).join(Division).filter(Event.event_date == clean_date).order_by(Event.fight_order).all()
         if len(event_data) == 0:
             abort(404)
@@ -557,9 +558,9 @@ def create_app(test_config=None):
         for event, division in event_data:
             event_info.append(
               {
-                  'event_name':event.event_name, 
+                  'event_name':event.event_name,
                   'event_date':format_datetime(str(event.event_date)),
-                  'location':event.location, 
+                  'location':event.location,
                   'division':event.division,
                   'fighter_1':event.fighter_1,
                   'fighter_2':event.fighter_2,
@@ -577,7 +578,7 @@ def create_app(test_config=None):
               'event_info':event_info
           }),200
 
-    @app.route('/api/event-create', methods=['GET']) 
+    @app.route('/api/event-create', methods=['GET'])
     @requires_auth('get:event-create')
     def create_event_form_api(token):
         form = EventForm()
@@ -585,28 +586,28 @@ def create_app(test_config=None):
         return jsonify({
           'success':True,
         }),200
-        
-        
+
+
     @app.route('/api/event-create', methods=['POST'])
     @requires_auth('post:event-create')
     def create_event_api(token):
         # get request body
         data = request.get_json()
-        try:       
+        try:
           event_data = Event(
-          event_name = data.get('event_name'), 
+          event_name = data.get('event_name'),
           event_date = format_datetime(str(data.get('event_date'))),
           location = data.get('location'),
           division = data.get('division'),
-          fighter_1 = data.get('fighter_1'), 
-          fighter_2 = data.get('fighter_2'),  
+          fighter_1 = data.get('fighter_1'),
+          fighter_2 = data.get('fighter_2'),
           fighter_1_votes = 0,
           fighter_2_votes = 0,
           fighter_1_odds = data.get('fighter_1_odds'),
           fighter_2_odds = data.get('fighter_2_odds'),
-          fight_order = data.get('fight_order'), 
+          fight_order = data.get('fight_order'),
             )
-          
+
           # commit session to database
           event_data.insert()
           #Success
@@ -623,14 +624,14 @@ def create_app(test_config=None):
           abort(422)
         finally:
           db.session.close()
-        
+
 
     @app.route('/api/event/plus/<name>/<number>', methods=['PATCH'])
     def get_event_fighter_votes_api(name, number):
-        
+
         clean_name = html.unescape(name)
         fighter_number = number
-        
+
         if(fighter_number == '1'):
             #event_data for latest event
             event_data = Event.query.filter(Event.fighter_1 == clean_name).order_by(Event.event_date.desc()).limit(1).all()
@@ -647,7 +648,7 @@ def create_app(test_config=None):
             data = []
             for event in event_data:
               data.append( {
-                    'fighter_number':1,     
+                    'fighter_number':1,
                     'fighter_1_votes':event.fighter_1_votes,
                 })
               return jsonify({
@@ -670,17 +671,17 @@ def create_app(test_config=None):
 
             data = []
             for event in event_data:
-                  data.append( {  
-                    'fighter_number':2,   
-                    'fighter_2_votes':event.fighter_2_votes, 
+                  data.append( {
+                    'fighter_number':2,
+                    'fighter_2_votes':event.fighter_2_votes,
                     })
-              
+
                   return jsonify({
                     'success':True,
                     'fighter_votes':data,
                   }), 200
 
-    @app.route('/api/event-delete/<date>', methods=['GET']) 
+    @app.route('/api/event-delete/<date>', methods=['GET'])
     @requires_auth('get:event-delete')
     def edit_event_form_api(token, date):
         clean_date = html.unescape(date)
@@ -700,14 +701,14 @@ def create_app(test_config=None):
         events = Event.query.filter(Event.event_date == clean_date).all()
         if len(events) == 0:
                 abort(404)
-        
+
         [event.delete() for event in events]
-          
+
         return jsonify({
           'success': True,
           'deleted': date,
-        }), 200 
-    
+        }), 200
+
     @app.route('/api/event-delete/<int:id>', methods=['DELETE'])
     @requires_auth('delete:event-delete')
     def delete_event_id_api(token, id):
@@ -715,16 +716,16 @@ def create_app(test_config=None):
         event = Event.query.filter(Event.id == id).one_or_none()
         if event is None:
           abort(404)
-        
+
         event.delete()
-        
-        
+
+
         return jsonify({
           'success': True,
           'deleted': id,
-        }), 200 
+        }), 200
 
-    @app.route('/api/fighter-edit/<int:fighter_id>', methods=['GET']) 
+    @app.route('/api/fighter-edit/<int:fighter_id>', methods=['GET'])
     @requires_auth('get:fighter-edit')
     def fighter_edit_form_api(token, fighter_id):
         # Get fighter by id
@@ -732,21 +733,21 @@ def create_app(test_config=None):
         if fighter is None:
             abort(400)
         fighter_details = fighter.format()
-        
+
         #Here we populate the form from the database
-        form = FighterForm(obj = fighter) 
+        form = FighterForm(obj = fighter)
 
         return jsonify({
           'success':True,
           'fighter_details':fighter_details,
         }),200
-    
+
     @app.route('/api/fighter-edit/<int:fighter_id>', methods=['POST'])
     @requires_auth('get:fighter-edit')
     def edit_fighters_api(token, fighter_id):
         fighter_division = 0
         try:
-          fighter = Fighter.query.filter(Fighter.id == fighter_id).one_or_none()    
+          fighter = Fighter.query.filter(Fighter.id == fighter_id).one_or_none()
           fighter_division = fighter.division
           form = FighterForm(obj = fighter)
 
@@ -759,11 +760,11 @@ def create_app(test_config=None):
           flash('An error occurred. Event could not be listed.')
           abort(422)
         finally:
-          db.session.close()  
+          db.session.close()
         return jsonify({
           'success':True,
           'division_id':fighter_division,
-        }),200 
+        }),200
     #--------------------------------------------------------------------------------#
     #---ERROR HANDLERS---------------------------------------------------------------#
     @app.errorhandler(405)
@@ -814,4 +815,3 @@ def create_app(test_config=None):
 
     return app
 
-      

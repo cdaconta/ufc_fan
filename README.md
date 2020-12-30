@@ -10,7 +10,7 @@ This project is the capstone project for the Udacity Full Stack Web Developer Na
 *Use the unittest library to test endpoint behavior
 
 # Roles and Permissions
-* This project has two primary roles configured in Auth0.com:
+* This project has two primary roles configured in Auth0.com.  A JWT token needs to be passed to each endpoint that requires permission.
   * Admin role - The admin role has complete permissions to all endpoints in the project.
     * Permissions:
       * get:event-delete - Read the event delete page and see items available to be deleted.
