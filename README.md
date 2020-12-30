@@ -9,6 +9,29 @@ This project is the capstone project for the Udacity Full Stack Web Developer Na
 *Enable Role Based Authentication and roles-based access control (RBAC) in a Flask application
 *Use the unittest library to test endpoint behavior
 
+# Roles and Permissions
+* This project has two primary roles configured in Auth0.com:
+  * Admin role - The admin role has complete permissions to all endpoints in the project.
+    * Permissions:
+      * get:event-delete - Read the event page and items available to be deleted.
+      * delete:event-delete	- Delete the part of an event or the whole event.
+      * get:event-create - Get event form prefilled with event information.     
+      * post:event-create - Change event in EventForm and Post Changes.
+      * get:fighter-edit -	Read the fighter you want to edit.
+      * post:fighter-edit	- Edit the fighter position profided in FighterForm.
+  * Edit Event Role - The Event Editor has permissions for all endpoints in the project involving Event information.
+    * Permissions:
+      * delete:event-delete	- Delete the part of an event or the whole event.
+      * get:event-create - Get event form prefilled with event information.
+      * get:event-delete - Read the event page and items available to be deleted.
+      * post:event-create - Change event in EventForm and Post Changes.
+* All other users who sign up fall into a default permission category which only allows access to these endpoints:
+  * GET /api-key - Shows JWK.
+  * GET /index - Gets all fighters by division and shows upcoming Event.
+  * GET /knockouts - Gets knockout videos.
+  * GET /division_fighters/<int:division_id> - Shows fighters by division id.
+  * GET /event/<date> - Shows event associated with a given date.
+
 ##API Reference
 #Getting Started on Local Machine
 People using this project should already have Python, PIP, and Postgres installed on their local machine. You will also have to create an account and configure Auth0.
@@ -1477,7 +1500,7 @@ Endpoints (**All example curl commands will be difference in Powershell)
 ```
 ### GET /api/event-create
 * General: Gets form to create an event.
-* The endpoint does require authorization token.
+* The endpoint does require authorization token with permission - get:event-create.
     * Login with Admin or Event Editor credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
     * In terminal, export ROLE_TOKEN=<jwt> with active Admin or Event Editor JWT before request.
 * Example: curl -H "Authorization: Bearer $ROLE_TOKEN" -X GET https://ufc-fan.herokuapp.com/api/event-create
@@ -1488,7 +1511,7 @@ Endpoints (**All example curl commands will be difference in Powershell)
 ```
 ### POST /api/event-create
 * General: Post form to create an event.
-* The endpoint does require authorization token.
+* The endpoint does require authorization token with permission - post:event-create
     * Login with Admin or Event Editor credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
     * In terminal, export ROLE_TOKEN=<jwt> with active Admin or Event Editor JWT before request.
 * Example: curl -d '{
@@ -1528,7 +1551,7 @@ Endpoints (**All example curl commands will be difference in Powershell)
 ```
 ### GET /api/event-delete/<date>
 * General: Gets event to delete. Please use event-create first.
-* The endpoint does require authorization token.
+* The endpoint does require authorization token with permission - get:event-delete.
     * Login with Admin or Event Editor credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
     * In terminal, export ROLE_TOKEN=<jwt> with active Admin or Event Editor JWT before request.
 * Example: curl -H "Authorization: Bearer $ROLE_TOKEN" -X GET https://ufc-fan.herokuapp.com/api/event-delete/2020-12-12T12:00:00.000Z
@@ -1597,7 +1620,7 @@ Endpoints (**All example curl commands will be difference in Powershell)
 ```
 ### DELETE /api/event-delete/<date>
 * General: Delete event by date. Please use event-create first.
-* The endpoint does require authorization token.
+* The endpoint does require authorization token with permission - delete:event-delete.
     * Login with Admin or Event Editor credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
     * In terminal, export ROLE_TOKEN=<jwt> with active Admin or Event Editor JWT before request.
 * Example: curl -H "Authorization: Bearer $ROLE_TOKEN" -X DELETE https://ufc-fan.herokuapp.com/api/event-delete/2020-12-12T12:00:00.000Z
@@ -1609,7 +1632,7 @@ Endpoints (**All example curl commands will be difference in Powershell)
 ```
 ### DELETE /api/event-delete/<int:id>
 * General: Delete event by id. Please use event-create first and look in your database for the id to test delete id endpoint.
-* The endpoint does require authorization token.
+* The endpoint does require authorization token with permission - delete:event-delete.
     * Login with Admin or Event Editor credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
     * In terminal, export ROLE_TOKEN=<jwt> with active Admin or Event Editor JWT before request.
 * Example: curl -H "Authorization: Bearer $ROLE_TOKEN" -X DELETE https://ufc-fan.herokuapp.com/api/event-delete/35
@@ -1621,7 +1644,7 @@ Endpoints (**All example curl commands will be difference in Powershell)
 ```
 ### GET /api/fighter-edit/<int:fighter_id>
 * General: Get fighter to edit by id. Confirm id of fighter in your database for test
-* The endpoint does require authorization token.
+* The endpoint does require authorization token with permission - get:figher-edit.
     * Login with Admin credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
     * In terminal, export ROLE_TOKEN=<jwt> with active Admin or Event Editor JWT before request.
 * Example: curl -H "Authorization: Bearer $ROLE_TOKEN" -X GET https://ufc-fan.herokuapp.com/api/fighter-edit/71
@@ -1648,7 +1671,7 @@ Endpoints (**All example curl commands will be difference in Powershell)
 ```
 ### POST /api/fighter-edit/<int:fighter_id>
 * General: Edit fighter to for division rank by id. Confirm id of fighter in your database for test
-* The endpoint does require authorization token.
+* The endpoint does require authorization token with permission - post:figher-edit.
     * Login with Admin credentials, then obtain JWT token at https://ufc-fan.herokuapp.com/api-key
     * In terminal, export ROLE_TOKEN=<jwt> with active Admin or Event Editor JWT before request.
 * Example: curl -d '{
