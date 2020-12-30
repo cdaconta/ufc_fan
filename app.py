@@ -119,8 +119,8 @@ def create_app(test_config=None):
 
     @app.route('/login')
     def login():
-        return auth0.authorize_redirect\
-            (redirect_uri=AUTH0_CALLBACK_URL, audience=AUTH0_AUDIENCE)
+        return auth0.authorize_redirect(redirect_uri=AUTH0_CALLBACK_URL,
+                    audience=AUTH0_AUDIENCE)
 
     @app.route('/logout')
     def logout():
@@ -189,9 +189,10 @@ def create_app(test_config=None):
         div_12_data = [event.format() for event in div_12]
 
         if len(div_1) == 0 or len(div_2) == 0 or\
-             len(div_3) == 0 or len(div_4) == 0 or len(div_5) == 0 or\
-                  len(div_6) == 0 or len(div_7) == 0 or len(div_8) == 0 or\
-                       len(div_9) == 0 or len(div_10) == 0 or len(div_11) == 0 or len(div_12) == 0:
+            len(div_3) == 0 or len(div_4) == 0 or len(div_5) == 0 or\
+            len(div_6) == 0 or len(div_7) == 0 or len(div_8) == 0 or\
+            len(div_9) == 0 or len(div_10) == 0 or\
+                len(div_11) == 0 or len(div_12) == 0:
             abort(404)
 
         event_info = []
@@ -207,16 +208,23 @@ def create_app(test_config=None):
                 'location': event_data[0].location,
             }
         )
-        # Here I set a session variable so I can link to the event page from the main.html
+        # Here I set a session variable so I can link to
+        # the event page from the main.html
         session['Upcoming Event'] = '/event/' + \
             format_datetime(str(event_data[0].event_date))
         return render_template('index.html',
-                               userinfo=session[constants.PROFILE_KEY],
-                               userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4), events=event_info, div_1=div_1_data, div_2=div_2_data, div_3=div_3_data, div_4=div_4_data, div_5=div_5_data, div_6=div_6_data, div_7=div_7_data, div_8=div_8_data, div_9=div_9_data, div_10=div_10_data, div_11=div_11_data, div_12=div_12_data), 200
+                    userinfo=session[constants.PROFILE_KEY],
+                    userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD],
+                    indent=4), events=event_info, div_1=div_1_data, div_2=div_2_data,
+                    div_3=div_3_data, div_4=div_4_data, div_5=div_5_data,
+                    div_6=div_6_data, div_7=div_7_data, div_8=div_8_data,
+                    div_9=div_9_data, div_10=div_10_data, div_11=div_11_data,
+                    div_12=div_12_data), 200
 
     @app.route('/knockouts')
     def get_knockout_page():
-        return render_template('knockouts.html',  userinfo=session[constants.PROFILE_KEY]), 200
+        return render_template('knockouts.html',
+                    userinfo=session[constants.PROFILE_KEY]), 200
 
     @app.route('/division_fighters/<int:division_id>')
     def get_division_fighters(division_id):
@@ -280,9 +288,10 @@ def create_app(test_config=None):
                 }
             )
 
-        return render_template('event.html', userinfo=session[constants.PROFILE_KEY],
-                               userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD],
-                                                          indent=4), events=event_info), 200
+        return render_template('event.html',
+                    userinfo=session[constants.PROFILE_KEY],
+                    userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD],
+                    indent=4), events=event_info), 200
 
     @app.route('/event-create', methods=['GET'])
     @requires_auth('get:event-create')
