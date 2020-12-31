@@ -1,4 +1,4 @@
-# UFC FAN   
+# UFC FAN
 
 This application is a fan site for the Ultimate Fighting Championship (UFC).  The site is hosted on Heroku at https://ufc-fan.herokuapp.com. Anyone can create a public account and learn about the UFC divisions and an upcoming Event.  The landing page shows all twelve divisions and an upcoming event for the UFC.  The user can take a deeper look at the divisions and also vote on the main card fighters in that upcoming event.  Admin and the Event Editor have special priveleges to edit fighters or edit event information.
 
@@ -15,14 +15,14 @@ This project is the capstone project for the Udacity Full Stack Web Developer Na
     * Permissions:
       * get:event-delete - Read the event delete page and see items available to be deleted.
       * delete:event-delete	- Delete a part of an event or the whole event.
-      * get:event-create - Get event form prefilled with event information.     
+      * get:event-create - Get event form prefilled with event information.
       * post:event-create - Change event in event form and Post the changes.
       * get:fighter-edit -	Read the fighter you want to edit in fighter form.
       * post:fighter-edit	- Edit the fighter base on rank provided in fighter form.
   * Edit Event Role - The Event Editor has permissions for all endpoints in the project involving Event information.
     * Permissions:
       * get:event-create - Get event form prefilled with event information.
-      * delete:event-delete	- Delete a part of an event or the whole event.    
+      * delete:event-delete	- Delete a part of an event or the whole event.
       * get:event-delete - Read the event page and see items available to be deleted.
       * post:event-create - Change event in event form and Post changes.
 * All other users who sign up fall into a default permission category which only allows access to these endpoints:
@@ -45,28 +45,27 @@ Clone the repository from github.com to your local machine.  In your .env file a
 
 It is recommended to use a virtual environment for the project.  https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
 
-Open a terminal to run the project. 
+Open a terminal to run the project.
 *	One for the backend and the other for the front end.
 
 ```
-	pip install -r requirements.txt
+	pip3 install -r requirements.txt
 ```
 
-*	The key dependencies are Flask, SQLalchemy, and Flask-Cors.
 *	To run the server, execute:
 ```
-	export FLASK_APP=flaskr
+	export FLASK_APP=app
 	export FLASK_ENV=development
 	flask run
 ```
 * Setting the `FLASK_ENV` variable to `development` will detect file changes and restart the server automatically.
-* Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` directory and the `__init__.py` file to find the application.
-*	On Windows 10 in the flaskr folder with PowerShell:
+*	On Windows 10 with PowerShell:
 ```
-    $env:FLASK_APP = "__init__"
+    $env:FLASK_APP = "app"
     $env:FLASK_DEBUG=1
-    Flask run	
+    Flask run
 ```
+* Setting `FLASK_DEBUG=1` will detect file changes and restart the server automatically.
 ## Testing
 
 To run the tests, in psql run
@@ -95,7 +94,7 @@ The API will return five types of errors:
 *	404 – resource not found
 *   405 - method not allowed
 *	422 – unprocessable
-*   
+*
 
 Endpoints (**All example curl commands will be difference in Powershell)
 
@@ -1518,7 +1517,7 @@ Endpoints (**All example curl commands will be difference in Powershell)
     * In terminal, export ROLE_TOKEN=<jwt> with active Admin or Event Editor JWT before request.
 * Example: curl -d '{
     'event_name':'UFC',
-    'event_date':'2020-12-12T12:00:00.000Z', 
+    'event_date':'2020-12-12T12:00:00.000Z',
     'location':'Somewhere',
     'division':1,
     'fighter_1':'Doorman',
@@ -1697,7 +1696,7 @@ Endpoints (**All example curl commands will be difference in Powershell)
     'rank':2}' -H "Authorization: Bearer $ROLE_TOKEN" -X POST https://ufc-fan.herokuapp.com/api/fighter-edit/138
 ```
 {
-  "division_id": 12, 
+  "division_id": 12,
   "success": true
 }
 ```
