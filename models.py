@@ -27,6 +27,28 @@ def setup_db(app, database_path=database_path):
     migrate.init_app(app, db)
 
 
+# class CrudHelper(db.Model):  Multi-level inheritance
+#     def insert(self):
+    """ db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def rollback(self):
+        db.session.rollback()
+
+    def close(self):
+        db.session.close() """
+
+
+
+
+
 # Creating the debatase for Actors
 class Fighter(db.Model):
     __tablename__ = 'fighters'

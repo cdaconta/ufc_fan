@@ -139,7 +139,30 @@ def create_app(test_config=None):
         session['Admin'] = env.get('APP_ADMIN')
         session['Event Editor'] = env.get('EVENT_EDITOR')
 
-        # Here I get all the fighter by division
+        # Here we get all the fighters by division
+        data = []
+        for item in range(11):
+            fighter_info = Fighter.query.filter(
+            Fighter.division == (item + 1)).order_by(Fighter.rank).all()
+            if len(fighter_info) == 0:
+                abort(404)
+            div_data = [item.format() for item in fighter_info]
+            data.append(div_data)
+
+        div_1_data = data[0]
+        div_2_data = data[1]
+        div_3_data = data[2]
+        div_4_data = data[3]
+        div_5_data = data[4]
+        div_6_data = data[5]
+        div_7_data = data[6]
+        div_8_data = data[7]
+        div_9_data = data[8]
+        div_10_data = data[9]
+        div_11_data = data[10]
+        div_12_data = data[11]
+
+        """ # Here I get all the fighter by division
         div_1 = Fighter.query.filter(
             Fighter.division == 1).order_by(Fighter.rank).all()
         div_1_data = [event.format() for event in div_1]
@@ -186,14 +209,14 @@ def create_app(test_config=None):
 
         div_12 = Fighter.query.filter(
             Fighter.division == 12).order_by(Fighter.rank).all()
-        div_12_data = [event.format() for event in div_12]
+        div_12_data = [event.format() for event in div_12] """
 
-        if len(div_1) == 0 or len(div_2) == 0 or\
+        """ if len(div_1) == 0 or len(div_2) == 0 or\
             len(div_3) == 0 or len(div_4) == 0 or len(div_5) == 0 or\
             len(div_6) == 0 or len(div_7) == 0 or len(div_8) == 0 or\
             len(div_9) == 0 or len(div_10) == 0 or\
                 len(div_11) == 0 or len(div_12) == 0:
-            abort(404)
+            abort(404) """
 
         event_info = []
         event_data = Event.query.order_by(
