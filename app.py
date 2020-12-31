@@ -288,6 +288,19 @@ def create_app(test_config=None):
                                    session[constants.JWT_PAYLOAD], indent=4),
                                fighters=data), 200
 
+    @app.route('/fighter/<int:id>')
+    def get_selected_fighter(id):
+        fighter = Fighter.query.get(id)
+        if fighter is None:
+            abort(404)
+        selected_fighter = [fighter.format()]
+
+        return render_template('/selected_fighter.html',
+                               userinfo=session[constants.PROFILE_KEY],
+                               userinfo_pretty=json.dumps(
+                               session[constants.JWT_PAYLOAD], indent=4),
+                               fighter=selected_fighter), 200
+
     @app.route('/event/<date>')
     def get_event(date):
         clean_date = html.unescape(date)
