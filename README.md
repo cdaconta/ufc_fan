@@ -94,13 +94,13 @@ The API will return five types of errors:
 *	404 – resource not found
 *   405 - method not allowed
 *	422 – unprocessable
-*
+
 
 Endpoints (**All example curl commands will be difference in Powershell)
 
 ## Endpoints
 
-###GET /api/index
+### GET /api/index
 * General: Returns a list of fighters and an event.
 * Does not require authorization.
 * Example: curl https://ufc-fan.herokuapp.com/api/index
