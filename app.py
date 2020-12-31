@@ -215,7 +215,7 @@ def create_app(test_config=None):
         return render_template('index.html',
                                userinfo=session[constants.PROFILE_KEY],
                                userinfo_pretty=json.dumps(
-                               session[constants.JWT_PAYLOAD], indent=4),
+                                   session[constants.JWT_PAYLOAD], indent=4),
                                events=event_info, div_1=div_1_data,
                                div_2=div_2_data, div_3=div_3_data,
                                div_4=div_4_data, div_5=div_5_data,
@@ -262,7 +262,7 @@ def create_app(test_config=None):
         return render_template('division_fighters.html',
                                userinfo=session[constants.PROFILE_KEY],
                                userinfo_pretty=json.dumps(
-                               session[constants.JWT_PAYLOAD], indent=4),
+                                   session[constants.JWT_PAYLOAD], indent=4),
                                fighters=data), 200
 
     @app.route('/event/<date>')
@@ -299,7 +299,7 @@ def create_app(test_config=None):
         return render_template('event.html',
                                userinfo=session[constants.PROFILE_KEY],
                                userinfo_pretty=json.dumps(
-                               session[constants.JWT_PAYLOAD], indent=4),
+                                   session[constants.JWT_PAYLOAD], indent=4),
                                events=event_info), 200
 
     @app.route('/event-create', methods=['GET'])

@@ -10,18 +10,20 @@ AUTH0_DOMAIN = os.environ.get('AUTH0_DOMAIN')
 ALGORITHMS = [os.environ.get('ALGORITHMS')]
 AUTH0_AUDIENCE = os.environ.get('AUTH0_AUDIENCE')
 
-## AuthError Exception
+# AuthError Exception
 '''
 AuthError Exception
 A standardized way to communicate auth failure modes
 '''
+
+
 class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
 
 
-## Auth Header
+# Auth Header
 
 def get_token_auth_header():
     """
@@ -144,7 +146,8 @@ def verify_decode_jwt(token):
         except jwt.JWTClaimsError:
             raise AuthError({
                 'code': 'invalid_claims',
-                'description': 'Incorrect claims. Please, check the audience and issuer.'
+                'description': 'Incorrect claims. Please, \
+                 check the audience and issuer.'
             }, 401)
         except Exception:
             raise AuthError({
@@ -159,7 +162,8 @@ def verify_decode_jwt(token):
 
 def requires_auth(permission=''):
     '''
-    Decorator fucntion used for adding authorization to endpoints with permissions
+    Decorator fucntion used for adding authorization to endpoints \
+    with permissions
     '''
     def requires_auth_decorator(f):
         @wraps(f)

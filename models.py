@@ -47,11 +47,16 @@ class Fighter(db.Model):
     rank = db.Column(db.Integer)
 
     def __repr__(self):
-        return f"<Fighter id='{self.id}' first_name='{self.first_name}' last_name='{self.last_name}' age='{self.age}'\
-            height='{self.height}' weight='{self.weight}' arm_reach='{self.arm_reach}' leg_reach='{self.leg_reach}' sex='{self.sex}' \
-                win='{self.win}' loss='{self.loss}' draw='{self.draw}' division = '{self.division}' rank='{self.rank}'>"
+        return f"<Fighter id='{self.id}' first_name='{self.first_name}' \
+                last_name='{self.last_name}' age='{self.age}'\
+                height='{self.height}' weight='{self.weight}' \
+                arm_reach='{self.arm_reach}' leg_reach='{self.leg_reach}' \
+                sex='{self.sex}' win='{self.win}' loss='{self.loss}' \
+                draw='{self.draw}' division = '{self.division}' \
+                rank='{self.rank}'>"
 
-    def __init__(self, first_name, last_name, age, height, weight, arm_reach, leg_reach, sex, win, loss, draw, division, rank):
+    def __init__(self, first_name, last_name, age, height, weight,
+                 arm_reach, leg_reach, sex, win, loss, draw, division, rank):
         self.first_name = first_name
         self.last_name = last_name
         self.age = age
@@ -108,13 +113,14 @@ class Division(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     weight = db.Column(db.Integer)
-    fighters = db.relationship(
-        'Fighter', backref='division_f', lazy='select', cascade='all, delete-orphan')
-    events = db.relationship(
-        'Event', backref='division_e', lazy='select', cascade='all, delete-orphan')
+    fighters = db.relationship('Fighter', backref='division_f',
+                               lazy='select', cascade='all, delete-orphan')
+    events = db.relationship('Event', backref='division_e', lazy='select',
+                             cascade='all, delete-orphan')
 
     def __repr__(self):
-        return f"<Division id='{self.id}' name='{self.name}' weight='{self.weight}' >"
+        return f"<Division id='{self.id}' name='{self.name}' \
+                weight='{self.weight}' >"
 
     def __init__(self, name, weight):
         self.name = name
@@ -162,11 +168,19 @@ class Event(db.Model):
     fight_order = db.Column(db.Integer, default=0)
 
     def __repr__(self):
-        return f"<Event id='{self.id}' event_name='{self.event_name}' event_date='{self.event_date}' location='{self.location}'\
-            division='{self.division}' fighter_1='{self.fighter_1}' fighter_2='{self.fighter_2}' fighter_1_votes='{self.fighter_1_votes}' \
-                fighter_2_votes='{self.fighter_2_votes}' fighter_1_odds = '{self.fighter_1_odds}' fighter_2_odds = '{self.fighter_2_odds}' fight_order='{self.fight_order}' >"
+        return f"<Event id='{self.id}' event_name='{self.event_name}' \
+                event_date='{self.event_date}' location='{self.location}'\
+                division='{self.division}' fighter_1='{self.fighter_1}' \
+                fighter_2='{self.fighter_2}' \
+                fighter_1_votes='{self.fighter_1_votes}' \
+                fighter_2_votes='{self.fighter_2_votes}' \
+                fighter_1_odds = '{self.fighter_1_odds}' \
+                fighter_2_odds = '{self.fighter_2_odds}' \
+                fight_order='{self.fight_order}' >"
 
-    def __init__(self, event_name, event_date, location, division, fighter_1, fighter_2, fighter_1_votes, fighter_2_votes, fighter_1_odds, fighter_2_odds, fight_order) -> None:
+    def __init__(self, event_name, event_date, location, division,
+                 fighter_1, fighter_2, fighter_1_votes, fighter_2_votes,
+                 fighter_1_odds, fighter_2_odds, fight_order) -> None:
         self.event_name = event_name
         self.event_date = event_date
         self.location = location
