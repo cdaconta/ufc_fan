@@ -38,13 +38,13 @@
       -webkit-text-stroke: 1.11px black; /* stroke width and color */
       color: rgb(255, 255, 255);
       -webkit-font-smoothing: antialiased;
-      
+
       }
 
       body {
         min-height: 75rem;
         padding-top: 4.5rem;
-      } 
+      }
     </style>
     <!-- Custom styles for this template -->
     <link href="/static/css/album.css" rel="stylesheet">
@@ -66,7 +66,7 @@
           <li class="nav-item active">
             <a class="nav-link" href="{{ session['Upcoming Event'] }}">Event <span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" style="cursor: pointer;">
             <div class="nav-link dropdown-toggle text-white" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Divisions
             </div>
@@ -86,7 +86,7 @@
             </div>
           </li>
         </ul>
-        
+
         <a class="btn btn-danger" href="/logout" role="button">LOGOUT</a>
       </div>
     </nav>
