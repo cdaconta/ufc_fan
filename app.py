@@ -139,7 +139,7 @@ def create_app(test_config=None):
         session['Admin'] = env.get('APP_ADMIN')
         session['Event Editor'] = env.get('EVENT_EDITOR')
 
-        # Here we get all the fighters by division
+        """ # Here we get all the fighters by division
         data = []
         for item in range(11):
             fighter_info = Fighter.query.filter(
@@ -161,8 +161,8 @@ def create_app(test_config=None):
         div_10_data = data[9]
         div_11_data = data[10]
         div_12_data = data[11]
-
-        """ # Here I get all the fighter by division
+        """
+        # Here I get all the fighter by division
         div_1 = Fighter.query.filter(
             Fighter.division == 1).order_by(Fighter.rank).all()
         div_1_data = [event.format() for event in div_1]
@@ -209,14 +209,14 @@ def create_app(test_config=None):
 
         div_12 = Fighter.query.filter(
             Fighter.division == 12).order_by(Fighter.rank).all()
-        div_12_data = [event.format() for event in div_12] """
+        div_12_data = [event.format() for event in div_12]
 
-        """ if len(div_1) == 0 or len(div_2) == 0 or\
+        if len(div_1) == 0 or len(div_2) == 0 or\
             len(div_3) == 0 or len(div_4) == 0 or len(div_5) == 0 or\
             len(div_6) == 0 or len(div_7) == 0 or len(div_8) == 0 or\
             len(div_9) == 0 or len(div_10) == 0 or\
                 len(div_11) == 0 or len(div_12) == 0:
-            abort(404) """
+            abort(404)
 
         event_info = []
         event_data = Event.query.order_by(
