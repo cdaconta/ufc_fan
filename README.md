@@ -32,8 +32,8 @@ This project is the capstone project for the Udacity Full Stack Web Developer Na
   * GET /division_fighters/<int:division_id> - Shows fighters by division id.
   * GET /event/<date> - Shows event associated with a given date.
 
-##API Reference
-#Getting Started on Local Machine
+## API Reference
+# Getting Started on Local Machine
 People using this project should already have Python, PIP, and Postgres installed on their local machine. You will also have to create an account and configure Auth0.
 *	https://www.python.org/
 *	https://pypi.org/project/pip/
