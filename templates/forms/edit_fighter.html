@@ -5,9 +5,9 @@
   <div class="form-wrapper m-5">
     <form method="POST" action="/fighter-edit/{{ fighter.id }}">
       <h3 class="form-heading">Edit Fighter for Rank {{fighter.rank}}</h3>
-      
+
       <div class="form-group">
-      
+
       <div class="form-group">
         <label for="first_name">First Name</label>
         {{ form.first_name(class_ = 'form-control', placeholder='', autofocus = true) }}
@@ -71,11 +71,11 @@
           <li>women_featherweight</li>
         </ol>
         {{ form.division(class_ = 'form-control', autofocus = true) }}
-      </div>  
-      <!-- <div class="form-group">
+      </div>
+      <div class="form-group">
         <label for="rank">Rank</label>
         {{ form.rank(class_ = 'form-control', autofocus = true) }}
-      </div> -->      
+      </div>
       <input type="submit" value="Edit Fighter" class="btn btn-primary btn-lg btn-block">
     </form>
   </div>
