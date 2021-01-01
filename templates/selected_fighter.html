@@ -3,28 +3,28 @@
 <main role="main">
 
 
-    <div class="album py-5 bg-light">
+    <div class="py-5 bg-light">
       <div class="container">
+        <div class="d-flex justify-content-center"></div>
+            <div class="card mb-4 shadow-sm" style="width: 20rem;">
+                  {% if fighter[0].sex.upper() == 'M' %}
+                  <img src="/static/img/male.png" class="img-fluid" alt="Responsive image">
+                  {% else %}
+                  <img src="/static/img/female.png" class="img-fluid" alt="Responsive image">
+                  {% endif %}
+                    <div class="card-body">
+                      <h6 class="card-title"><span class="badge badge-primary badge-pill">Champ</span> {{ fighter[0].first_name}} {{ fighter[0].last_name }}</h6>
+                      {% if userinfo['name'] == session['Admin'] %}<a href="/fighter-edit/{{ fighter[0].id }}" class="ml-2 btn-sm btn-warning">Edit</a>{% endif %}
+                    </div>
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item"><span class="badge badge-primary badge-pill">Age</span> {{ fighter[0].age}}</li>
+                      <li class="list-group-item"><span class="badge badge-primary badge-pill">Height</span> {{ fighter[0].height}}</li>
+                      <li class="list-group-item"><span class="badge badge-primary badge-pill">Weight</span> {{ fighter[0].weight}}</li>
+                      <li class="list-group-item"><span class="badge badge-primary badge-pill">Arm Reach</span> {{ fighter[0].arm_reach}}</li>
+                      <li class="list-group-item"><span class="badge badge-primary badge-pill">Leg Reach</span> {{ fighter[0].leg_reach}}</li>
+                      <li class="list-group-item"><span class="badge badge-primary badge-pill">Win/Loss/Draw</span> {{ fighter[0].win}}/{{ fighter[0].loss }}/{{ fighter[0].draw }}</li>
 
-        <div class="card mb-4 shadow-sm" style="width: 18rem;">
-              {% if fighter[0].sex.upper() == 'M' %}
-              <img src="/static/img/male.png" class="img-fluid" alt="Responsive image">
-              {% else %}
-              <img src="/static/img/female.png" class="img-fluid" alt="Responsive image">
-              {% endif %}
-                <div class="card-body">
-                  <h6 class="card-title"><span class="badge badge-primary badge-pill">Champ</span> {{ fighter[0].first_name}} {{ fighter[0].last_name }}</h6>
-                  {% if userinfo['name'] == session['Admin'] %}<a href="/fighter-edit/{{ fighter[0].id }}" class="ml-2 btn-sm btn-warning">Edit</a>{% endif %}
-                </div>
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item"><span class="badge badge-primary badge-pill">Age</span> {{ fighter[0].age}}</li>
-                  <li class="list-group-item"><span class="badge badge-primary badge-pill">Height</span> {{ fighter[0].height}}</li>
-                  <li class="list-group-item"><span class="badge badge-primary badge-pill">Weight</span> {{ fighter[0].weight}}</li>
-                  <li class="list-group-item"><span class="badge badge-primary badge-pill">Arm Reach</span> {{ fighter[0].arm_reach}}</li>
-                  <li class="list-group-item"><span class="badge badge-primary badge-pill">Leg Reach</span> {{ fighter[0].leg_reach}}</li>
-                  <li class="list-group-item"><span class="badge badge-primary badge-pill">Win/Loss/Draw</span> {{ fighter[0].win}}/{{ fighter[0].loss }}/{{ fighter[0].draw }}</li>
-
-                </ul>
+                    </ul>
             </div>
 
 
