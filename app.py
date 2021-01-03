@@ -135,117 +135,19 @@ def create_app(test_config=None):
 
     @app.route('/index')
     def get_all_fighters():
-
         session['Admin'] = env.get('APP_ADMIN')
         session['Event Editor'] = env.get('EVENT_EDITOR')
+        # Here I call the api function and use it on render_template
+        response = get_all_fighters_api()
+        data = json.loads(response)
+        div_data = data["div_data"]
+        events = data["events"]
 
-        """ # Here we get all the fighters by division
-        data = []
-        for item in range(11):
-            fighter_info = Fighter.query.filter(
-            Fighter.division == (item + 1)).order_by(Fighter.rank).all()
-            if len(fighter_info) == 0:
-                abort(404)
-            div_data = [item.format() for item in fighter_info]
-            data.append(div_data)
-
-        div_1_data = data[0]
-        div_2_data = data[1]
-        div_3_data = data[2]
-        div_4_data = data[3]
-        div_5_data = data[4]
-        div_6_data = data[5]
-        div_7_data = data[6]
-        div_8_data = data[7]
-        div_9_data = data[8]
-        div_10_data = data[9]
-        div_11_data = data[10]
-        div_12_data = data[11]
-        """
-        # Here I get all the fighter by division
-        div_1 = Fighter.query.filter(
-            Fighter.division == 1).order_by(Fighter.rank).all()
-        div_1_data = [event.format() for event in div_1]
-
-        div_2 = Fighter.query.filter(
-            Fighter.division == 2).order_by(Fighter.rank).all()
-        div_2_data = [event.format() for event in div_2]
-
-        div_3 = Fighter.query.filter(
-            Fighter.division == 3).order_by(Fighter.rank).all()
-        div_3_data = [event.format() for event in div_3]
-
-        div_4 = Fighter.query.filter(
-            Fighter.division == 4).order_by(Fighter.rank).all()
-        div_4_data = [event.format() for event in div_4]
-
-        div_5 = Fighter.query.filter(
-            Fighter.division == 5).order_by(Fighter.rank).all()
-        div_5_data = [event.format() for event in div_5]
-
-        div_6 = Fighter.query.filter(
-            Fighter.division == 6).order_by(Fighter.rank).all()
-        div_6_data = [event.format() for event in div_6]
-
-        div_7 = Fighter.query.filter(
-            Fighter.division == 7).order_by(Fighter.rank).all()
-        div_7_data = [event.format() for event in div_7]
-
-        div_8 = Fighter.query.filter(
-            Fighter.division == 8).order_by(Fighter.rank).all()
-        div_8_data = [event.format() for event in div_8]
-
-        div_9 = Fighter.query.filter(
-            Fighter.division == 9).order_by(Fighter.rank).all()
-        div_9_data = [event.format() for event in div_9]
-
-        div_10 = Fighter.query.filter(
-            Fighter.division == 10).order_by(Fighter.rank).all()
-        div_10_data = [event.format() for event in div_10]
-
-        div_11 = Fighter.query.filter(
-            Fighter.division == 11).order_by(Fighter.rank).all()
-        div_11_data = [event.format() for event in div_11]
-
-        div_12 = Fighter.query.filter(
-            Fighter.division == 12).order_by(Fighter.rank).all()
-        div_12_data = [event.format() for event in div_12]
-
-        if len(div_1) == 0 or len(div_2) == 0 or\
-            len(div_3) == 0 or len(div_4) == 0 or len(div_5) == 0 or\
-            len(div_6) == 0 or len(div_7) == 0 or len(div_8) == 0 or\
-            len(div_9) == 0 or len(div_10) == 0 or\
-                len(div_11) == 0 or len(div_12) == 0:
-            abort(404)
-
-        event_info = []
-        event_data = Event.query.order_by(
-            Event.event_date.desc()).limit(1).all()
-        if len(event_data) == 0:
-            abort(404)
-
-        event_info.append(
-            {
-                'event_name': event_data[0].event_name,
-                'event_date': format_datetime(str(event_data[0].event_date)),
-                'location': event_data[0].location,
-            }
-        )
-        # Here I set a session variable so I can link to
-        # the event page from the main.html
-        session['Upcoming Event'] = '/event/' + \
-            format_datetime(str(event_data[0].event_date))
         return render_template('index.html',
                                userinfo=session[constants.PROFILE_KEY],
                                userinfo_pretty=json.dumps(
                                    session[constants.JWT_PAYLOAD], indent=4),
-                               events=event_info, div_1=div_1_data,
-                               div_2=div_2_data, div_3=div_3_data,
-                               div_4=div_4_data, div_5=div_5_data,
-                               div_6=div_6_data, div_7=div_7_data,
-                               div_8=div_8_data, div_9=div_9_data,
-                               div_10=div_10_data, div_11=div_11_data,
-                               div_12=div_12_data), 200
+                               events=events, div_data=div_data), 200
 
     @app.route('/knockouts')
     def get_knockout_page():
@@ -298,7 +200,7 @@ def create_app(test_config=None):
         return render_template('/selected_fighter.html',
                                userinfo=session[constants.PROFILE_KEY],
                                userinfo_pretty=json.dumps(
-                               session[constants.JWT_PAYLOAD], indent=4),
+                                   session[constants.JWT_PAYLOAD], indent=4),
                                fighter=selected_fighter), 200
 
     @app.route('/event/<date>')
@@ -525,66 +427,16 @@ def create_app(test_config=None):
     @app.route('/api/index')
     def get_all_fighters_api():
 
-        # Here I get all the fighter by division
-        div_1 = Fighter.query.filter(
-            Fighter.division == 1).order_by(Fighter.rank).all()
-        div_1_data = [event.format() for event in div_1]
-
-        div_2 = Fighter.query.filter(
-            Fighter.division == 2).order_by(Fighter.rank).all()
-        div_2_data = [event.format() for event in div_2]
-
-        div_3 = Fighter.query.filter(
-            Fighter.division == 3).order_by(Fighter.rank).all()
-        div_3_data = [event.format() for event in div_3]
-
-        div_4 = Fighter.query.filter(
-            Fighter.division == 4).order_by(Fighter.rank).all()
-        div_4_data = [event.format() for event in div_4]
-
-        div_5 = Fighter.query.filter(
-            Fighter.division == 5).order_by(Fighter.rank).all()
-        div_5_data = [event.format() for event in div_5]
-
-        div_6 = Fighter.query.filter(
-            Fighter.division == 6).order_by(Fighter.rank).all()
-        div_6_data = [event.format() for event in div_6]
-
-        div_7 = Fighter.query.filter(
-            Fighter.division == 7).order_by(Fighter.rank).all()
-        div_7_data = [event.format() for event in div_7]
-
-        div_8 = Fighter.query.filter(
-            Fighter.division == 8).order_by(Fighter.rank).all()
-        div_8_data = [event.format() for event in div_8]
-
-        div_9 = Fighter.query.filter(
-            Fighter.division == 9).order_by(Fighter.rank).all()
-        div_9_data = [event.format() for event in div_9]
-
-        div_10 = Fighter.query.filter(
-            Fighter.division == 10).order_by(Fighter.rank).all()
-        div_10_data = [event.format() for event in div_10]
-
-        div_11 = Fighter.query.filter(
-            Fighter.division == 11).order_by(Fighter.rank).all()
-        div_11_data = [event.format() for event in div_11]
-
-        div_12 = Fighter.query.filter(
-            Fighter.division == 12).order_by(Fighter.rank).all()
-        div_12_data = [event.format() for event in div_12]
-
-        if len(div_1) == 0 or len(div_2) == 0 or \
-            len(div_3) == 0 or len(div_4) == 0 or len(div_5) == 0 or\
-            len(div_6) == 0 or len(div_7) == 0 or len(div_8) == 0 or\
-            len(div_9) == 0 or len(div_10) == 0 or len(div_11) == 0 or\
-                len(div_12) == 0:
+        # Here we get all the fighters by division
+        fighter_info = Fighter.query.order_by(Fighter.division, Fighter.rank)\
+            .all()
+        if len(fighter_info) == 0:
             abort(404)
+        div_data = [fighter.format() for fighter in fighter_info]
 
         event_info = []
         event_data = Event.query.order_by(
             Event.event_date.desc()).limit(1).all()
-
         if len(event_data) == 0:
             abort(404)
 
@@ -595,22 +447,17 @@ def create_app(test_config=None):
                 'location': event_data[0].location,
             }
         )
-        return jsonify({
-            'success': True,
-            'events': event_info,
-            'div_1': div_1_data,
-            'div_2': div_2_data,
-            'div_3': div_3_data,
-            'div_4': div_4_data,
-            'div_5': div_5_data,
-            'div_6': div_6_data,
-            'div_7': div_7_data,
-            'div_8': div_8_data,
-            'div_9': div_9_data,
-            'div_10': div_10_data,
-            'div_11': div_11_data,
-            'div_12': div_12_data
-        }), 200
+
+        # Here I set a session variable so I can link to
+        # the event page from the main.html
+        session['Upcoming Event'] = '/event/' + \
+            format_datetime(str(event_data[0].event_date))
+
+        return json.dumps({
+            "success": True,
+            "events": event_info,
+            "div_data": div_data
+        })
 
     @app.route('/api/division_fighters/<int:division_id>')
     def get_division_fighters_api(division_id):
