@@ -25,8 +25,8 @@ def setup_db(app, database_path=database_path):
     db.init_app(app)
     migrate.init_app(app, db)
 
-#Multi-level inheritance
-class CrudHelper(db.Model):
+# Used in Multiple inheritance
+class CrudHelper:
     def insert(self):
         db.session.add(self)
         db.session.commit()
@@ -46,7 +46,7 @@ class CrudHelper(db.Model):
 
 
 # Creating the debatase for Actors
-class Fighter(CrudHelper):
+class Fighter(db.Model, CrudHelper):
     __tablename__ = 'fighters'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -108,7 +108,7 @@ class Fighter(CrudHelper):
         }
 
 
-class Division(CrudHelper):
+class Division(db.Model, CrudHelper):
     __tablename__ = 'divisions'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -135,7 +135,7 @@ class Division(CrudHelper):
         }
 
 
-class Event(CrudHelper):
+class Event(db.Model, CrudHelper):
     __tablename__ = 'events'
 
     id = db.Column(db.Integer, primary_key=True)
