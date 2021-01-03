@@ -17,7 +17,6 @@ setup_db(app)
     binds a flask application and a SQLAlchemy service
 '''
 
-
 def setup_db(app, database_path=database_path):
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -26,10 +25,10 @@ def setup_db(app, database_path=database_path):
     db.init_app(app)
     migrate.init_app(app, db)
 
-
-# class CrudHelper(db.Model):  Multi-level inheritance
-#     def insert(self):
-    """ db.session.add(self)
+#Multi-level inheritance
+class CrudHelper(db.Model):
+    def insert(self):
+        db.session.add(self)
         db.session.commit()
 
     def update(self):
@@ -43,14 +42,11 @@ def setup_db(app, database_path=database_path):
         db.session.rollback()
 
     def close(self):
-        db.session.close() """
-
-
-
+        db.session.close()
 
 
 # Creating the debatase for Actors
-class Fighter(db.Model):
+class Fighter(CrudHelper):
     __tablename__ = 'fighters'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -93,23 +89,6 @@ class Fighter(db.Model):
         self.division = division
         self.rank = rank
 
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def update(self):
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-
-    def rollback(self):
-        db.session.rollback()
-
-    def close(self):
-        db.session.close()
-
     def format(self):
         return{
             'id': self.id,
@@ -129,7 +108,7 @@ class Fighter(db.Model):
         }
 
 
-class Division(db.Model):
+class Division(CrudHelper):
     __tablename__ = 'divisions'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -148,23 +127,6 @@ class Division(db.Model):
         self.name = name
         self.weight = weight
 
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def update(self):
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-
-    def rollback(self):
-        db.session.rollback()
-
-    def close(self):
-        db.session.close()
-
     def format(self):
         return{
             'id': self.id,
@@ -173,7 +135,7 @@ class Division(db.Model):
         }
 
 
-class Event(db.Model):
+class Event(CrudHelper):
     __tablename__ = 'events'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -214,23 +176,6 @@ class Event(db.Model):
         self.fighter_1_odds = fighter_1_odds
         self.fighter_2_odds = fighter_2_odds
         self.fight_order = fight_order
-
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def update(self):
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-
-    def rollback(self):
-        db.session.rollback()
-
-    def close(self):
-        db.session.close()
 
     def format(self):
         return {
