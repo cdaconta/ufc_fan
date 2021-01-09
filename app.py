@@ -465,7 +465,7 @@ def create_app(test_config=None):
         division_fighters = db.session.query(Fighter, Division).join(
                                              Division).filter(
                                              Fighter.division == division_id)\
-                                             .all()
+                                             .order_by(Fighter.rank).all()
 
         if len(division_fighters) == 0:
             abort(404)
