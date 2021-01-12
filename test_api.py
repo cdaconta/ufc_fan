@@ -344,7 +344,7 @@ class UfcFanTestCase(unittest.TestCase):
               f'/api/event/plus/{name}/{number}', json=json_data)
         data = json.loads(res.data)
         self.assertEqual(data['success'], False)
-        self.assertEqual(res.status_code, 422)
+        self.assertEqual(res.status_code, 404)
         self.assertEqual(data['message'], 'resource not found')
 
     def test_event_delete_get_date_api(self):
