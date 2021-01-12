@@ -271,7 +271,7 @@ def create_app(test_config=None):
     @requires_auth('get:fighter-edit')
     def fighter_edit_form(token, fighter_id):
         fighter = Fighter.query.get(fighter_id)
-        response = fighter_edit_form_api(token, fighter_id)
+        response = fighter_edit_form_api(fighter_id)
         data = json.loads(response)
         fighter_details = data['fighter_details']
 
@@ -291,7 +291,7 @@ def create_app(test_config=None):
         return redirect(url_for('get_division_fighters',
                                 division_id=fighter_division))
     # -------------------------------------------------------------#
-    # API - Identical functions except now with json responses.
+    # API - functions with json responses.
     # -------------------------------------------------------------#
 
     @app.route('/api/index')
