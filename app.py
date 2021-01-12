@@ -253,12 +253,12 @@ def create_app(test_config=None):
     @app.route('/event-delete/<date>', methods=['DELETE'])
     @requires_auth('delete:event-delete')
     def delete_event(token, date):
-        delete_event_api(token, date)
+        delete_event_api(date)
 
     @app.route('/event-delete/<int:id>', methods=['DELETE'])
     @requires_auth('delete:event-delete')
     def delete_event_id(token, id):
-        response = delete_event_id_api(token, id)
+        response = delete_event_id_api(id)
         data = json.loads(response)
         success = data['success']
         deleted = data['deleted']
@@ -284,7 +284,7 @@ def create_app(test_config=None):
     @app.route('/fighter-edit/<int:fighter_id>', methods=['POST'])
     @requires_auth('get:fighter-edit')
     def edit_fighters(token, fighter_id):
-        response = edit_fighters_api(token, fighter_id)
+        response = edit_fighters_api(fighter_id)
         data = json.loads(response)
         fighter_division = data['division_id']
 
