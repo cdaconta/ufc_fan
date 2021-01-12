@@ -403,11 +403,15 @@ def create_app(test_config=None):
     @app.route('/api/event-create', methods=['GET'])
     @requires_auth('get:event-create')
     def create_event_form_api(token):
-        form = EventForm()
+        try:
+            form = EventForm()
 
-        return jsonify({
-            'success': True,
-        }), 200
+            return jsonify({
+                'success': True,
+            }), 200
+        except BaseException as e:
+            print(e)
+            abort(500)
 
     @app.route('/api/event-create', methods=['POST'])
     @requires_auth('post:event-create')
@@ -544,10 +548,10 @@ def create_app(test_config=None):
 
         event.delete()
 
-        return jsonify({
+        return json.dumps({
             'success': True,
             'deleted': id,
-        }), 200
+        })
 
     @app.route('/api/fighter-edit/<int:fighter_id>', methods=['GET'])
     @requires_auth('get:fighter-edit')
@@ -635,6 +639,14 @@ def create_app(test_config=None):
             "error": 422,
             "message": "unprocessable"
         }), 422
+
+    @app.errorhandler(500)
+    def server_error(error):
+        return jsonify({
+            "success": False,
+            "error": 500,
+            "message": "Server Error"
+        }), 500
 
     @app.errorhandler(Exception)
     def handle_auth_error(ex):

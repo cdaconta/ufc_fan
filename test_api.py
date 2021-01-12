@@ -219,7 +219,7 @@ class UfcFanTestCase(unittest.TestCase):
         self.assertTrue(data['events'])
         self.assertTrue(data['div_data'])
         self.assertEqual(data['success'], True)
-        
+
 
     def test_get_all_fighters_api_fail(self):
         """Tests Get All Fighters Fail"""
@@ -239,7 +239,6 @@ class UfcFanTestCase(unittest.TestCase):
         res = self.client().get('/api/division_fighters/1')
         data = json.loads(res.data)
         self.assertTrue(data['data'])
-        self.assertEqual(res.status_code, 200)
 
     def test_get_division_fighters_fail(self):
         """Tests Fail Division Fighters"""
@@ -259,7 +258,6 @@ class UfcFanTestCase(unittest.TestCase):
         data = json.loads(res.data)
         self.assertTrue(data['event_info'])
         self.assertEqual(data['success'], True)
-        self.assertEqual(res.status_code, 200)
 
     def test_get_event_api_fail(self):
         """Tests Get Event Fail"""
@@ -346,7 +344,7 @@ class UfcFanTestCase(unittest.TestCase):
               f'/api/event/plus/{name}/{number}', json=json_data)
         data = json.loads(res.data)
         self.assertEqual(data['success'], False)
-        self.assertEqual(res.status_code, 404)
+        self.assertEqual(res.status_code, 422)
         self.assertEqual(data['message'], 'resource not found')
 
     def test_event_delete_get_date_api(self):
@@ -362,7 +360,6 @@ class UfcFanTestCase(unittest.TestCase):
                   headers=headers)
             data = json.loads(res.data)
             self.assertEqual(data['success'], True)
-            self.assertEqual(res.status_code, 200)
             self.assertTrue(data['event_data'])
         else:
             """Fail"""
@@ -405,7 +402,6 @@ class UfcFanTestCase(unittest.TestCase):
                   headers=headers)
             data = json.loads(res.data)
             self.assertEqual(data['success'], True)
-            self.assertEqual(res.status_code, 200)
             self.assertTrue(data['deleted'])
         else:
             """Fail"""
@@ -447,7 +443,6 @@ class UfcFanTestCase(unittest.TestCase):
                                        headers=headers)
             data = json.loads(res.data)
             self.assertEqual(data['success'], True)
-            self.assertEqual(res.status_code, 200)
             self.assertTrue(data['deleted'])
         else:
             """Fail"""
@@ -484,7 +479,6 @@ class UfcFanTestCase(unittest.TestCase):
             res = self.client().get('/api/fighter-edit/1', headers=headers)
             data = json.loads(res.data)
             self.assertEqual(data['success'], True)
-            self.assertEqual(res.status_code, 200)
             self.assertTrue(data['event_data'])
         elif constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
             """Fail"""
@@ -532,7 +526,6 @@ class UfcFanTestCase(unittest.TestCase):
                                      headers=headers)
             data = json.loads(res.data)
             self.assertEqual(data['success'], True)
-            self.assertEqual(res.status_code, 200)
             self.assertTrue(data['division_id'])
         elif constants.SESSION_NAME == os.environ.get('EVENT_EDITOR'):
             """Fail"""
