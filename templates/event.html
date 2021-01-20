@@ -72,6 +72,17 @@
             buttons_row[index].style.pointerEvents = "none";
       }
 
+    // Here we use localstorage
+    let data_obj = []
+    let old_data = localStorage.getItem("rows");
+    if(old_data !== null){
+      data_obj.push(old_data);
+      console.log(old_data)
+    }
+    data_obj.push(data_row);
+    console.log(data_obj)
+    localStorage.setItem("rows", data_obj);
+
     fetch('/event/plus/' + name +'/' + number_fighter,{
         method:"PATCH",
         body: JSON.stringify({ "disabled": data_row }),

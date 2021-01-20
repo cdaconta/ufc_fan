@@ -7,7 +7,7 @@ from flask_migrate import Migrate
 database_name = "ufcfan"
 
 # Here we connect to Heroku database
-database_path = os.environ.get('DATABASE_URL')
+database_path = os.environ.get('DATABASE_TEST')
 
 db = SQLAlchemy()
 migrate = Migrate()
