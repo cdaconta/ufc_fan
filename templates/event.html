@@ -72,16 +72,24 @@
             buttons_row[index].style.pointerEvents = "none";
       }
 
-    // Here we use localstorage
-    let data_obj = []
-    let old_data = localStorage.getItem("rows");
-    if(old_data !== null){
-      data_obj.push(old_data);
-      console.log(old_data)
-    }
-    data_obj.push(data_row);
-    console.log(data_obj)
-    localStorage.setItem("rows", data_obj);
+      var addToLocalStorageArray = function (name, value) {
+        // Get the existing data
+        var existing = localStorage.getItem(name);
+
+        // If no existing data, create an array
+        // Otherwise, convert the localStorage string to an array
+        existing = existing ? existing.split(',') : [];
+
+        // Add new data to localStorage Array
+        existing.push(value);
+
+        // Save back to localStorage
+        localStorage.setItem(name, existing.toString());
+
+        };
+
+     addToLocalStorageArray("row", data_row);
+
 
     fetch('/event/plus/' + name +'/' + number_fighter,{
         method:"PATCH",
