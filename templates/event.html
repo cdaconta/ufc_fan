@@ -1,7 +1,7 @@
 {% extends "main.html" %}
 {% block content %}
 
-<div class="d-flex justify-content-center" id="event_page">
+<div class="d-flex justify-content-center" id="event_page" data-dateid="{{events[0].event_date}}">
 
     <div>
       <div class="card mb-4 shadow-sm">
@@ -61,6 +61,22 @@
 <script type="text/javascript">
   // self executing function here
   (function() {
+    var eventPage = document.getElementById("event_page");
+    var eventDate = eventPage.dataset.dateid;
+
+    var eventData = localStorage.getItem("event_date");
+    if(eventData === null){
+      eventData = localStorage.setItem("event_date", eventDate);
+    }else{
+      if(eventDate === eventData){
+        break;
+      }
+      else{
+        eventData = localStorage.setItem("event_date", eventDate);
+        localStorage.removeItem("row")
+      }
+    }
+
     var existing = localStorage.getItem("row");
 
     if(existing){
@@ -94,17 +110,13 @@
       var addToLocalStorageArray = function (name, value) {
         // Get the existing data
         var existing = localStorage.getItem(name);
-
         // If no existing data, create an array
         // Otherwise, convert the localStorage string to an array
         existing = existing ? existing.split(',') : [];
-
         // Add new data to localStorage Array
         existing.push(value);
-
         // Save back to localStorage
         localStorage.setItem(name, existing.toString());
-
         };
 
      addToLocalStorageArray("row", data_row);
