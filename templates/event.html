@@ -59,6 +59,25 @@
 
 
 <script type="text/javascript">
+  // self executing function here
+  (function() {
+    var existing = localStorage.getItem("row");
+
+    if(existing){
+     existing.split(',')}
+     else { return;}
+
+    for (let index in existing) {
+      let buttons_row = document.getElementsByClassName("row_"+ existing[index]);
+
+      for(var i = 0; i < buttons_row.length; i++){
+      // Access HTMLcollection with item funtion
+      buttons_row[i].style.pointerEvents = "none";
+
+      }
+    }
+
+  })();
 
   function update_vote(name)
   {
