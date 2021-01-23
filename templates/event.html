@@ -68,10 +68,8 @@
     if(eventData === null){
       eventData = localStorage.setItem("event_date", eventDate);
     }else{
-      if(eventDate === eventData){
-        break;
-      }
-      else{
+      if(eventDate !== eventData){
+
         eventData = localStorage.setItem("event_date", eventDate);
         localStorage.removeItem("row")
       }
