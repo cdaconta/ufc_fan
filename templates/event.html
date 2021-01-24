@@ -63,18 +63,18 @@
   (function() {
     var eventPage = document.getElementById("event_page");
     var eventDate = eventPage.dataset.dateid;
-
+    // Here I check if event exists
     var eventData = localStorage.getItem("event_date");
     if(eventData === null){
       eventData = localStorage.setItem("event_date", eventDate);
-    }else{
+    }else{  // If event is not the current event delete row data
       if(eventDate !== eventData){
 
         eventData = localStorage.setItem("event_date", eventDate);
         localStorage.removeItem("row")
       }
     }
-
+    // Check if row item exists
     var existing = localStorage.getItem("row");
 
     if(existing){
@@ -85,7 +85,7 @@
       let buttons_row = document.getElementsByClassName("row_"+ existing[index]);
 
       for(var i = 0; i < buttons_row.length; i++){
-      // Access HTMLcollection with item funtion
+      // Here we disable the buttons
       buttons_row[i].style.pointerEvents = "none";
 
       }
