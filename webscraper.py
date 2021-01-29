@@ -9,7 +9,7 @@ option = webdriver.ChromeOptions()
 option.add_argument("--incognito")
 
 # Create new Instance of Chrome in incognito mode
-browser = webdriver.Chrome(executable_path='/Library/Application Support/Google/chromedriver', chrome_options=option)
+browser = webdriver.Chrome(executable_path='./chrome_web', chrome_options=option)
 
 # Go to desired website
 browser.get("https://github.com/TheDancerCodes")
