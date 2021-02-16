@@ -11,7 +11,7 @@ driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), o
 driver.get("https://www.ufc.com/trending/all")
 driver.implicitly_wait(10) # seconds
 try:
-    heading3 = driver.find_element_by_tag_name("h3")
+    heading3 = driver.find_elements_by_tag_name("h3")
     for item in heading3:   
         print(item.getAttribute("innerText"))
 except:
