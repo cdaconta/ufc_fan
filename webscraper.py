@@ -1,5 +1,7 @@
 from selenium import webdriver
 import os
+# This can be tested at heroku.com in 'Run console' with command: python webscraper.py
+
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument("--disable-dev-shm-usage")
