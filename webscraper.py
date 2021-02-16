@@ -13,7 +13,7 @@ driver.implicitly_wait(10) # seconds
 try:
     heading3 = driver.find_element_by_tag_name("h3")
     for item in heading3:   
-        print(item.getAttribute("innerHTML"))
+        print(item.getAttribute("innerText"))
 except:
     print("Couldn't find it")
 print("Finished!")
