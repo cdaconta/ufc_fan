@@ -9,7 +9,11 @@ chrome_options.add_argument("--no-sandbox")
 chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
 driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
 driver.get("https://www.ufc.com/trending/all")
-heading3 = driver.find_element_by_tag_name("h3")
-for item in heading3:   
-    print(heading3[item])
+driver.implicitly_wait(10) # seconds
+try:
+    heading3 = driver.find_element_by_tag_name("h3")
+    for item in heading3:   
+        print(item.getAttribute("innerHTML"))
+except:
+    print("Couldn't find it")
 print("Finished!")
