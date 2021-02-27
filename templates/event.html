@@ -67,13 +67,12 @@
     var eventData = localStorage.getItem("event_date");
     if(eventData === null){
       eventData = localStorage.setItem("event_date", eventDate);
-    }else{  // If event is not the current event delete row data
-      if(eventDate !== eventData){
-
+    }else if(eventDate !== eventData)
+      {
         eventData = localStorage.setItem("event_date", eventDate);
         localStorage.removeItem("row")
       }
-    }
+
     // Check if row item exists
     var existing = localStorage.getItem("row");
 
