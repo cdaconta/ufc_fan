@@ -63,6 +63,7 @@
   (function() {
     var eventPage = document.getElementById("event_page");
     var eventDate = eventPage.dataset.dateid;
+    var rowData = localStorage.getItem('row');
     // Here I check if event exists
     var eventData = localStorage.getItem("event_date");
     if(eventData === null){
@@ -70,7 +71,7 @@
     }else if(eventDate !== eventData)
       {
         eventData = localStorage.setItem("event_date", eventDate);
-        localStorage.removeItem("row")
+        rowData = localStorage.removeItem("row")
       }
 
     // Check if row item exists
