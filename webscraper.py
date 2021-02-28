@@ -16,8 +16,13 @@ def get_elements(element, attrib):
     print(f'This is heading3 - {heading3}')
     for item in heading3:
         print(item.getAttribute(attrib))
+def test():
+    print("testing")
+
 
 try:
+    print("We made it here!")
+    test()
     get_elements("h3", "innerText")
 except Exception as e:
     print(f'Couldn\'t find it - {e}')
