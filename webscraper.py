@@ -13,8 +13,8 @@ driver.implicitly_wait(10) # seconds
 driver.get("https://www.ufc.com/trending/all")
 
 def get_elements():
-    heading3 = driver.find_elements(By.XPATH, '//h3[@innerText]');
-    print(f'This is heading3 - {heading3}')
+    heading3 = driver.find_elements(By.tagName("h3"))
+
     for item in heading3:
         print(item.text)
 def test():
