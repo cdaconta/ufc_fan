@@ -13,10 +13,10 @@ driver.implicitly_wait(10) # seconds
 driver.get("https://www.ufc.com/trending/all")
 
 def get_elements():
-    heading3 = driver.find_elements(By.tagName("h3"))
+    heading3 = driver.find_element_by_tag_name("h3").get_attribute("textContent")
 
     for item in heading3:
-        print(item.text)
+        print(item)
 def test():
     print("testing")
 
