@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 import os
 # This can be tested at heroku.com in 'Run console' with command: python webscraper.py
 
@@ -12,7 +13,7 @@ driver.implicitly_wait(10) # seconds
 driver.get("https://www.ufc.com/trending/all")
 
 def get_elements(element, attrib):
-    heading3 = driver.find_elements_by_tag_name(element)
+    heading3 = driver.find_elements(By.XPATH, '//h3');
     print(f'This is heading3 - {heading3}')
     for item in heading3:
         print(item.getAttribute(attrib))
