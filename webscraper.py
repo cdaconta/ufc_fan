@@ -12,11 +12,11 @@ driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), o
 driver.implicitly_wait(10) # seconds
 driver.get("https://www.ufc.com/trending/all")
 
-def get_elements(element, attrib):
-    heading3 = driver.find_elements(By.XPATH, '//h3');
+def get_elements():
+    heading3 = driver.find_elements(By.XPATH, '//h3[@innerText]');
     print(f'This is heading3 - {heading3}')
     for item in heading3:
-        print(item.getAttribute(attrib))
+        print(item)
 def test():
     print("testing")
 
@@ -24,7 +24,7 @@ def test():
 try:
     print("We made it here!")
     test()
-    get_elements("h3", "innerText")
+    get_elements()
 except Exception as e:
     print(f'Couldn\'t find it - {e}')
 print("Finished!")
