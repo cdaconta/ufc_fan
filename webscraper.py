@@ -16,7 +16,7 @@ def get_elements():
     heading3 = driver.find_elements(By.XPATH, '//h3[@innerText]');
     print(f'This is heading3 - {heading3}')
     for item in heading3:
-        print(item)
+        print(item.text)
 def test():
     print("testing")
 
