@@ -16,7 +16,7 @@ def get_elements():
     heading3 = driver.find_element_by_tag_name("h3").get_attribute("textContent")
 
     for item in heading3:
-        print(item)
+        print(item.text)
 def test():
     print("testing")
 
