@@ -22,7 +22,7 @@ def get_elements():
         print(item.get_attribute("textContent"))
 
     for item in elements:
-        print(item)
+        print(item.get_attribute("href"))
 try:
     print("We made it here!")
 
