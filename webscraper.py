@@ -24,11 +24,14 @@ def get_elements():
     for item in heading3:
         print(item.get_attribute("textContent"))
 
+    filteredHREF = []
+
     for item in elements:
-        print(item.get_attribute("href"))
-        substring = "news"
-        substring2 = "video"
-        filteredList = [string for string in item.get_attribute("href") if substring or substring2 in string]
+        filteredHREF.append(item.get_attribute("href"))
+
+    substring = ["news", "video"]
+
+    filteredList = [string for string in filteredHREF if substring in string]
     for item in filteredList:
         print(item)
 
