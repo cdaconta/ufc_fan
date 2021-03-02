@@ -31,7 +31,7 @@ def get_elements():
         filteredList = [string for string in item.get_attribute("href") if substring or substring2 in string]
     for item in filteredList:
         print(item)
-List
+
 try:
     print("We made it here!")
 
