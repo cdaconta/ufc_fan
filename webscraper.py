@@ -31,7 +31,7 @@ def get_elements():
 
     substring = ["news", "video"]
 
-    filteredList = [string for string in filteredHREF if substring in string]
+    filteredList = [word for word in filteredHREF if substring[0] or substring[1] in word]
     for item in filteredList:
         print(item)
 
