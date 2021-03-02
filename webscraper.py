@@ -18,12 +18,20 @@ def get_elements():
     heading3 = driver.find_elements_by_tag_name("h3")
     elements = driver.find_elements_by_tag_name("a")
 
+    updatedLength = len(heading3)
+    filteredList = []
+
     for item in heading3:
         print(item.get_attribute("textContent"))
 
     for item in elements:
         print(item.get_attribute("href"))
-        print(item.get_attribute("textContent"))
+        substring = "news"
+        substring2 = "video"
+        filteredList = [string for string in item.get_attribute("href") if substring or substring2 in string]
+    for item in filteredList:
+        print(item)
+List
 try:
     print("We made it here!")
 
