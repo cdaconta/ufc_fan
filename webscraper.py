@@ -37,10 +37,10 @@ def get_elements():
     newsList = []    
     for item in filteredHREF:
         if "news" in item:
-            newsList.appent(item)
+            newsList.append(item)
             print(f'This is news: {item}')
         elif "video" in item:
-            newsList.appent(item)
+            newsList.append(item)
             print(f'This is video: {item}')
 try:
     print("We made it here!")
