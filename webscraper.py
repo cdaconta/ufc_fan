@@ -29,12 +29,19 @@ def get_elements():
     for item in elements:
         filteredHREF.append(item.get_attribute("href"))
 
-    substring = ["news", "video"]
+    """ substring = ["news", "video"]
 
     filteredList = [word for word in filteredHREF if substring[0] or substring[1] in word]
     for item in filteredList:
-        print(item)
-
+        print(item) """
+    newsList = []    
+    for item in filteredHREF:
+        if "news" in item:
+            newsList.appent(item)
+            print(f'This is news: {item}')
+        elif "video" in item:
+            newsList.appent(item)
+            print(f'This is video: {item}')
 try:
     print("We made it here!")
 
