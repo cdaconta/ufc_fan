@@ -36,7 +36,7 @@ def get_elements():
         print(item) """
     newsList = []    
     for item in filteredHREF:
-        if "news" or "video" in item:
+        if "https://www.ufc.com/news/" or "https://www.ufc.com/video/" or "https://www.ufc.com/gallery/" in item:
             newsList.append(item)
             print(f'This is news: {item}')
         
